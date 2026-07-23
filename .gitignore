@@ -1,0 +1,21 @@
+# Secrets — never commit real keys
+.env
+.env.*
+!.env.example
+
+# Private session seed (prep/plan stays out of the published repo)
+HANDOFF.md
+
+# OS
+.DS_Store
+
+# Node
+node_modules/
+dist/
+build/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

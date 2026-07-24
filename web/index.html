@@ -40,6 +40,13 @@
   .chip.SYNTHETIC { color:var(--dim); background:#1a2233; border:1px solid var(--line); }
   .chip.LIVE { color:#051b10; background:var(--green); }
   .chip.PRERUN { color:#1a0f2b; background:var(--violet); }
+  .sponsors { margin-top:44px; }
+  .s-label { font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin:18px 0 9px; }
+  .s-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .s-chip { font-size:13px; color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 12px; background:var(--panel); }
+  .s-chip.you { color:var(--cyan); border-color:var(--cyan); font-weight:600; }
+  .s-chip.render { color:var(--violet); border-color:var(--violet); font-weight:600; }
+  .s-chip.sm { font-size:12px; padding:4px 10px; color:var(--faint); }
   .foot { color:var(--faint); font-size:12.5px; border-top:1px solid var(--line); padding-top:18px; margin-top:36px; }
 </style>
 </head>
@@ -82,6 +89,32 @@
     <span class="chip LIVE">LIVE</span><span>fired now</span>
     <span class="chip PRERUN">PRERUN</span><span>ran earlier, cached</span>
     <span class="chip SYNTHETIC">SYNTHETIC</span><span>fabricated data</span>
+  </div>
+
+  <div class="sponsors">
+    <div class="s-label">Built on</div>
+    <div class="s-row">
+      <span class="s-chip you">You.com — live Search + ARI</span>
+      <span class="s-chip render">Render — deployed live</span>
+    </div>
+    <div class="s-label">You.com Agentic Hackathon · builder perks</div>
+    <div class="s-row">
+      <span class="s-chip">You.com</span>
+      <span class="s-chip">LlamaIndex</span>
+      <span class="s-chip">Agno</span>
+      <span class="s-chip">One (Pica)</span>
+      <span class="s-chip">Render</span>
+      <span class="s-chip">CrewAI</span>
+      <span class="s-chip">Replit</span>
+      <span class="s-chip">Parasail</span>
+      <span class="s-chip">AWS</span>
+    </div>
+    <div class="s-label">Partners</div>
+    <div class="s-row">
+      <span class="s-chip sm">MindStudio</span>
+      <span class="s-chip sm">Opsera</span>
+      <span class="s-chip sm">Founders Bay</span>
+    </div>
   </div>
 
   <div class="foot">

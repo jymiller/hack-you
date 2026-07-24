@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Render — where this is running</title>
+<style>
+  :root {
+    --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
+    --green:#35d07f; --red:#ff5470; --amber:#ffb020; --cyan:#46c6ff; --violet:#b48cff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5; }
+  a { color:var(--green); }
+  header { display:flex; align-items:center; gap:14px; padding:13px 22px; border-bottom:1px solid var(--line); position:sticky; top:0; background:linear-gradient(180deg,#0e1524,#0b0f17); z-index:5; flex-wrap:wrap; }
+  header .brand { font-weight:700; } header .brand b { color:var(--green); }
+  header .spacer { flex:1; }
+  header .nav { font-size:12px; color:var(--dim); text-decoration:none; border:1px solid var(--line); padding:4px 10px; border-radius:6px; }
+  header .nav:hover { color:var(--ink); border-color:var(--green); }
+  .pill { font-family:var(--mono); font-size:11.5px; padding:4px 11px; border-radius:999px; border:1px solid var(--line); color:var(--dim); }
+  .pill.up { color:var(--green); border-color:var(--green); background:rgba(53,208,127,.08); }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:6px; vertical-align:middle; animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  @media (prefers-reduced-motion: reduce) { .dot { animation:none; } }
+  main { max-width:1080px; margin:0 auto; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:840px){ main{grid-template-columns:1fr;} }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card.wide { grid-column:1/-1; }
+  h2 { margin:0 0 3px; font-size:15px; }
+  .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; }
+  .kv { display:grid; grid-template-columns:auto 1fr; gap:8px 16px; font-size:13px; }
+  .kv dt { color:var(--dim); white-space:nowrap; }
+  .kv dd { margin:0; font-family:var(--mono); font-variant-numeric:tabular-nums; word-break:break-all; }
+  .kv dd.na { color:var(--faint); font-style:italic; font-family:var(--sans); }
+  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; }
+  .m { background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:11px 13px; }
+  .m .v { font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:19px; font-weight:700; }
+  .m .l { font-size:10.5px; color:var(--faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+  pre { margin:0; background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:14px; overflow-x:auto; font-family:var(--mono); font-size:12px; line-height:1.6; color:var(--dim); }
+  pre .k { color:var(--cyan); } pre .c { color:var(--faint); font-style:italic; } pre .s { color:var(--green); }
+  .tags { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  .tag { font-family:var(--mono); font-size:11px; padding:3px 9px; border-radius:6px; border:1px solid var(--line); color:var(--dim); }
+  .tag.on { color:var(--green); border-color:var(--green); } .tag.off { color:var(--faint); }
+  .note { font-size:12px; color:var(--faint); margin-top:12px; line-height:1.6; }
+  .muted { color:var(--dim); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Render</b> — where this is running</div>
+  <span class="pill up" id="envPill"><span class="dot"></span>checking…</span>
+  <div class="spacer"></div>
+  <a class="nav" href="/">← Home</a>
+  <a class="nav" href="/app">Sentinel desk →</a>
+</header>
+
+<main>
+  <div class="card">
+    <h2>This instance</h2>
+    <p class="sub">Self-reported by the process you're talking to — no admin API key involved.</p>
+    <dl class="kv" id="svc"><dd class="na">loading…</dd></dl>
+  </div>
+
+  <div class="card">
+    <h2>Running code</h2>
+    <p class="sub">The exact commit this instance was built from.</p>
+    <dl class="kv" id="git"><dd class="na">loading…</dd></dl>
+    <div class="tags" id="integrations"></div>
+  </div>
+
+  <div class="card wide">
+    <h2>Runtime</h2>
+    <p class="sub">Live process metrics — refreshes every 5s.</p>
+    <div class="metrics" id="metrics"></div>
+  </div>
+
+  <div class="card wide">
+    <h2>Blueprint <span class="muted" style="font-weight:400;font-size:12.5px">— infrastructure as code</span></h2>
+    <p class="sub" id="bpSub">The <code>render.yaml</code> that provisioned this service. Env vars are declared here by name; values are dashboard secrets.</p>
+    <pre id="bp">loading…</pre>
+    <p class="note">Deliberately no <code>RENDER_API_KEY</code> on this box: an infrastructure admin token can read every
+      other secret in the account, so it has no place in a public web app. Everything above is either self-reported by
+      this process or committed to the repo.</p>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
+const row = (k, v) => `<dt>${esc(k)}</dt>` + (v == null || v === "" ? `<dd class="na">not set</dd>` : `<dd>${esc(v)}</dd>`);
+
+async function tick() {
+  let d;
+  try { d = await (await fetch("/api/render/runtime")).json(); }
+  catch { $("envPill").innerHTML = "unreachable"; return; }
+
+  const onRender = d.environment === "render";
+  $("envPill").className = "pill up";
+  $("envPill").innerHTML = `<span class="dot"></span>${onRender ? "live on Render · " + esc(d.service.name || "service") : "running locally"}`;
+
+  $("svc").innerHTML =
+    row("environment", onRender ? "Render" : "local (not on Render)") +
+    row("service", d.service.name) + row("service id", d.service.id) +
+    row("instance", d.service.instance_id) + row("type", d.service.type) +
+    row("external url", d.service.external_url);
+
+  $("git").innerHTML =
+    row("commit", d.git.commit_short) + row("branch", d.git.branch) +
+    row("repo", d.git.repo_slug) + row("node", d.process.node) +
+    row("platform", d.process.platform) + row("booted", d.process.booted_at?.replace("T", " ").slice(0, 19) + "Z");
+
+  const i = d.integrations;
+  $("integrations").innerHTML =
+    `<span class="tag ${i.youcom ? "on" : "off"}">You.com ${i.youcom ? "configured" : "absent"}</span>` +
+    `<span class="tag ${i.parasail ? "on" : "off"}">Parasail ${i.parasail ? "configured" : "absent"}</span>` +
+    (i.parasail_model ? `<span class="tag">${esc(i.parasail_model)}</span>` : "");
+
+  const p = d.process;
+  $("metrics").innerHTML = [
+    ["uptime", p.uptime_human], ["memory rss", p.rss_mb + " MB"], ["heap used", p.heap_used_mb + " MB"],
+    ["port", p.port], ["pid", p.pid], ["node", p.node.replace("v", "")],
+  ].map(([l, v]) => `<div class="m"><div class="v">${esc(v)}</div><div class="l">${esc(l)}</div></div>`).join("");
+}
+
+async function blueprint() {
+  try {
+    const b = await (await fetch("/api/render/blueprint")).json();
+    const s = b.summary;
+    $("bpSub").innerHTML = `<code>render.yaml</code> — plan <b>${esc(s.plan)}</b> · region <b>${esc(s.region)}</b> · health check <code>${esc(s.health_check)}</code> · auto-deploy <b>${s.auto_deploy ? "on" : "off"}</b> · secrets: ${s.dashboard_secrets.map(x => `<code>${esc(x)}</code>`).join(", ")}`;
+    $("bp").innerHTML = esc(b.yaml)
+      .replace(/^(\s*)(#.*)$/gm, '$1<span class="c">$2</span>')
+      .replace(/^(\s*-?\s*)([a-zA-Z_]+):/gm, '$1<span class="k">$2</span>:');
+  } catch { $("bp").textContent = "blueprint unavailable"; }
+}
+
+tick(); blueprint(); setInterval(tick, 5000);
+</script>
+</body>
+</html>

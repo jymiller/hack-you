@@ -1,0 +1,7 @@
+{
+  "name": "Render",
+  "blurb": "Where this is running — live instance, commit, uptime, blueprint",
+  "accent": "green",
+  "status": "live",
+  "order": 25
+}

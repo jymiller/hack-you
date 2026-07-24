@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Migration Assessment",
+  "type": "object",
+  "required": ["type", "scope"],
+  "properties": {
+    "type": { "const": "migration_assessment" },
+    "scope": { "enum": ["system-wide", "domain"] },
+    "domain": { "type": "string" },
+    "last_analyzed": { "type": "string", "format": "date" },
+    "overall_readiness": { "type": "number", "minimum": 0, "maximum": 1 },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "dependency_injection": { "type": "number", "minimum": 0, "maximum": 1 },
+        "test_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "separation_of_concerns": { "type": "number", "minimum": 0, "maximum": 1 },
+        "api_surface_clarity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "data_layer_isolation": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "global_state_inventory": {
+      "type": "object",
+      "properties": {
+        "session_keys_total": { "type": "integer" },
+        "global_variables": { "type": "array", "items": { "type": "string" } },
+        "singletons": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Request Lifecycle — the money-shot</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#232733; --border:#2e3345;
+    --text:#e1e4ed; --text-dim:#8b90a0; --accent:#6c8aff; --accent2:#a78bfa;
+    --green:#4ade80; --orange:#fb923c; --red:#f87171; --cyan:#22d3ee;
+    --mono:'JetBrains Mono','Fira Code',ui-monospace,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+    font-family:'Inter',-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); text-decoration:none; }
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 2rem;
+    display:flex; gap:1rem; align-items:center; position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+  .nav a { padding:.35rem .9rem; border-radius:6px; font-size:.85rem; background:var(--surface2);
+    color:var(--text-dim); }
+  .nav a:hover { background:var(--accent); color:#fff; }
+  .nav .title { font-weight:700; margin-right:auto; font-size:.95rem; }
+  .wrap { max-width:1160px; margin:0 auto; padding:24px; }
+  h1 { font-size:24px; margin:6px 0 4px; }
+  .lead { color:var(--text-dim); max-width:80ch; margin:0 0 18px; }
+  .svgbox { background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:14px; overflow-x:auto; }
+  .legend { display:flex; gap:20px; flex-wrap:wrap; margin-top:16px; font-size:13px; color:var(--text-dim); }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  code { font-family:var(--mono); font-size:.85em; background:var(--surface2); padding:1px 5px;
+    border-radius:4px; color:var(--cyan); }
+  .foot { margin-top:22px; font-size:13px; color:var(--text-dim); }
+  a[href$=".md"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:var(--green); margin-left:4px; vertical-align:middle; }
+  a[href$=".html"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:var(--accent); margin-left:4px; vertical-align:middle; }
+  .nav a::after, a[href^="javascript"]::after { content:none !important; }
+  svg text { font-family:'Inter',sans-serif; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="title">Request Lifecycle · the money-shot</span>
+  <a href="../../index.html">Home</a>
+  <a href="javascript:history.back()">Back</a>
+  <a href="kernel-pipeline.html">Kernel pipeline</a>
+  <a href="code-patterns.html">Code patterns</a>
+  <a href="../data-engineer/data-pipeline.html">Data pipeline</a>
+</div>
+<div class="wrap">
+  <h1>The money-shot — scan → recompute → flip → attest → notice</h1>
+  <p class="lead">The end-to-end path from the <strong>Scan live web</strong> click to a committed
+  breach notice. Colors: blue = presentation/orchestration, purple = kernel, green = data/clean,
+  orange = external I/O, red = the gate/effect, cyan = telemetry.</p>
+
+  <div class="svgbox">
+  <svg viewBox="0 0 1120 940" width="100%" role="img" aria-label="Money-shot sequence">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6c8aff"/></marker>
+      <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4ade80"/></marker>
+      <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fb923c"/></marker>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#f87171"/></marker>
+    </defs>
+
+    <!-- 1 UI -->
+    <rect x="360" y="20" width="400" height="54" rx="8" fill="#232733" stroke="#6c8aff" stroke-width="1.5"/>
+    <text x="560" y="43" text-anchor="middle" fill="#e1e4ed" font-size="13" font-weight="700">web/app.html · click "Scan live web"</text>
+    <text x="560" y="61" text-anchor="middle" fill="#8b90a0" font-size="10.5">POST /api/scan { mode: live | prerun }</text>
+
+    <!-- 2 app -->
+    <rect x="360" y="104" width="400" height="54" rx="8" fill="#232733" stroke="#6c8aff" stroke-width="1.5"/>
+    <text x="560" y="127" text-anchor="middle" fill="#e1e4ed" font-size="13" font-weight="700">app.ts · runScan(now, mode)</text>
+    <text x="560" y="145" text-anchor="middle" fill="#8b90a0" font-size="10.5">cache result in sessions[scan_id]</text>
+
+    <!-- 3 withMemory -->
+    <rect x="360" y="188" width="400" height="48" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="560" y="209" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">corpus.ts · withMemory("thornwick")</text>
+    <text x="560" y="226" text-anchor="middle" fill="#8b90a0" font-size="10">load 6 fixtures · index by sponsor_id</text>
+
+    <!-- 4 Promise.all fan-out -->
+    <rect x="60" y="266" width="440" height="86" rx="8" fill="#232733" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="280" y="289" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">youcom.ts · searchLiveWeb() [Promise.all]</text>
+    <text x="280" y="308" text-anchor="middle" fill="#8b90a0" font-size="10">GET ydc-index.io/v1/search · freshness=week</text>
+    <text x="280" y="325" text-anchor="middle" fill="#4ade80" font-size="10">key? → LIVE hits</text>
+    <text x="280" y="341" text-anchor="middle" fill="#8b90a0" font-size="10">else → SYNTHETIC fixture headline</text>
+
+    <rect x="620" y="266" width="440" height="86" rx="8" fill="#232733" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="840" y="289" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">youcom.ts · researchAri() [Promise.all]</text>
+    <text x="840" y="308" text-anchor="middle" fill="#8b90a0" font-size="10">POST api.you.com/v1/research · background:true</text>
+    <text x="840" y="325" text-anchor="middle" fill="#4ade80" font-size="10">task_id → poll GET /{id} → LIVE brief</text>
+    <text x="840" y="341" text-anchor="middle" fill="#b48cff" font-size="10">else → PRERUN cache (genuine)</text>
+
+    <!-- 5 kernel -->
+    <rect x="300" y="384" width="520" height="150" rx="10" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="6 3"/>
+    <text x="320" y="405" fill="#a78bfa" font-size="11" font-weight="700">covenant-kernel · assess() — pure, no I/O</text>
+    <rect x="320" y="416" width="480" height="46" rx="7" fill="#1a1d27" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="560" y="435" text-anchor="middle" fill="#e1e4ed" font-size="12" font-weight="600">authoritative basis = audited_restated (outranks certified)</text>
+    <text x="560" y="453" text-anchor="middle" fill="#8b90a0" font-size="10">recompute adjusted_ebitda 34.0 → 29.0</text>
+    <rect x="320" y="472" width="480" height="52" rx="7" fill="#1a1d27" stroke="#f87171" stroke-width="1.6"/>
+    <text x="560" y="493" text-anchor="middle" fill="#f87171" font-size="14" font-weight="800">220 / 29.0 = 7.59× → BREACH (was 6.47× GREEN)</text>
+    <text x="560" y="512" text-anchor="middle" fill="#8b90a0" font-size="10">certification_conflict=true · memory.hit → Halveston</text>
+
+    <!-- 6 attach citations -->
+    <rect x="360" y="560" width="400" height="46" rx="8" fill="#232733" stroke="#6c8aff" stroke-width="1.5"/>
+    <text x="560" y="580" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">scan.ts · attachLiveCitations(a, ari)</text>
+    <text x="560" y="597" text-anchor="middle" fill="#8b90a0" font-size="10">ARI sources → evidence + proposed_write</text>
+
+    <!-- 7 scoreboard -->
+    <rect x="300" y="632" width="520" height="60" rx="8" fill="#232733" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="560" y="655" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">scoreboard.ts · scan(a)</text>
+    <text x="560" y="674" text-anchor="middle" fill="#22d3ee" font-size="10.5">scanned(LIVE) → breach → memory_hit</text>
+
+    <!-- 8 return to UI -->
+    <rect x="360" y="718" width="400" height="46" rx="8" fill="#232733" stroke="#6c8aff" stroke-width="1.5"/>
+    <text x="560" y="738" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">ScanResult → web/app.html</text>
+    <text x="560" y="755" text-anchor="middle" fill="#8b90a0" font-size="10">flip tile · render ARI brief · reveal attest gate</text>
+
+    <!-- 9 attest -->
+    <rect x="300" y="790" width="520" height="60" rx="8" fill="#232733" stroke="#f87171" stroke-width="1.6"/>
+    <text x="560" y="813" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="700">POST /api/attest → applyAttestation → attest()</text>
+    <text x="560" y="832" text-anchor="middle" fill="#8b90a0" font-size="10">human ATTEST → CommittedWrite (only path to a serve)</text>
+
+    <!-- 10 notice -->
+    <rect x="300" y="876" width="520" height="48" rx="8" fill="#1a1d27" stroke="#f87171" stroke-width="2"/>
+    <text x="560" y="898" text-anchor="middle" fill="#f87171" font-size="13" font-weight="800">executeCommitted() → reservation-of-rights notice</text>
+    <text x="560" y="915" text-anchor="middle" fill="#8b90a0" font-size="10">covenant register · SYNTHETIC · write_committed</text>
+
+    <!-- arrows -->
+    <line x1="560" y1="74" x2="560" y2="104" stroke="#6c8aff" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="560" y1="158" x2="560" y2="188" stroke="#6c8aff" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="470" y1="236" x2="300" y2="266" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ao)"/>
+    <line x1="650" y1="236" x2="820" y2="266" stroke="#fb923c" stroke-width="1.5" marker-end="url(#ao)"/>
+    <line x1="300" y1="352" x2="440" y2="416" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="840" y1="352" x2="700" y2="560" stroke="#fb923c" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ao)"/>
+    <line x1="560" y1="534" x2="560" y2="560" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="560" y1="606" x2="560" y2="632" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="560" y1="692" x2="560" y2="718" stroke="#6c8aff" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="560" y1="764" x2="560" y2="790" stroke="#f87171" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="560" y1="850" x2="560" y2="876" stroke="#f87171" stroke-width="1.6" marker-end="url(#ar)"/>
+  </svg>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:#6c8aff"></span>Presentation / orchestration</span>
+    <span><span class="dot" style="background:#a78bfa"></span>Kernel (pure)</span>
+    <span><span class="dot" style="background:#4ade80"></span>Data / clean</span>
+    <span><span class="dot" style="background:#fb923c"></span>External I/O (You.com)</span>
+    <span><span class="dot" style="background:#f87171"></span>Gate / effect</span>
+    <span><span class="dot" style="background:#22d3ee"></span>Telemetry</span>
+  </div>
+
+  <p class="foot">Prose trace: <a href="../../atlas/data-flows.md">atlas/data-flows.md §1 &amp; §2</a>.
+  Files: <a href="../../cards/scan-orchestration/scan.md">scan.ts</a> ·
+  <a href="../../cards/covenant-kernel/assess.md">assess.ts</a> ·
+  <a href="../../cards/attestation-gate/attest.md">attest.ts</a> ·
+  <a href="../../cards/youcom-integration/youcom.md">youcom.ts</a>.<br>
+  <span class="dot" style="background:#4ade80"></span>Green dot = Markdown ·
+  <span class="dot" style="background:#6c8aff"></span>Blue dot = HTML.</p>
+</div>
+</body>
+</html>

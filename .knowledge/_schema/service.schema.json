@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Service Document",
+  "type": "object",
+  "required": ["type", "name", "file"],
+  "properties": {
+    "type": { "const": "service" },
+    "name": { "type": "string" },
+    "file": { "type": "string" },
+    "pattern": { "enum": ["singleton", "factory", "static", "instance", "middleware"] },
+    "complexity": { "enum": ["low", "medium", "high"] },
+    "public_api": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "signature"],
+        "properties": {
+          "name": { "type": "string" },
+          "signature": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "globals": { "type": "array", "items": { "type": "string" } },
+        "session_keys": { "type": "array", "items": { "type": "string" } },
+        "database_tables": { "type": "array", "items": { "type": "string" } },
+        "services": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "migration": {
+      "type": "object",
+      "properties": {
+        "extractable": { "type": "boolean" },
+        "extraction_notes": { "type": "string" },
+        "coupling_score": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

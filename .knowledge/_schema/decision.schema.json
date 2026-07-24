@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decision Record",
+  "type": "object",
+  "required": ["type", "id", "title", "status"],
+  "properties": {
+    "type": { "const": "decision" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "status": { "enum": ["accepted", "inferred", "superseded", "deprecated"] },
+    "date": { "type": "string", "format": "date" },
+    "date_inferred": { "type": "string", "format": "date" },
+    "scope": { "enum": ["system-wide", "domain", "module", "file"] },
+    "affects": { "type": "array", "items": { "type": "string" } },
+    "migration_impact": { "enum": ["none", "low", "medium", "high"] },
+    "migration_notes": { "type": "string" }
+  }
+}

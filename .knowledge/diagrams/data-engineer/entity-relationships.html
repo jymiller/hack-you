@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entity Relationships — the Facts bundle</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#232733; --border:#2e3345;
+    --text:#e1e4ed; --text-dim:#8b90a0; --accent:#6c8aff; --accent2:#a78bfa;
+    --green:#4ade80; --orange:#fb923c; --red:#f87171; --cyan:#22d3ee;
+    --mono:'JetBrains Mono','Fira Code',ui-monospace,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); text-decoration:none; }
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 2rem;
+    display:flex; gap:1rem; align-items:center; position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+  .nav a { padding:.35rem .9rem; border-radius:6px; font-size:.85rem; background:var(--surface2); color:var(--text-dim); }
+  .nav a:hover { background:var(--accent); color:#fff; }
+  .nav .title { font-weight:700; margin-right:auto; font-size:.95rem; }
+  .wrap { max-width:1160px; margin:0 auto; padding:24px; }
+  h1 { font-size:24px; margin:6px 0 4px; }
+  .lead { color:var(--text-dim); max-width:82ch; margin:0 0 18px; }
+  .svgbox { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; overflow-x:auto; }
+  .foot { margin-top:22px; font-size:13px; color:var(--text-dim); }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  code { font-family:var(--mono); font-size:.85em; background:var(--surface2); padding:1px 5px; border-radius:4px; color:var(--cyan); }
+  a[href$=".md"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-left:4px; vertical-align:middle; }
+  a[href$=".html"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-left:4px; vertical-align:middle; }
+  .nav a::after, a[href^="javascript"]::after { content:none !important; }
+  svg text { font-family:'Inter',sans-serif; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="title">Entity Relationships · Facts bundle</span>
+  <a href="../../index.html">Home</a>
+  <a href="javascript:history.back()">Back</a>
+  <a href="data-pipeline.html">Data pipeline</a>
+  <a href="../developer/kernel-pipeline.html">Kernel pipeline</a>
+</div>
+<div class="wrap">
+  <h1>The Facts data model (there is no SQL database)</h1>
+  <p class="lead">A <code>FactsBundle</code> = one borrower = one JSON file in <code>fixtures/</code>.
+  Nesting and the joins that matter. Green = data containers, cyan = the drift/memory surfaces, red =
+  the tri-state field the recompute keys off. Prose:
+  <a href="../../atlas/database-schema.md">atlas/database-schema.md</a>.</p>
+
+  <div class="svgbox">
+  <svg viewBox="0 0 1120 760" width="100%" role="img" aria-label="Facts ER diagram">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4ade80"/></marker>
+      <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#22d3ee"/></marker>
+    </defs>
+
+    <!-- FactsBundle root -->
+    <rect x="410" y="20" width="300" height="70" rx="9" fill="#1a1d27" stroke="#4ade80" stroke-width="2"/>
+    <text x="560" y="46" text-anchor="middle" fill="#e1e4ed" font-size="14" font-weight="700">FactsBundle</text>
+    <text x="560" y="66" text-anchor="middle" fill="#8b90a0" font-size="10">facts_id · provenance_label · units · basis_precedence</text>
+    <text x="560" y="81" text-anchor="middle" fill="#8b90a0" font-size="10">1 per borrower · SYNTHETIC</text>
+
+    <!-- children row 1 -->
+    <rect x="40" y="140" width="230" height="60" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="155" y="164" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">borrower</text>
+    <text x="155" y="182" text-anchor="middle" fill="#8b90a0" font-size="9.5">sponsor{sponsor_id} · auditors · facility</text>
+
+    <rect x="300" y="140" width="230" height="60" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="415" y="160" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">covenants[]</text>
+    <text x="415" y="177" text-anchor="middle" fill="#8b90a0" font-size="9.5">metric · direction · formula{keys}</text>
+    <text x="415" y="191" text-anchor="middle" fill="#8b90a0" font-size="9.5">thresholds[] · watch_rule</text>
+
+    <rect x="560" y="140" width="230" height="60" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="675" y="164" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">periods[]</text>
+    <text x="675" y="182" text-anchor="middle" fill="#8b90a0" font-size="9.5">test_date · sequence</text>
+
+    <rect x="820" y="140" width="260" height="60" rx="8" fill="#232733" stroke="#22d3ee" stroke-width="1.4"/>
+    <text x="950" y="160" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">memory</text>
+    <text x="950" y="177" text-anchor="middle" fill="#22d3ee" font-size="9.5">sponsor_id (the cross-deal join)</text>
+    <text x="950" y="191" text-anchor="middle" fill="#8b90a0" font-size="9.5">pattern_tags · related_deals[]</text>
+
+    <!-- observation -->
+    <rect x="520" y="250" width="310" height="68" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="675" y="274" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">observations[]  (one per basis)</text>
+    <text x="675" y="292" text-anchor="middle" fill="#8b90a0" font-size="9.5">basis · as_of · provenance_label</text>
+    <text x="675" y="307" text-anchor="middle" fill="#22d3ee" font-size="9.5">field_map_fingerprint · unmapped_fields[]</text>
+
+    <!-- oracle -->
+    <rect x="860" y="250" width="220" height="68" rx="8" fill="#1a1d27" stroke="#fb923c" stroke-width="1.4"/>
+    <text x="970" y="272" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="700">expected_assessment[]</text>
+    <text x="970" y="290" text-anchor="middle" fill="#8b90a0" font-size="9.5">the ORACLE — test only</text>
+    <text x="970" y="305" text-anchor="middle" fill="#8b90a0" font-size="9.5">assess() must never read it</text>
+
+    <!-- measures + build -->
+    <rect x="330" y="366" width="250" height="72" rx="8" fill="#232733" stroke="#22d3ee" stroke-width="1.4"/>
+    <text x="455" y="388" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">measures[]</text>
+    <text x="455" y="406" text-anchor="middle" fill="#8b90a0" font-size="9.5">key · value · raw_name · state</text>
+    <text x="455" y="421" text-anchor="middle" fill="#22d3ee" font-size="9.5">raw_name/state → drift surface</text>
+
+    <rect x="620" y="366" width="290" height="72" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="765" y="388" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">ebitda_build</text>
+    <text x="765" y="406" text-anchor="middle" fill="#8b90a0" font-size="9.5">base_amount · add_backs[] · adjustments[]</text>
+    <text x="765" y="421" text-anchor="middle" fill="#8b90a0" font-size="9.5">total_amount (a CLAIM, recomputed)</text>
+
+    <!-- add_back.allowed -->
+    <rect x="620" y="470" width="290" height="60" rx="8" fill="#1a1d27" stroke="#f87171" stroke-width="1.8"/>
+    <text x="765" y="493" text-anchor="middle" fill="#f87171" font-size="12.5" font-weight="700">add_back.allowed : true | false | null</text>
+    <text x="765" y="512" text-anchor="middle" fill="#8b90a0" font-size="9.5">only true is summed — drops the disallowed synergy</text>
+
+    <!-- certified -->
+    <rect x="330" y="470" width="250" height="60" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="455" y="493" text-anchor="middle" fill="#e1e4ed" font-size="12" font-weight="600">certified_results[]</text>
+    <text x="455" y="511" text-anchor="middle" fill="#8b90a0" font-size="9.5">the borrower's claim (never an input)</text>
+
+    <!-- documents / events -->
+    <rect x="40" y="250" width="230" height="68" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="155" y="274" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">documents[]</text>
+    <text x="155" y="292" text-anchor="middle" fill="#8b90a0" font-size="9.5">sha256 fingerprint (placeholder)</text>
+    <text x="155" y="307" text-anchor="middle" fill="#8b90a0" font-size="9.5">provenance_label</text>
+
+    <rect x="40" y="366" width="250" height="72" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="165" y="388" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">events[]</text>
+    <text x="165" y="406" text-anchor="middle" fill="#8b90a0" font-size="9.5">the live-web trigger row</text>
+    <text x="165" y="421" text-anchor="middle" fill="#8b90a0" font-size="9.5">LIVE at runtime · SYNTHETIC placeholder</text>
+
+    <!-- sibling bundle (memory join) -->
+    <rect x="820" y="560" width="260" height="64" rx="8" fill="#1a1d27" stroke="#22d3ee" stroke-width="1.6"/>
+    <text x="950" y="584" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="700">sibling FactsBundle</text>
+    <text x="950" y="602" text-anchor="middle" fill="#8b90a0" font-size="9.5">same sponsor_id (Thornwick → Halveston)</text>
+    <text x="950" y="617" text-anchor="middle" fill="#8b90a0" font-size="9.5">via buildMemoryContext.bySponsor()</text>
+
+    <!-- covenant→measure join -->
+    <rect x="330" y="590" width="250" height="56" rx="8" fill="#1a1d27" stroke="#6c8aff" stroke-width="1.6"/>
+    <text x="455" y="613" text-anchor="middle" fill="#6c8aff" font-size="12" font-weight="700">formula.numerator/denominator_key</text>
+    <text x="455" y="631" text-anchor="middle" fill="#8b90a0" font-size="9.5">joins covenant → measure (the ratio)</text>
+
+    <!-- arrows -->
+    <g stroke="#4ade80" stroke-width="1.3">
+      <line x1="470" y1="90" x2="200" y2="140" marker-end="url(#a)"/>
+      <line x1="520" y1="90" x2="430" y2="140" marker-end="url(#a)"/>
+      <line x1="600" y1="90" x2="670" y2="140" marker-end="url(#a)"/>
+      <line x1="675" y1="200" x2="675" y2="250" marker-end="url(#a)"/>
+      <line x1="720" y1="318" x2="765" y2="366" marker-end="url(#a)"/>
+      <line x1="620" y1="300" x2="500" y2="366" marker-end="url(#a)"/>
+      <line x1="560" y1="318" x2="455" y2="470" marker-end="url(#a)"/>
+      <line x1="765" y1="438" x2="765" y2="470" marker-end="url(#a)"/>
+      <line x1="155" y1="200" x2="155" y2="250" marker-end="url(#a)"/>
+      <line x1="130" y1="318" x2="140" y2="366" marker-end="url(#a)"/>
+    </g>
+    <g stroke="#22d3ee" stroke-width="1.4" stroke-dasharray="5 3">
+      <line x1="700" y1="90" x2="940" y2="140" marker-end="url(#ac)"/>
+      <line x1="950" y1="200" x2="950" y2="560" marker-end="url(#ac)"/>
+    </g>
+    <line x1="415" y1="200" x2="440" y2="590" stroke="#6c8aff" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#ac)"/>
+  </svg>
+  </div>
+
+  <p class="foot">Prose: <a href="../../atlas/database-schema.md">atlas/database-schema.md</a> ·
+  contract: <a href="../../cards/synthetic-corpus/covenant-facts-schema.md">covenant-facts.schema.json</a> ·
+  the reference fixture: <a href="../../cards/synthetic-corpus/thornwick-fixture.md">thornwick.json</a>.<br>
+  <span class="dot" style="background:#4ade80"></span>Green dot = Markdown ·
+  <span class="dot" style="background:#6c8aff"></span>Blue dot = HTML.</p>
+</div>
+</body>
+</html>

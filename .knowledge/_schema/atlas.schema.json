@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Atlas Document",
+  "type": "object",
+  "required": ["type", "title"],
+  "properties": {
+    "type": { "const": "atlas" },
+    "title": { "type": "string" },
+    "last_analyzed": { "type": "string", "format": "date" },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "display_name", "role"],
+        "properties": {
+          "name": { "type": "string" },
+          "display_name": { "type": "string" },
+          "file_count": { "type": "integer" },
+          "role": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "entry_points": { "type": "array", "items": { "type": "string" } },
+          "handlers": { "type": "array", "items": { "type": "string" } },
+          "migration": {
+            "type": "object",
+            "properties": {
+              "complexity": { "enum": ["low", "medium", "high"] },
+              "coupling_score": { "type": "number", "minimum": 0, "maximum": 1 },
+              "session_dependencies": { "type": "integer" },
+              "global_dependencies": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "bootstrap_chain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "file", "role"],
+        "properties": {
+          "step": { "type": "integer" },
+          "file": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    },
+    "data_flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

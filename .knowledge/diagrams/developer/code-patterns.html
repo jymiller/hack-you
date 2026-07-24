@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code Patterns</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#232733; --border:#2e3345;
+    --text:#e1e4ed; --text-dim:#8b90a0; --accent:#6c8aff; --accent2:#a78bfa;
+    --green:#4ade80; --orange:#fb923c; --red:#f87171; --cyan:#22d3ee;
+    --mono:'JetBrains Mono','Fira Code',ui-monospace,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); text-decoration:none; }
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 2rem;
+    display:flex; gap:1rem; align-items:center; position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+  .nav a { padding:.35rem .9rem; border-radius:6px; font-size:.85rem; background:var(--surface2); color:var(--text-dim); }
+  .nav a:hover { background:var(--accent); color:#fff; }
+  .nav .title { font-weight:700; margin-right:auto; font-size:.95rem; }
+  .wrap { max-width:1160px; margin:0 auto; padding:24px; }
+  h1 { font-size:24px; margin:6px 0 4px; }
+  .lead { color:var(--text-dim); max-width:82ch; margin:0 0 18px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:820px){ .grid{grid-template-columns:1fr;} }
+  .pat { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .pat h3 { margin:0 0 4px; font-size:15px; }
+  .pat .meta { font-size:11px; color:var(--text-dim); font-family:var(--mono); margin-bottom:10px; }
+  pre { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px;
+    overflow-x:auto; font-size:12px; line-height:1.6; color:var(--text-dim); font-family:var(--mono); margin:0 0 8px; }
+  .pat p { font-size:13px; color:var(--text-dim); margin:0; }
+  .kw { color:var(--accent2); } .st { color:var(--green); } .cm { color:#5a6472; }
+  .foot { margin-top:22px; font-size:13px; color:var(--text-dim); }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  a[href$=".md"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-left:4px; vertical-align:middle; }
+  a[href$=".html"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-left:4px; vertical-align:middle; }
+  .nav a::after, a[href^="javascript"]::after { content:none !important; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="title">Code Patterns</span>
+  <a href="../../index.html">Home</a>
+  <a href="javascript:history.back()">Back</a>
+  <a href="request-lifecycle.html">Request lifecycle</a>
+  <a href="kernel-pipeline.html">Kernel pipeline</a>
+</div>
+<div class="wrap">
+  <h1>The recurring patterns, side by side</h1>
+  <p class="lead">Six patterns that recur across the codebase. Full catalog with counts:
+  <a href="../../migration/pattern-inventory.md">migration/pattern-inventory.md</a>.</p>
+
+  <div class="grid">
+    <div class="pat">
+      <h3>1 · Pure function, injected clock</h3>
+      <div class="meta">×6 · src/kernel/*.ts</div>
+      <pre><span class="kw">export function</span> assess(facts, cov, cert, memory, ctx) {
+  <span class="kw">const</span> now = ctx.now;   <span class="cm">// never Date.now()</span>
+  <span class="kw">const</span> order = ctx.precedence_override
+              ?? facts.basis_precedence;
+  <span class="cm">// no I/O, no globals, no writes</span>
+}</pre>
+      <p>Every input a parameter; the only clock is <code>ctx.now</code>. Referentially transparent.</p>
+    </div>
+
+    <div class="pat">
+      <h3>2 · Total function (errors[], never throws)</h3>
+      <div class="meta">×1 primary · assess.ts</div>
+      <pre><span class="kw">if</span> (rc.error) <span class="kw">return</span> indeterminate(
+  facts, cov, period, now, rc.error,
+  <span class="st">"Ratio unresolved"</span>, null,
+  { basis, ratio, drift }   <span class="cm">// keep what resolved</span>
+);
+<span class="cm">// INDETERMINATE ≠ silent PASS</span></pre>
+      <p>A data fault yields a Finding with a typed code, not an exception.</p>
+    </div>
+
+    <div class="pat">
+      <h3>3 · Resolver with tiered fallback</h3>
+      <div class="meta">×1 · recompute.ts</div>
+      <pre><span class="cm">// 1 clean measure → 2 reconstruct build</span>
+<span class="cm">// → 3 stale (raise drift) → 4 unresolved</span>
+<span class="kw">if</span> (m &amp;&amp; m.value != null
+    &amp;&amp; state === <span class="st">"observed"</span>
+    &amp;&amp; m.raw_name != null)
+  <span class="kw">return</span> { value: m.value,
+           source: <span class="st">"measure"</span> };</pre>
+      <p>Decides when to trust an extracted value vs. rebuild — the drift boundary.</p>
+    </div>
+
+    <div class="pat">
+      <h3>4 · One comparator via direction</h3>
+      <div class="meta">×1 · classify.ts</div>
+      <pre>headroom = dir === <span class="st">"max"</span>
+  ? threshold - value   <span class="cm">// leverage ceiling</span>
+  : value - threshold;  <span class="cm">// cover floor</span>
+<span class="cm">// headroom &lt; 0  ⇒  BREACH</span></pre>
+      <p>One code path serves both metric families — no per-metric branching.</p>
+    </div>
+
+    <div class="pat">
+      <h3>5 · Capability-object gate</h3>
+      <div class="meta">×1 · attest.ts</div>
+      <pre><span class="kw">function</span> executeCommitted(
+  w: CommittedWrite, ...): ServeReceipt
+<span class="cm">// only attest()@ATTEST builds a</span>
+<span class="cm">// CommittedWrite → no serve without</span>
+<span class="cm">// a human, enforced by the type.</span></pre>
+      <p>The one side-effect is unreachable without a token only the human gate mints.</p>
+    </div>
+
+    <div class="pat">
+      <h3>6 · API client with labeled fallback</h3>
+      <div class="meta">×4 · youcom.ts</div>
+      <pre><span class="kw">if</span> (!key) <span class="kw">return</span> fallback(...);   <span class="cm">// labeled</span>
+<span class="kw">try</span> {
+  <span class="kw">const</span> d = <span class="kw">await</span> fetchJson(host, ...);
+  <span class="kw">return</span> { label: <span class="st">"LIVE"</span>, ... };
+} <span class="kw">catch</span> { <span class="kw">return</span> fallback(...); } <span class="cm">// PRERUN/SYNTHETIC</span></pre>
+      <p>Never hangs; the honesty label flips honestly on fallback.</p>
+    </div>
+  </div>
+
+  <p class="foot">Full inventory (12 patterns, counts, reuse notes):
+  <a href="../../migration/pattern-inventory.md">migration/pattern-inventory.md</a>.<br>
+  <span class="dot" style="background:#4ade80"></span>Green dot = Markdown ·
+  <span class="dot" style="background:#6c8aff"></span>Blue dot = HTML.</p>
+</div>
+</body>
+</html>

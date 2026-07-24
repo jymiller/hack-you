@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Page / Route Sitemap</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#232733; --border:#2e3345;
+    --text:#e1e4ed; --text-dim:#8b90a0; --accent:#6c8aff; --accent2:#a78bfa;
+    --green:#4ade80; --orange:#fb923c; --red:#f87171; --cyan:#22d3ee;
+    --mono:'JetBrains Mono','Fira Code',ui-monospace,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); text-decoration:none; }
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 2rem;
+    display:flex; gap:1rem; align-items:center; position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+  .nav a { padding:.35rem .9rem; border-radius:6px; font-size:.85rem; background:var(--surface2); color:var(--text-dim); }
+  .nav a:hover { background:var(--accent); color:#fff; }
+  .nav .title { font-weight:700; margin-right:auto; font-size:.95rem; }
+  .wrap { max-width:1160px; margin:0 auto; padding:24px; }
+  h1 { font-size:24px; margin:6px 0 4px; }
+  .lead { color:var(--text-dim); max-width:82ch; margin:0 0 18px; }
+  .svgbox { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; overflow-x:auto; }
+  .foot { margin-top:22px; font-size:13px; color:var(--text-dim); }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  code { font-family:var(--mono); font-size:.85em; background:var(--surface2); padding:1px 5px; border-radius:4px; color:var(--cyan); }
+  a[href$=".md"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-left:4px; vertical-align:middle; }
+  a[href$=".html"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-left:4px; vertical-align:middle; }
+  .nav a::after, a[href^="javascript"]::after { content:none !important; }
+  svg text { font-family:'Inter',sans-serif; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="title">Page / Route Sitemap</span>
+  <a href="../../index.html">Home</a>
+  <a href="javascript:history.back()">Back</a>
+  <a href="../developer/request-lifecycle.html">Request lifecycle</a>
+  <a href="../data-engineer/data-pipeline.html">Data pipeline</a>
+</div>
+<div class="wrap">
+  <h1>Every user-facing page &amp; API route</h1>
+  <p class="lead">The single Express app serves a landing launcher, the flagship Sentinel desk, and
+  auto-mounted mini-demos. Blue = first-party pages, cyan = live mini-demos, grey = "soon" stubs,
+  green = API routes. Behind it: <a href="../../maps/web-demo-platform/index.md">web-demo-platform</a>.</p>
+
+  <div class="svgbox">
+  <svg viewBox="0 0 1120 620" width="100%" role="img" aria-label="Sitemap">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6c8aff"/></marker>
+      <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4ade80"/></marker>
+    </defs>
+
+    <!-- root -->
+    <rect x="440" y="24" width="240" height="56" rx="9" fill="#1a1d27" stroke="#6c8aff" stroke-width="2"/>
+    <text x="560" y="48" text-anchor="middle" fill="#e1e4ed" font-size="14" font-weight="700">/  · landing launcher</text>
+    <text x="560" y="66" text-anchor="middle" fill="#8b90a0" font-size="10">web/index.html · grid from /api/demos</text>
+
+    <!-- app -->
+    <rect x="120" y="140" width="280" height="70" rx="9" fill="#232733" stroke="#6c8aff" stroke-width="1.6"/>
+    <text x="260" y="164" text-anchor="middle" fill="#e1e4ed" font-size="13" font-weight="700">/app · Sentinel desk</text>
+    <text x="260" y="182" text-anchor="middle" fill="#8b90a0" font-size="10">web/app.html · the flagship demo</text>
+    <text x="260" y="198" text-anchor="middle" fill="#8b90a0" font-size="10">tile flip · scoreboard · attest gate</text>
+
+    <!-- youcom demo -->
+    <rect x="430" y="140" width="260" height="70" rx="9" fill="#232733" stroke="#22d3ee" stroke-width="1.6"/>
+    <text x="560" y="164" text-anchor="middle" fill="#e1e4ed" font-size="13" font-weight="700">/youcom · Explorer  [LIVE]</text>
+    <text x="560" y="182" text-anchor="middle" fill="#8b90a0" font-size="10">demos/youcom/page.html</text>
+    <text x="560" y="198" text-anchor="middle" fill="#8b90a0" font-size="10">search · research · balance</text>
+
+    <!-- data demo -->
+    <rect x="720" y="140" width="260" height="70" rx="9" fill="#232733" stroke="#22d3ee" stroke-width="1.6"/>
+    <text x="850" y="164" text-anchor="middle" fill="#e1e4ed" font-size="13" font-weight="700">/data · corpus explorer  [LIVE]</text>
+    <text x="850" y="182" text-anchor="middle" fill="#8b90a0" font-size="10">demos/data/page.html</text>
+    <text x="850" y="198" text-anchor="middle" fill="#8b90a0" font-size="10">6 borrowers · recompute vs oracle</text>
+
+    <!-- soon stubs -->
+    <rect x="120" y="252" width="860" height="52" rx="8" fill="#161923" stroke="#2e3345" stroke-width="1.2" stroke-dasharray="5 3"/>
+    <text x="150" y="273" fill="#8b90a0" font-size="11" font-weight="700">"soon" stubs (meta.json only → greyed cards)</text>
+    <text x="150" y="292" fill="#5a6472" font-size="11">/crewai · /parasail · /llamaindex · /agno · /replit · /pica</text>
+
+    <!-- API routes -->
+    <rect x="120" y="356" width="400" height="150" rx="10" fill="rgba(74,222,128,0.05)" stroke="#4ade80" stroke-width="1" stroke-dasharray="6 3"/>
+    <text x="140" y="378" fill="#4ade80" font-size="11" font-weight="700">core API (app.ts)</text>
+    <g font-size="11" fill="#8b90a0" font-family="'JetBrains Mono',monospace">
+      <text x="142" y="404">GET  /api/health</text>
+      <text x="142" y="428">POST /api/scan</text>
+      <text x="142" y="452">POST /api/attest</text>
+      <text x="142" y="476">GET  /api/corpus</text>
+      <text x="142" y="498">GET  /api/demos</text>
+    </g>
+
+    <rect x="580" y="356" width="400" height="150" rx="10" fill="rgba(34,211,238,0.05)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="6 3"/>
+    <text x="600" y="378" fill="#22d3ee" font-size="11" font-weight="700">mini-demo API (auto-mounted)</text>
+    <g font-size="11" fill="#8b90a0" font-family="'JetBrains Mono',monospace">
+      <text x="602" y="404">POST /api/youcom/search</text>
+      <text x="602" y="428">POST /api/youcom/research</text>
+      <text x="602" y="452">GET  /api/youcom/balance</text>
+      <text x="602" y="476">GET  /api/data/corpus</text>
+      <text x="602" y="498">GET  /api/data/borrower/:id</text>
+    </g>
+
+    <!-- arrows -->
+    <g stroke="#6c8aff" stroke-width="1.5">
+      <line x1="480" y1="80" x2="290" y2="140" marker-end="url(#a)"/>
+      <line x1="560" y1="80" x2="560" y2="140" marker-end="url(#a)"/>
+      <line x1="640" y1="80" x2="830" y2="140" marker-end="url(#a)"/>
+    </g>
+    <line x1="260" y1="210" x2="300" y2="356" stroke="#4ade80" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#ag)"/>
+    <line x1="560" y1="210" x2="720" y2="356" stroke="#22d3ee" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#a)"/>
+    <line x1="850" y1="210" x2="820" y2="356" stroke="#22d3ee" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#a)"/>
+  </svg>
+  </div>
+
+  <p class="foot">Behind these pages: <a href="../../maps/web-demo-platform/index.md">web-demo-platform map</a> ·
+  <a href="../../cards/web-demo-platform/app-html.md">Sentinel desk card</a> ·
+  <a href="../../decisions/0009-mini-demo-auto-mount.md">ADR-0009 auto-mount</a>.<br>
+  <span class="dot" style="background:#4ade80"></span>Green dot = Markdown ·
+  <span class="dot" style="background:#6c8aff"></span>Blue dot = HTML.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Data Pipeline — corpus to assessment</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#232733; --border:#2e3345;
+    --text:#e1e4ed; --text-dim:#8b90a0; --accent:#6c8aff; --accent2:#a78bfa;
+    --green:#4ade80; --orange:#fb923c; --red:#f87171; --cyan:#22d3ee;
+    --mono:'JetBrains Mono','Fira Code',ui-monospace,monospace; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; line-height:1.6; }
+  a { color:var(--accent); text-decoration:none; }
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 2rem;
+    display:flex; gap:1rem; align-items:center; position:sticky; top:0; z-index:10; flex-wrap:wrap; }
+  .nav a { padding:.35rem .9rem; border-radius:6px; font-size:.85rem; background:var(--surface2); color:var(--text-dim); }
+  .nav a:hover { background:var(--accent); color:#fff; }
+  .nav .title { font-weight:700; margin-right:auto; font-size:.95rem; }
+  .wrap { max-width:1160px; margin:0 auto; padding:24px; }
+  h1 { font-size:24px; margin:6px 0 4px; }
+  .lead { color:var(--text-dim); max-width:82ch; margin:0 0 18px; }
+  .svgbox { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; overflow-x:auto; }
+  .foot { margin-top:22px; font-size:13px; color:var(--text-dim); }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+  code { font-family:var(--mono); font-size:.85em; background:var(--surface2); padding:1px 5px; border-radius:4px; color:var(--cyan); }
+  a[href$=".md"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-left:4px; vertical-align:middle; }
+  a[href$=".html"]::after { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-left:4px; vertical-align:middle; }
+  .nav a::after, a[href^="javascript"]::after { content:none !important; }
+  svg text { font-family:'Inter',sans-serif; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <span class="title">Data Pipeline · corpus → assessment</span>
+  <a href="../../index.html">Home</a>
+  <a href="javascript:history.back()">Back</a>
+  <a href="entity-relationships.html">ER diagram</a>
+  <a href="../developer/request-lifecycle.html">Request lifecycle</a>
+</div>
+<div class="wrap">
+  <h1>From JSON on disk to a labeled assessment</h1>
+  <p class="lead">The corpus-sweep pipeline (used by <code>/api/corpus</code> and the Data explorer),
+  and where the cross-deal memory index is built. Green = data, purple = kernel, cyan = telemetry.</p>
+
+  <div class="svgbox">
+  <svg viewBox="0 0 1120 560" width="100%" role="img" aria-label="Data pipeline">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6c8aff"/></marker>
+    </defs>
+
+    <rect x="40" y="40" width="220" height="120" rx="10" fill="rgba(74,222,128,0.05)" stroke="#4ade80" stroke-width="1" stroke-dasharray="6 3"/>
+    <text x="56" y="60" fill="#4ade80" font-size="11" font-weight="700">fixtures/ (6 JSON files)</text>
+    <text x="150" y="86" text-anchor="middle" fill="#8b90a0" font-size="10">thornwick · halveston</text>
+    <text x="150" y="104" text-anchor="middle" fill="#8b90a0" font-size="10">northgate · marrowfield</text>
+    <text x="150" y="122" text-anchor="middle" fill="#8b90a0" font-size="10">merribrook · brenmark</text>
+    <text x="150" y="146" text-anchor="middle" fill="#4ade80" font-size="10">+ expected_assessment[] oracle</text>
+
+    <rect x="330" y="56" width="220" height="88" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="440" y="86" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">corpus.ts · loadCorpus()</text>
+    <text x="440" y="106" text-anchor="middle" fill="#8b90a0" font-size="10">readFileSync + JSON.parse</text>
+    <text x="440" y="124" text-anchor="middle" fill="#8b90a0" font-size="10">→ FactsBundle[]</text>
+
+    <rect x="620" y="56" width="240" height="88" rx="8" fill="#232733" stroke="#22d3ee" stroke-width="1.4"/>
+    <text x="740" y="86" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">buildMemoryContext()</text>
+    <text x="740" y="106" text-anchor="middle" fill="#22d3ee" font-size="10">index by sponsor_id</text>
+    <text x="740" y="124" text-anchor="middle" fill="#8b90a0" font-size="10">bySponsor(id) → siblings</text>
+
+    <rect x="330" y="220" width="530" height="96" rx="10" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="6 3"/>
+    <text x="350" y="242" fill="#a78bfa" font-size="11" font-weight="700">per borrower × period × covenant</text>
+    <rect x="350" y="252" width="230" height="52" rx="7" fill="#1a1d27" stroke="#a78bfa" stroke-width="1.4"/>
+    <text x="465" y="273" text-anchor="middle" fill="#e1e4ed" font-size="11.5" font-weight="600">certificateFor(...)</text>
+    <text x="465" y="291" text-anchor="middle" fill="#8b90a0" font-size="9.5">borrower's claim input</text>
+    <rect x="600" y="252" width="240" height="52" rx="7" fill="#1a1d27" stroke="#a78bfa" stroke-width="1.6"/>
+    <text x="720" y="273" text-anchor="middle" fill="#e1e4ed" font-size="12" font-weight="700">assess(bundle, cov, cert, memory, ctx)</text>
+    <text x="720" y="291" text-anchor="middle" fill="#8b90a0" font-size="9.5">the pure kernel</text>
+
+    <rect x="330" y="378" width="530" height="70" rx="8" fill="#232733" stroke="#4ade80" stroke-width="1.4"/>
+    <text x="595" y="404" text-anchor="middle" fill="#e1e4ed" font-size="12.5" font-weight="600">Assessment rows</text>
+    <text x="595" y="423" text-anchor="middle" fill="#8b90a0" font-size="10">status · value · certified · conflict · drift · memory · labels</text>
+    <text x="595" y="438" text-anchor="middle" fill="#8b90a0" font-size="10">→ /api/corpus · /api/data/borrower/:id</text>
+
+    <rect x="330" y="480" width="530" height="52" rx="8" fill="#1a1d27" stroke="#fb923c" stroke-width="1.4"/>
+    <text x="595" y="502" text-anchor="middle" fill="#fb923c" font-size="11.5" font-weight="700">oracle.test.ts — recompute vs expected_assessment[]</text>
+    <text x="595" y="519" text-anchor="middle" fill="#8b90a0" font-size="10">keeps fixtures · types.ts · kernel in agreement</text>
+
+    <g stroke="#6c8aff" stroke-width="1.5">
+      <line x1="260" y1="100" x2="330" y2="100" marker-end="url(#a)"/>
+      <line x1="550" y1="100" x2="620" y2="100" marker-end="url(#a)"/>
+      <line x1="440" y1="144" x2="460" y2="252" marker-end="url(#a)"/>
+      <line x1="740" y1="144" x2="720" y2="252" marker-end="url(#a)"/>
+      <line x1="595" y1="316" x2="595" y2="378" marker-end="url(#a)"/>
+      <line x1="595" y1="448" x2="595" y2="480" marker-end="url(#a)"/>
+    </g>
+  </svg>
+  </div>
+
+  <p class="foot">Prose: <a href="../../atlas/data-flows.md">atlas/data-flows.md §4</a> · files:
+  <a href="../../cards/synthetic-corpus/corpus.md">corpus.ts</a> ·
+  <a href="../../cards/covenant-kernel/assess.md">assess.ts</a> ·
+  <a href="../../cards/eval-harness/oracle-test.md">oracle.test.ts</a>.<br>
+  <span class="dot" style="background:#4ade80"></span>Green dot = Markdown ·
+  <span class="dot" style="background:#6c8aff"></span>Blue dot = HTML.</p>
+</div>
+</body>
+</html>

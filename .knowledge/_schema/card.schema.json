@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Card Document",
+  "type": "object",
+  "required": ["type", "module", "file"],
+  "properties": {
+    "type": { "const": "card" },
+    "module": { "type": "string" },
+    "file": { "type": "string" },
+    "complexity": { "enum": ["low", "medium", "high"] },
+    "lines": { "type": "integer" },
+    "last_analyzed": { "type": "string", "format": "date" },
+    "migration": {
+      "type": "object",
+      "properties": {
+        "global_refs": { "type": "array", "items": { "type": "string" } },
+        "session_keys_read": { "type": "array", "items": { "type": "string" } },
+        "session_keys_written": { "type": "array", "items": { "type": "string" } },
+        "db_tables_touched": { "type": "array", "items": { "type": "string" } },
+        "side_effects": { "type": "array", "items": { "type": "string" } },
+        "singleton_pattern": { "type": "boolean" },
+        "extractable": { "type": "boolean" },
+        "extraction_notes": { "type": "string" }
+      }
+    }
+  }
+}

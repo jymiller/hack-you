@@ -1,0 +1,19 @@
+# Render Blueprint — deploys the Covenant Sentinel web service.
+# Dashboard → New → Blueprint → connect this repo → Render reads this file → Apply.
+services:
+  - type: web
+    name: covenant-sentinel
+    runtime: node
+    plan: free # upgrade to "starter" in the dashboard for the live demo (no cold starts; your $50 covers it)
+    region: oregon
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Set this as a secret in the dashboard → live You.com. Without it the app still runs,
+      # in labelled fallback mode (Search → SYNTHETIC, ARI → the genuine PRERUN cache).
+      - key: YDC_API_KEY
+        sync: false
+      - key: NODE_VERSION
+        value: "22"

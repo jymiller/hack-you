@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Covenant Sentinel — ENID · powered by You.com</title>
+<title>Covenant Sentinel — You.com Agentic Hackathon</title>
 <style>
   :root {
     --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
@@ -11,116 +11,120 @@
     --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:radial-gradient(1200px 600px at 70% -10%, #14204a33, transparent), var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5; }
+  body { margin:0; background:radial-gradient(1100px 560px at 72% -12%, #16265a44, transparent), var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5; }
   a { color:var(--cyan); }
-  header { display:flex; align-items:center; gap:14px; padding:14px 24px; border-bottom:1px solid var(--line); }
-  header .brand { font-weight:700; letter-spacing:.3px; }
-  header .brand b { color:var(--cyan); }
+  header { display:flex; align-items:center; gap:12px; padding:15px 26px; border-bottom:1px solid var(--line); }
+  header .brand { font-weight:700; letter-spacing:.3px; } header .brand b { color:var(--cyan); }
+  header .tag { font-family:var(--mono); font-size:11px; color:var(--faint); border:1px solid var(--line); padding:3px 9px; border-radius:6px; }
   header .spacer { flex:1; }
-  header .nav { font-size:13px; color:var(--dim); text-decoration:none; border:1px solid var(--line); padding:5px 11px; border-radius:7px; }
-  header .nav:hover { color:var(--ink); border-color:var(--cyan); }
-  .wrap { max-width:1000px; margin:0 auto; padding:56px 24px 80px; }
+  header a.gh { font-size:12.5px; color:var(--dim); text-decoration:none; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 24px; }
+
+  /* HERO = the demo */
+  .hero { padding:66px 0 42px; }
   .eyebrow { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--cyan); margin-bottom:14px; }
-  h1 { font-size:44px; line-height:1.08; margin:0 0 16px; letter-spacing:-1px; }
+  h1 { font-size:46px; line-height:1.07; margin:0 0 16px; letter-spacing:-1px; }
   h1 .g { color:var(--green); } h1 .r { color:var(--red); }
-  .lede { color:var(--dim); font-size:18px; max-width:60ch; margin:0 0 28px; }
-  .persona { border-left:3px solid var(--cyan); padding:6px 0 6px 16px; color:var(--ink); font-size:15px; max-width:66ch; margin:0 0 36px; }
-  .flip { display:inline-flex; align-items:center; gap:16px; font-family:var(--mono); font-size:34px; font-weight:800; margin:6px 0 40px; }
-  .flip .green { color:var(--green); } .flip .red { color:var(--red); } .flip .ar { color:var(--dim); font-size:24px; }
-  .cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:8px 0 40px; }
-  @media(max-width:760px){ .cards{grid-template-columns:1fr;} h1{font-size:34px;} }
-  .card { display:block; text-decoration:none; color:inherit; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px; transition:border-color .15s, transform .15s; }
-  .card:hover { border-color:var(--cyan); transform:translateY(-2px); }
-  .card h2 { margin:0 0 8px; font-size:21px; }
-  .card p { color:var(--dim); font-size:14px; margin:0 0 14px; }
-  .card .go { font-family:var(--mono); font-size:13px; color:var(--cyan); font-weight:700; }
-  .card.you h2 { color:var(--violet); } .card.you:hover { border-color:var(--violet); } .card.you .go { color:var(--violet); }
-  .legend { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--dim); margin-top:8px; }
+  .lede { color:var(--dim); font-size:18px; max-width:62ch; margin:0 0 26px; }
+  .flip { display:flex; align-items:center; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:32px; font-weight:800; margin:2px 0 30px; }
+  .flip .green { color:var(--green); } .flip .red { color:var(--red); } .flip .ar { color:var(--dim); font-size:22px; }
+  .flip .note { font-family:var(--sans); font-size:14px; color:var(--dim); font-weight:400; }
+  .cta { display:inline-flex; align-items:center; gap:10px; background:var(--cyan); color:#04121c; font-weight:800; font-size:16px; padding:14px 26px; border-radius:11px; text-decoration:none; box-shadow:0 0 0 0 #46c6ff55; transition:box-shadow .2s, transform .12s; }
+  .cta:hover { box-shadow:0 0 26px 2px #46c6ff44; transform:translateY(-1px); }
+  .cta .sub { font-weight:500; font-size:12px; opacity:.8; }
+
+  /* EXPLORE = vendor mini-demos */
+  .explore { padding:30px 0 20px; border-top:1px solid var(--line); }
+  .explore h2 { font-size:14px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.12em; color:var(--dim); margin:0 0 4px; }
+  .explore .sub { color:var(--faint); font-size:13px; margin:0 0 20px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media(max-width:820px){ .grid{grid-template-columns:1fr 1fr;} h1{font-size:36px;} }
+  @media(max-width:560px){ .grid{grid-template-columns:1fr;} }
+  .vcard { position:relative; display:block; text-decoration:none; color:inherit; background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:18px 18px 16px; transition:border-color .16s, transform .14s, box-shadow .16s; }
+  .vcard .nm { font-size:17px; font-weight:700; margin-bottom:3px; }
+  .vcard .bl { color:var(--dim); font-size:13px; min-height:34px; }
+  .vcard .go { font-family:var(--mono); font-size:12px; font-weight:700; margin-top:10px; display:inline-block; }
+  .vcard .badge { position:absolute; top:14px; right:14px; font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.5px; padding:2px 7px; border-radius:999px; }
+  /* live cards light up in the vendor accent */
+  .vcard.live { cursor:pointer; }
+  .vcard.live:hover { transform:translateY(-3px); }
+  .vcard.live .badge { color:#051b10; background:var(--green); }
+  .vcard.live[data-accent="cyan"]:hover { border-color:var(--cyan); box-shadow:0 0 24px -6px var(--cyan); } .vcard.live[data-accent="cyan"] .go{color:var(--cyan);}
+  .vcard.live[data-accent="violet"]:hover { border-color:var(--violet); box-shadow:0 0 24px -6px var(--violet); } .vcard.live[data-accent="violet"] .go{color:var(--violet);}
+  .vcard.live[data-accent="green"]:hover { border-color:var(--green); box-shadow:0 0 24px -6px var(--green); } .vcard.live[data-accent="green"] .go{color:var(--green);}
+  .vcard.soon { opacity:.6; }
+  .vcard.soon .badge { color:var(--faint); background:var(--panel2); border:1px solid var(--line); }
+  .vcard.soon .go { color:var(--faint); }
+
+  .infra { margin:22px 0 0; font-size:12.5px; color:var(--faint); }
+  .infra b { color:var(--dim); }
+  .foot { color:var(--faint); font-size:12.5px; border-top:1px solid var(--line); padding:18px 0 60px; margin-top:34px; }
   .chip { font-family:var(--mono); font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:999px; letter-spacing:.4px; }
   .chip.SYNTHETIC { color:var(--dim); background:#1a2233; border:1px solid var(--line); }
   .chip.LIVE { color:#051b10; background:var(--green); }
   .chip.PRERUN { color:#1a0f2b; background:var(--violet); }
-  .sponsors { margin-top:44px; }
-  .s-label { font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin:18px 0 9px; }
-  .s-row { display:flex; flex-wrap:wrap; gap:8px; }
-  .s-chip { font-size:13px; color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 12px; background:var(--panel); }
-  .s-chip.you { color:var(--cyan); border-color:var(--cyan); font-weight:600; }
-  .s-chip.render { color:var(--violet); border-color:var(--violet); font-weight:600; }
-  .s-chip.sm { font-size:12px; padding:4px 10px; color:var(--faint); }
-  .foot { color:var(--faint); font-size:12.5px; border-top:1px solid var(--line); padding-top:18px; margin-top:36px; }
 </style>
 </head>
 <body>
 <header>
   <div class="brand"><b>Covenant</b> Sentinel</div>
+  <span class="tag">You.com Agentic Hackathon · AWS Builder Loft, SF</span>
   <div class="spacer"></div>
-  <a class="nav" href="/app">Sentinel desk →</a>
-  <a class="nav" href="/youcom">You.com Explorer →</a>
+  <a class="gh" href="https://github.com/jymiller/hack-you" target="_blank" rel="noopener">GitHub ↗</a>
 </header>
 
 <div class="wrap">
-  <div class="eyebrow">ENID · real-time credit-monitoring · powered by You.com</div>
-  <h1>The certificate reads <span class="g">GREEN</span>.<br>The recompute reads <span class="r">BREACH</span>.</h1>
-  <p class="lede">A credit-monitoring analyst covers 40 borrowers and can't read every filing. Covenant Sentinel watches
-  the live web, and the moment something threatens a covenant it produces a cited, structured drift alert in under a minute.</p>
-
-  <div class="flip">
-    <span class="green">6.47×</span><span class="ar">→</span><span class="red">7.59×</span>
-    <span style="font-family:var(--sans);font-size:14px;color:var(--dim);font-weight:400">a borrower quietly restated its accounts — the dashboard stayed green</span>
-  </div>
-
-  <div class="cards">
-    <a class="card" href="/app">
-      <h2>▶ Covenant Sentinel desk</h2>
-      <p>The live money-shot: scan the web, recompute off restated facts, watch the covenant flip GREEN → BREACH, route it
-      to a human to attest. Deterministic kernel, cross-deal memory, honesty labels on every effect.</p>
-      <span class="go">Open the desk →</span>
-    </a>
-    <a class="card you" href="/youcom">
-      <h2>◆ You.com Explorer</h2>
-      <p>Search the live web and research a company's financials with cited sources — straight from You.com's Search and
-      ARI research APIs (#1 on DeepSearchQA). See the live credit balance tick down as you go.</p>
-      <span class="go">Explore You.com →</span>
-    </a>
-  </div>
-
-  <div class="legend">
-    <span>Every on-screen effect carries exactly one honesty label:</span>
-    <span class="chip LIVE">LIVE</span><span>fired now</span>
-    <span class="chip PRERUN">PRERUN</span><span>ran earlier, cached</span>
-    <span class="chip SYNTHETIC">SYNTHETIC</span><span>fabricated data</span>
-  </div>
-
-  <div class="sponsors">
-    <div class="s-label">Built on</div>
-    <div class="s-row">
-      <span class="s-chip you">You.com — live Search + ARI</span>
-      <span class="s-chip render">Render — deployed live</span>
+  <!-- HERO: the money-shot demo -->
+  <section class="hero">
+    <div class="eyebrow">ENID · real-time credit monitoring · powered by You.com</div>
+    <h1>The certificate reads <span class="g">GREEN</span>.<br>The recompute reads <span class="r">BREACH</span>.</h1>
+    <p class="lede">A credit analyst covers 40 borrowers and can't read every filing. Covenant Sentinel watches the live
+    web, and the moment a borrower quietly restates its accounts — silently breaching a covenant while the dashboard stays
+    green — it produces a cited, structured drift alert in under a minute.</p>
+    <div class="flip">
+      <span class="green">6.47×</span><span class="ar">→</span><span class="red">7.59×</span>
+      <span class="note">certificate GREEN, recompute BREACH — the money-shot</span>
     </div>
-    <div class="s-label">You.com Agentic Hackathon · builder perks</div>
-    <div class="s-row">
-      <span class="s-chip">You.com</span>
-      <span class="s-chip">LlamaIndex</span>
-      <span class="s-chip">Agno</span>
-      <span class="s-chip">One (Pica)</span>
-      <span class="s-chip">Render</span>
-      <span class="s-chip">CrewAI</span>
-      <span class="s-chip">Replit</span>
-      <span class="s-chip">Parasail</span>
-      <span class="s-chip">AWS</span>
-    </div>
-    <div class="s-label">Partners</div>
-    <div class="s-row">
-      <span class="s-chip sm">MindStudio</span>
-      <span class="s-chip sm">Opsera</span>
-      <span class="s-chip sm">Founders Bay</span>
-    </div>
-  </div>
+    <a class="cta" href="/app">▶ Open the live demo <span class="sub">the Sentinel desk</span></a>
+  </section>
+
+  <!-- EXPLORE: a mini-demo per vendor -->
+  <section class="explore">
+    <h2>Explore the stack</h2>
+    <p class="sub">A live mini-demo for each vendor in the build — click to open.</p>
+    <div class="grid" id="grid"></div>
+
+    <p class="infra">Hosted live on <b>Render</b> · venue &amp; deploy credits from <b>AWS</b> Builder Loft · builder perks from
+      LlamaIndex, Agno, One (Pica), CrewAI, Replit, Parasail. Partners: MindStudio, Opsera, Founders Bay.</p>
+  </section>
 
   <div class="foot">
-    All borrower data is SYNTHETIC (invented — no real company). The recompute is a pure, deterministic function; the live
-    signal and cited research come from You.com. Built for the You.com Agentic hackathon · AWS Builder Loft, SF.
+    Every on-screen effect carries one honesty label — <span class="chip LIVE">LIVE</span> fired now ·
+    <span class="chip PRERUN">PRERUN</span> ran earlier, cached · <span class="chip SYNTHETIC">SYNTHETIC</span> fabricated data.
+    All borrower data is SYNTHETIC (no real company); the recompute is a pure deterministic function; live signal &amp; cited
+    research come from You.com.
   </div>
 </div>
+
+<script>
+  // The grid is auto-populated from the server's demo registry (/api/demos), which scans demos/.
+  // Add a directory demos/<slug>/ with a meta.json and it appears here — no edits to this file.
+  const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
+  const grid = document.getElementById("grid");
+  (async () => {
+    let demos = [];
+    try { demos = (await (await fetch("/api/demos")).json()).demos || []; }
+    catch { grid.innerHTML = "<span style='color:var(--faint)'>could not load mini-demos</span>"; return; }
+    grid.innerHTML = demos.map(v => {
+      const live = v.status === "live";
+      const tag = `<span class="badge">${live ? "LIVE" : "SOON"}</span>`;
+      const go = live ? "Open →" : "coming soon";
+      const inner = `${tag}<div class="nm">${esc(v.name)}</div><div class="bl">${esc(v.blurb)}</div><div class="go">${go}</div>`;
+      return live
+        ? `<a class="vcard live" data-accent="${esc(v.accent)}" href="${esc(v.href)}">${inner}</a>`
+        : `<span class="vcard soon" data-accent="${esc(v.accent)}">${inner}</span>`;
+    }).join("");
+  })();
+</script>
 </body>
 </html>

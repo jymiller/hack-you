@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Data — the corpus behind Covenant Sentinel</title>
+<style>
+  :root {
+    --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
+    --green:#35d07f; --red:#ff5470; --amber:#ffb020; --cyan:#46c6ff; --violet:#b48cff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5; }
+  a { color:var(--cyan); }
+  header { display:flex; align-items:center; gap:14px; padding:13px 22px; border-bottom:1px solid var(--line); position:sticky; top:0; background:linear-gradient(180deg,#0e1524,#0b0f17); z-index:5; }
+  header .brand { font-weight:700; } header .brand b { color:var(--amber); }
+  header .spacer { flex:1; }
+  header .nav { font-size:12px; color:var(--dim); text-decoration:none; border:1px solid var(--line); padding:4px 10px; border-radius:6px; }
+  header .nav:hover { color:var(--ink); border-color:var(--amber); }
+  main { max-width:1160px; margin:0 auto; padding:20px; display:grid; grid-template-columns:280px 1fr; gap:18px; }
+  @media(max-width:820px){ main{grid-template-columns:1fr;} }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  h2 { margin:0 0 10px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); font-weight:700; }
+  .blist { display:flex; flex-direction:column; gap:6px; }
+  .b { text-align:left; width:100%; background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:10px 12px; cursor:pointer; color:var(--ink); }
+  .b:hover { border-color:var(--amber); }
+  .b.active { border-color:var(--amber); background:#211b0e; }
+  .b .nm { font-weight:700; }
+  .b .meta { font-size:11.5px; color:var(--faint); font-family:var(--mono); margin-top:2px; }
+  .head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+  .head .t { font-size:20px; font-weight:700; }
+  .head .sub { color:var(--dim); font-size:12.5px; }
+  .chip { font-family:var(--mono); font-size:10px; padding:1px 6px; border-radius:4px; border:1px solid var(--line); color:var(--dim); }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:12px; }
+  th,td { text-align:left; padding:7px 9px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--dim); font-weight:600; font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; }
+  td.mono, .mono { font-family:var(--mono); }
+  td.s-BREACH { color:var(--red); font-weight:700; } td.s-PASS { color:var(--green); } td.s-WATCH { color:var(--amber); font-weight:700; } td.s-INDETERMINATE { color:var(--dim); }
+  .flag { font-size:10px; font-family:var(--mono); padding:1px 5px; border-radius:4px; border:1px solid var(--line); color:var(--dim); margin-right:3px; }
+  .flag.red { color:var(--red); border-color:#4a2230; } .flag.amber { color:var(--amber); border-color:#4a3a1a; } .flag.cyan { color:var(--cyan); border-color:#1e3a4a; }
+  .notes { margin-top:14px; font-size:12px; color:var(--dim); background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:12px; max-height:220px; overflow:auto; white-space:pre-wrap; line-height:1.5; }
+  .muted { color:var(--dim); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Data</b> — the corpus behind Covenant Sentinel</div>
+  <span class="muted" style="font-size:12px">6 synthetic borrowers · recomputed live vs the fixture oracle</span>
+  <div class="spacer"></div>
+  <a class="nav" href="/">← Home</a>
+  <a class="nav" href="/app">Sentinel desk →</a>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Borrowers</h2>
+    <div class="blist" id="blist"><span class="muted">loading…</span></div>
+  </div>
+  <div class="card" id="detail">
+    <span class="muted">Select a borrower to review its data — every ratio recomputed live by the kernel.</span>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
+let BORROWERS = [];
+
+async function load() {
+  const { borrowers } = await (await fetch("/api/data/corpus")).json();
+  BORROWERS = borrowers;
+  $("blist").innerHTML = borrowers.map(b =>
+    `<button class="b" data-id="${esc(b.facts_id)}"><div class="nm">${esc(b.borrower)}</div><div class="meta">${esc(b.sponsor||"—")} · ${b.periods} periods · ${b.covenants.length} cov</div></button>`
+  ).join("");
+  document.querySelectorAll(".b").forEach(el => el.onclick = () => select(el.dataset.id, el));
+  const first = document.querySelector(".b"); if (first) select(first.dataset.id, first);
+}
+
+async function select(id, el) {
+  document.querySelectorAll(".b").forEach(x => x.classList.remove("active"));
+  el?.classList.add("active");
+  $("detail").innerHTML = `<span class="muted">loading ${esc(id)}…</span>`;
+  const d = await (await fetch(`/api/data/borrower/${encodeURIComponent(id)}`)).json();
+  const flags = (r) => [r.conflict && `<span class="flag red">conflict</span>`, r.drift && `<span class="flag amber">drift</span>`, r.memory && `<span class="flag cyan">memory</span>`].filter(Boolean).join("") || `<span class="muted">—</span>`;
+  const rows = d.rows.map(r => `<tr>
+    <td class="mono">${esc(r.period)}</td>
+    <td class="mono" style="font-size:11px">${esc(r.covenant)}</td>
+    <td class="mono" style="font-size:11px">${esc(r.basis||"—")}</td>
+    <td class="mono">${r.value ?? "—"}× <span class="muted">/ ${r.threshold ?? "—"}×</span></td>
+    <td class="s-${r.status}">${r.status}</td>
+    <td class="mono muted">${r.certified ?? "—"}×</td>
+    <td>${flags(r)}</td></tr>`).join("");
+  $("detail").innerHTML = `
+    <div class="head">
+      <span class="t">${esc(d.borrower.short_name || d.borrower.legal_name)}</span>
+      <span class="chip">SYNTHETIC</span>
+      <span class="sub">${esc(d.borrower.sector||"")} · sponsor ${esc(d.borrower.sponsor?.name||"—")}</span>
+    </div>
+    <table>
+      <thead><tr><th>Period</th><th>Covenant</th><th>Basis</th><th>Recompute / limit</th><th>Status</th><th>Certified</th><th>Flags</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    ${d.notes ? `<div class="notes">${esc(d.notes)}</div>` : ""}`;
+}
+load();
+</script>
+</body>
+</html>

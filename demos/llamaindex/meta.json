@@ -1,0 +1,7 @@
+{
+  "name": "LlamaIndex",
+  "blurb": "Document parse & indexing",
+  "accent": "cyan",
+  "status": "soon",
+  "order": 50
+}

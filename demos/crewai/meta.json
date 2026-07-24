@@ -1,0 +1,7 @@
+{
+  "name": "CrewAI",
+  "blurb": "Multi-agent crew orchestration",
+  "accent": "green",
+  "status": "soon",
+  "order": 40
+}

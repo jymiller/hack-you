@@ -235,11 +235,11 @@ interface Assessment {
   };
 
   labels: {                           // §8 honesty overlay — rendered from the record
-    facts: "SYNTHETIC" | "REAL" | "PRERUN";       // the corpus/observation label
-    recompute: "SYNTHETIC" | "REAL" | "PRERUN";   // the kernel run itself == REAL
-    downstream_serve: "SYNTHETIC" | "REAL" | "PRERUN"; // the covenant-register notice == SYNTHETIC on stage
+    facts: "SYNTHETIC" | "LIVE" | "PRERUN";       // the corpus/observation label
+    recompute: "SYNTHETIC" | "LIVE" | "PRERUN";   // the kernel run itself == LIVE
+    downstream_serve: "SYNTHETIC" | "LIVE" | "PRERUN"; // the covenant-register notice == SYNTHETIC on stage
   };
-  provenance_label: "SYNTHETIC" | "REAL" | "PRERUN"; // top label for the whole record
+  provenance_label: "SYNTHETIC" | "LIVE" | "PRERUN"; // top label for the whole record
 
   proposed_write: ProposedWrite | null;   // §7 — present only for WATCH/BREACH; ALWAYS inert
 
@@ -453,7 +453,7 @@ unchanged breach yields the same id and cannot double-serve.
 
 ## 8 · Honesty-label overlay (rendered from the record, never a slide)
 
-Exactly one label per on-stage effect: **SYNTHETIC** (all corpus data), **REAL** (fired live), or
+Exactly one label per on-stage effect: **SYNTHETIC** (all corpus data), **LIVE** (fired live), or
 **PRERUN** (executed earlier, shown as a receipt). Where each attaches in the data model:
 
 | Where the label lives (field) | Value on stage | Meaning |
@@ -461,16 +461,16 @@ Exactly one label per on-stage effect: **SYNTHETIC** (all corpus data), **REAL**
 | `FactsBundle.provenance_label` | `SYNTHETIC` | whole corpus is synthetic |
 | `document.provenance_label` | `SYNTHETIC` | every fixture doc |
 | `observation.provenance_label` | `SYNTHETIC` | every recomputed observation |
-| `event.provenance_label` (`facts.events[]`) | `REAL` | the live You.com Search/ARI crawl that triggered the scan |
+| `event.provenance_label` (`facts.events[]`) | `LIVE` | the live You.com Search/ARI crawl that triggered the scan |
 | `Assessment.labels.facts` | `SYNTHETIC` | the book being assessed |
-| `Assessment.labels.recompute` | `REAL` | the kernel run itself is a real computation |
+| `Assessment.labels.recompute` | `LIVE` | the kernel run itself is a real computation |
 | `Assessment.labels.downstream_serve` | `SYNTHETIC` | the covenant-register notice over the synthetic book |
 | `Assessment.provenance_label` | `SYNTHETIC` | top label for the whole record |
 | `ProposedWrite.provenance_label` | `SYNTHETIC` | proposal over synthetic facts |
 | every scoreboard event `.provenance_label` (§9) | as above | UI reads it off the event |
 
-The **money-shot** is legible directly from `Assessment.labels`: `facts=SYNTHETIC`, `recompute=REAL`,
-`downstream_serve=SYNTHETIC` — "SYNTHETIC data through a REAL recompute, notice recorded to the register." The UI **must
+The **money-shot** is legible directly from `Assessment.labels`: `facts=SYNTHETIC`, `recompute=LIVE`,
+`downstream_serve=SYNTHETIC` — "SYNTHETIC data through a LIVE recompute, notice recorded to the register." The UI **must
 read the label from the record**; it must never paint a label from slide text. Rule: never label a
 mock as PRERUN; a `dry_run:true` descriptor that was never executed is SYNTHETIC, not PRERUN.
 
@@ -490,7 +490,7 @@ interface ScoreboardEvent {
   borrower_id: string;
   covenant_id: string | null;
   period_id: string | null;
-  provenance_label: "SYNTHETIC" | "REAL" | "PRERUN";
+  provenance_label: "SYNTHETIC" | "LIVE" | "PRERUN";
   assessment_id: string | null;   // links the tile back to the Finding
   data: object;                   // per-event, below
 }
@@ -514,7 +514,7 @@ Per-event `data` payloads:
 - **`write_committed`** — `{ proposal_id, downstream: { channel:"covenant_register", template, target_ref },
   serve_receipt_id: string|null, provenance_label: "SYNTHETIC" }` (the notice is recorded to the register).
 
-Ordering for the money-shot demo: `scanned(REAL) → breach → drift_detected → memory_hit → attested →
+Ordering for the money-shot demo: `scanned(LIVE) → breach → drift_detected → memory_hit → attested →
 write_committed(PRERUN)`. Borrower-B contributes a `watch`; Borrower-A a `pass`; Northgate a
 `drift_detected`+`breach`.
 

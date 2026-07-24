@@ -9,7 +9,7 @@ import { certificateFor, findCovenant } from "./helpers.js";
 import type { Assessment, Provenance } from "../kernel/types.js";
 
 const NOW = "2026-07-24T09:00:00Z";
-const LABELS: Provenance[] = ["SYNTHETIC", "REAL", "PRERUN"];
+const LABELS: Provenance[] = ["SYNTHETIC", "LIVE", "PRERUN"];
 
 const ANALYST = { analyst_id: "an-01", name: "A. Vergdefinetta", role: "credit_analyst" as const };
 
@@ -63,7 +63,7 @@ describe("GATE 6 — scoreboard: the money-shot emits an ordered event feed", ()
   it("Thornwick: scanned → breach → memory_hit → attested → write_committed (in order)", () => {
     const a = thornwickBreach();
     const sb = new Scoreboard(NOW);
-    sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "REAL", triggerSource: "you_research_ari" });
+    sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "LIVE", triggerSource: "you_research_ari" });
     const ok = makeAttestation(a.proposed_write!, "ATTEST", ANALYST, NOW);
     const result = attest(a.proposed_write!, ok);
     sb.attested(a, ok);
@@ -82,7 +82,7 @@ describe("GATE 6 — scoreboard: the money-shot emits an ordered event feed", ()
     // seq is monotonic
     expect(sb.events.every((e, i) => e.seq === i)).toBe(true);
     // scanned came from a live You.com crawl
-    expect(sb.events[0].provenance_label).toBe("REAL");
+    expect(sb.events[0].provenance_label).toBe("LIVE");
   });
 
   it("Northgate: drift_detected + breach on the schema-rename period", () => {
@@ -96,7 +96,7 @@ describe("GATE 6 — scoreboard: the money-shot emits an ordered event feed", ()
     expect(a.drift.detected).toBe(true);
 
     const sb = new Scoreboard(NOW);
-    sb.scan(a, { triggerEventId: "evt-northgate-traffic-q1-2026", triggerLabel: "REAL", triggerSource: "you_search" });
+    sb.scan(a, { triggerEventId: "evt-northgate-traffic-q1-2026", triggerLabel: "LIVE", triggerSource: "you_search" });
     const names: string[] = sb.events.map((e) => e.event);
     expect(names).toContain("breach");
     expect(names).toContain("drift_detected");
@@ -104,10 +104,10 @@ describe("GATE 6 — scoreboard: the money-shot emits an ordered event feed", ()
 });
 
 describe("★ GATE 7 — honesty labels: every effect carries exactly one label, none unlabeled", () => {
-  it("money-shot triad: facts SYNTHETIC · recompute REAL · downstream_serve SYNTHETIC", () => {
+  it("money-shot triad: facts SYNTHETIC · recompute LIVE · downstream_serve SYNTHETIC", () => {
     const a = thornwickBreach();
     expect(a.labels.facts).toBe("SYNTHETIC");
-    expect(a.labels.recompute).toBe("REAL");
+    expect(a.labels.recompute).toBe("LIVE");
     expect(a.labels.downstream_serve).toBe("SYNTHETIC");
     expect(a.provenance_label).toBe("SYNTHETIC");
     expect(a.proposed_write!.provenance_label).toBe("SYNTHETIC");
@@ -132,7 +132,7 @@ describe("★ GATE 7 — honesty labels: every effect carries exactly one label,
   it("every scoreboard event on the full money-shot carries a valid label — none unlabeled", () => {
     const a = thornwickBreach();
     const sb = new Scoreboard(NOW);
-    sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "REAL", triggerSource: "you_research_ari" });
+    sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "LIVE", triggerSource: "you_research_ari" });
     const ok = makeAttestation(a.proposed_write!, "ATTEST", ANALYST, NOW);
     const result = attest(a.proposed_write!, ok);
     sb.attested(a, ok);

@@ -61,8 +61,8 @@
 
     "provenance_label": {
       "type": "string",
-      "enum": ["SYNTHETIC", "REAL", "PRERUN"],
-      "description": "Exactly one honesty label per on-stage artefact. Corpus data is SYNTHETIC; a live You.com crawl is REAL; a cached prior You.com call shown as a receipt is PRERUN."
+      "enum": ["SYNTHETIC", "LIVE", "PRERUN"],
+      "description": "Exactly one honesty label per on-stage artefact. Corpus data is SYNTHETIC; a live You.com crawl is LIVE; a cached prior You.com call shown as a receipt is PRERUN."
     },
 
     "units": {

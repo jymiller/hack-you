@@ -34,9 +34,9 @@ number — so firing it before the recompute is legitimate, not faked.
 
 **Two You.com endpoints, one per job** (this is what Kruti rewards):
 - **You.com Search** — `GET ydc-index.io/v1/search`, `freshness=day`, `livecrawl=news` → surfaces the
-  fresh restatement headline, sub-second. This is the visible **live-data** proof. `[REAL]`
+  fresh restatement headline, sub-second. This is the visible **live-data** proof. `[LIVE]`
 - **You.com Research / ARI** — `POST api.you.com/v1/research`, `standard`, `background:true` → the
-  cited, structured brief. This is the flagship move; #1 on DeepSearchQA (83.67%). `[REAL]`
+  cited, structured brief. This is the flagship move; #1 on DeepSearchQA (83.67%). `[LIVE]`
 
 ---
 
@@ -57,21 +57,21 @@ number — so firing it before the recompute is legitimate, not faked.
 
 ## 2 · Second-by-second run-of-show
 
-Labels: **[REAL]** fired live · **[SYNTHETIC]** corpus data · **[PRERUN]** executed earlier, shown as
-a receipt. The money-shot is **SYNTHETIC data through a REAL recompute**.
+Labels: **[LIVE]** fired live · **[SYNTHETIC]** corpus data · **[PRERUN]** executed earlier, shown as
+a receipt. The money-shot is **SYNTHETIC data through a LIVE recompute**.
 
 | Time | On screen | Said (near-verbatim) | Firing / background | Label |
 |---|---|---|---|---|
 | **0:00** | Sentinel desk. Thornwick tile **GREEN 6.47×**; cert badge **IN COMPLIANCE** | "This is a live credit-monitoring desk. One analyst, forty borrowers — and every borrower's certificate says the same thing: in compliance." | — | data on tile `[SYNTHETIC]` |
-| **0:06** | Click **Scan live web** | "Sentinel watches the live web for anything that threatens a covenant. Watch the last twenty-four hours." | **Search fires** (`freshness=day`, `livecrawl=news`). **ARI fires `background:true`** — `task_id` returns instantly; scoreboard: `research: queued` | Search `[REAL]` · ARI `[REAL]` |
-| 0:10 | Scoreboard tick: `scanned · research: running ▓▓░░` | "The moment something lands it doesn't just alert — it researches, it recomputes, and it puts a human in the loop." | ARI running in background (≈13s); Search returning | ARI `[REAL]` |
-| **0:20** | **Live headline card** renders: *"Thornwick sponsor Ardenmoor restates FY2025 after auditor change"* + source + timestamp | "There it is — Thornwick's sponsor, Ardenmoor, restated FY2025 accounts after an auditor change. Live, from the last day, with a source." | ARI still running (done ≈0:19–0:21) | headline `[REAL]` |
-| **0:50** | Recompute panel opens; certified **6.47×** highlighted, then the bridge animates | "The certificate says 6.47 times — green. But Sentinel never trusts the certified number; it recomputes on our own books. The restatement reverses £1.7m of early-recognised revenue and disallows £3m of unrealised synergies. EBITDA falls from £34m to £29m. Net debt never moved." | ARI complete; result cached, waiting to display | recompute `[REAL]` on `[SYNTHETIC]` book |
-| **1:20** | Ratio flips **6.47× GREEN → 7.59× BREACH**; tile turns red; scoreboard: `breach · certification_conflict · memory_hit` | "6.47 becomes 7.59 — a breach by more than a full turn. The dashboard was green. The truth is a breach." | — | `[REAL]` recompute · `[SYNTHETIC]` data |
-| **1:30** | **Cited ARI brief** slides in: summary + `lender_actions[]`, each with **inline source links** | "And here's why it matters — researched while we were talking. You.com's ARI agent built a cited brief on exactly this: restated accounts, disallowed add-backs, auditor change. Eight real sources — Proskauer, Sidley, Paul Weiss." | — (pulled from the background call that finished at 0:19) | ARI package `[REAL]` |
-| **2:00** | **Attest gate**: write shown as **PROPOSED**, red "requires human sign-off" | "Sentinel does not act on this itself. It proposes. A human analyst attests." → click **Attest** → write goes **PROPOSED → COMMITTED** | — | gate `[REAL]` |
+| **0:06** | Click **Scan live web** | "Sentinel watches the live web for anything that threatens a covenant. Watch the last twenty-four hours." | **Search fires** (`freshness=day`, `livecrawl=news`). **ARI fires `background:true`** — `task_id` returns instantly; scoreboard: `research: queued` | Search `[LIVE]` · ARI `[LIVE]` |
+| 0:10 | Scoreboard tick: `scanned · research: running ▓▓░░` | "The moment something lands it doesn't just alert — it researches, it recomputes, and it puts a human in the loop." | ARI running in background (≈13s); Search returning | ARI `[LIVE]` |
+| **0:20** | **Live headline card** renders: *"Thornwick sponsor Ardenmoor restates FY2025 after auditor change"* + source + timestamp | "There it is — Thornwick's sponsor, Ardenmoor, restated FY2025 accounts after an auditor change. Live, from the last day, with a source." | ARI still running (done ≈0:19–0:21) | headline `[LIVE]` |
+| **0:50** | Recompute panel opens; certified **6.47×** highlighted, then the bridge animates | "The certificate says 6.47 times — green. But Sentinel never trusts the certified number; it recomputes on our own books. The restatement reverses £1.7m of early-recognised revenue and disallows £3m of unrealised synergies. EBITDA falls from £34m to £29m. Net debt never moved." | ARI complete; result cached, waiting to display | recompute `[LIVE]` on `[SYNTHETIC]` book |
+| **1:20** | Ratio flips **6.47× GREEN → 7.59× BREACH**; tile turns red; scoreboard: `breach · certification_conflict · memory_hit` | "6.47 becomes 7.59 — a breach by more than a full turn. The dashboard was green. The truth is a breach." | — | `[LIVE]` recompute · `[SYNTHETIC]` data |
+| **1:30** | **Cited ARI brief** slides in: summary + `lender_actions[]`, each with **inline source links** | "And here's why it matters — researched while we were talking. You.com's ARI agent built a cited brief on exactly this: restated accounts, disallowed add-backs, auditor change. Eight real sources — Proskauer, Sidley, Paul Weiss." | — (pulled from the background call that finished at 0:19) | ARI package `[LIVE]` |
+| **2:00** | **Attest gate**: write shown as **PROPOSED**, red "requires human sign-off" | "Sentinel does not act on this itself. It proposes. A human analyst attests." → click **Attest** → write goes **PROPOSED → COMMITTED** | — | gate `[LIVE]` |
 | **2:15** | **Breach-notice receipt** (reservation-of-rights) recorded in the covenant register | "Only after sign-off does the write commit — a reservation-of-rights breach notice, recorded in the covenant register. No external counterparty is ever served on stage." | — | notice `[SYNTHETIC]` |
-| **2:30** | Metric card + single **Opsera scan** slide | "Signal to cited breach alert: under a minute — an analyst's afternoon in thirteen seconds. Live signal from You.com Search, the cited brief from You.com's ARI, number one on DeepSearchQA. Secured and scanned with Opsera." | — | metric `[REAL]` · Opsera `[PRERUN]` |
+| **2:30** | Metric card + single **Opsera scan** slide | "Signal to cited breach alert: under a minute — an analyst's afternoon in thirteen seconds. Live signal from You.com Search, the cited brief from You.com's ARI, number one on DeepSearchQA. Secured and scanned with Opsera." | — | metric `[LIVE]` · Opsera `[PRERUN]` |
 | **2:45** | Split card: **cert GREEN 6.47×** vs **recompute BREACH 7.59×** | *(closing line — §4)* | — | — |
 | **3:00** | Hold on the split card | *(silence — let it land)* | — | — |
 
@@ -89,7 +89,7 @@ Say the fallback **out loud**; naming the cache is worth more than a flawless ru
 |---|---|---|
 | **Search headline (0:20)** | crawl times out on venue wifi | "Our live crawl just timed out on the venue wifi — here's the identical query I ran last night, labeled PRERUN." → cached Search screenshot `[PRERUN]` |
 | **ARI package (1:30)** | background call still running or 429/5xx | "The research call's still running — rather than watch a spinner, here's the completed package from last night. PRERUN — a genuine API response, eight real sources, 13.3 seconds." → render `prerun/ari-lender-response-standard.json` `[PRERUN]` |
-| **Recompute (0:50–1:20)** | UI hiccup | "The recompute is a pure local function — no network, nothing to fail. Here are the numbers straight from the book: £34m EBITDA down to £29m, 220 over 29 is 7.59." (read off `fixtures/thornwick.json`) `[REAL]` |
+| **Recompute (0:50–1:20)** | UI hiccup | "The recompute is a pure local function — no network, nothing to fail. Here are the numbers straight from the book: £34m EBITDA down to £29m, 220 over 29 is 7.59." (read off `fixtures/thornwick.json`) `[LIVE]` |
 | **Attest / notice (2:00–2:15)** | anything | The committed write is a local register record over synthetic data — nothing to fire live. "The notice is a pure local record; here it is." `[SYNTHETIC]` |
 | **Total wifi death** | network gone entirely | "Venue wifi's gone — here's the full run I recorded last night, end to end." → play the backup video (§5). |
 
@@ -116,7 +116,7 @@ Guardrails that protect the demo and the bounties:
 ## 5 · Backup video spec (record Thu night, on good wifi)
 
 - **1–3 min**, a single clean end-to-end run of §2 (same narration), captured with all calls firing
-  REAL on stable wifi. This is your insurance against total network failure — and the submission's
+  LIVE on stable wifi. This is your insurance against total network failure — and the submission's
   required backup video in one shot.
 - Show the deployed URL bar, the live Search headline, the recompute flip, the cited ARI package with
   visible source links, the attest click, and the committed breach-notice receipt.

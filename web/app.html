@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Covenant Sentinel — ENID</title>
+<style>
+  :root {
+    --bg: #0b0f17; --panel: #121826; --panel2: #0e1420; --line: #1e2740;
+    --ink: #e7ecf5; --dim: #8a97b1; --faint: #5a678a;
+    --green: #35d07f; --red: #ff5470; --amber: #ffb020; --cyan: #46c6ff; --violet: #b48cff;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+  a { color: var(--cyan); }
+  header {
+    display: flex; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #0e1524, #0b0f17); position: sticky; top: 0; z-index: 5;
+  }
+  header .brand { font-weight: 700; letter-spacing: .3px; }
+  header .brand b { color: var(--cyan); }
+  header .url { font-family: var(--mono); font-size: 12px; color: var(--dim); border: 1px solid var(--line); padding: 3px 8px; border-radius: 6px; }
+  header .spacer { flex: 1; }
+  .legend { display: flex; gap: 8px; align-items: center; font-size: 11px; }
+  .chip { font-family: var(--mono); font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; letter-spacing: .4px; }
+  .chip.SYNTHETIC { color: var(--dim); background: #1a2233; border: 1px solid var(--line); }
+  .chip.LIVE { color: #051b10; background: var(--green); }
+  .chip.PRERUN { color: #1a0f2b; background: var(--violet); }
+  header .nav { font-size: 12px; color: var(--dim); text-decoration: none; border: 1px solid var(--line); padding: 3px 9px; border-radius: 6px; }
+  header .nav:hover { color: var(--ink); border-color: var(--cyan); }
+  .modeToggle { display: flex; align-items: center; gap: 6px; }
+  .modeToggle .seg { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--dim); cursor: pointer; }
+  .modeToggle .seg.active { background: var(--cyan); color: #04121c; border-color: var(--cyan); }
+  #modePrerun.active { background: var(--violet); color: #1a0f2b; border-color: var(--violet); }
+  main { display: grid; grid-template-columns: 380px 1fr; gap: 16px; padding: 16px 20px; max-width: 1280px; margin: 0 auto; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); font-weight: 700; }
+  .muted { color: var(--dim); }
+  .mono { font-family: var(--mono); }
+
+  /* borrower tile */
+  .tile { text-align: center; }
+  .tile .name { font-size: 18px; font-weight: 700; }
+  .tile .sub { color: var(--dim); font-size: 12px; margin-bottom: 14px; }
+  .badge { display: inline-block; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; }
+  .badge.green { color: #062615; background: rgba(53,208,127,.16); border: 1px solid var(--green); }
+  .badge.red { color: #2a0713; background: rgba(255,84,112,.16); border: 1px solid var(--red); }
+  .ratio { font-size: 54px; font-weight: 800; letter-spacing: -1px; margin: 10px 0 2px; font-family: var(--mono); transition: color .4s; }
+  .ratio.green { color: var(--green); } .ratio.red { color: var(--red); }
+  .ratio .x { font-size: 26px; color: var(--dim); }
+  .flipline { font-size: 12px; color: var(--dim); min-height: 18px; }
+  .bridge { margin-top: 12px; font-size: 12px; color: var(--dim); text-align: left; border-top: 1px solid var(--line); padding-top: 10px; display: none; }
+  .bridge b { color: var(--ink); }
+  .memchip { display: none; margin-top: 10px; font-size: 12px; color: var(--cyan); background: rgba(70,198,255,.08); border: 1px solid rgba(70,198,255,.3); border-radius: 8px; padding: 8px 10px; text-align: left; }
+
+  button.scan { width: 100%; margin-top: 14px; padding: 11px; border-radius: 10px; border: 0; background: var(--cyan); color: #04121c; font-weight: 700; font-size: 14px; cursor: pointer; }
+  button.scan:disabled { opacity: .5; cursor: default; }
+  button.attest { padding: 9px 14px; border-radius: 9px; border: 1px solid var(--green); background: rgba(53,208,127,.14); color: var(--green); font-weight: 700; cursor: pointer; }
+  button.deny { padding: 9px 14px; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--dim); font-weight: 700; cursor: pointer; margin-left: 8px; }
+
+  /* scoreboard */
+  .feed { display: flex; flex-direction: column; gap: 6px; }
+  .ev { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); opacity: 0; transform: translateY(4px); animation: pop .28s forwards; }
+  @keyframes pop { to { opacity: 1; transform: none; } }
+  .ev .seq { font-family: var(--mono); color: var(--faint); font-size: 11px; width: 18px; }
+  .ev .nm { font-family: var(--mono); font-weight: 700; font-size: 12.5px; flex: 1; }
+  .ev.breach .nm { color: var(--red); } .ev.pass .nm { color: var(--green); } .ev.watch .nm { color: var(--amber); }
+  .ev.memory_hit .nm { color: var(--cyan); } .ev.drift_detected .nm { color: var(--amber); }
+  .ev.write_committed .nm { color: var(--violet); }
+
+  /* headline + brief */
+  .trigger { border-left: 3px solid var(--dim); padding-left: 12px; margin-bottom: 12px; display: none; }
+  .trigger .h { font-weight: 700; }
+  .trigger .src { font-size: 12px; color: var(--dim); }
+  .headline { border-left: 3px solid var(--green); padding-left: 12px; display: none; }
+  .headline .h { font-weight: 700; }
+  .headline .src { font-size: 12px; color: var(--dim); }
+  .headline .more { font-size: 12px; color: var(--dim); margin-top: 4px; }
+  .headline .more a { color: var(--cyan); text-decoration: none; }
+  .brief { display: none; }
+  .brief p { margin: 6px 0 12px; }
+  .actions { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .actions li { border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; background: var(--panel2); font-size: 13px; }
+  .sources { margin-top: 12px; font-size: 12px; }
+  .sources a { display: block; margin: 3px 0; color: var(--cyan); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gate { display: none; }
+  .receipt { display: none; font-family: var(--mono); font-size: 12px; color: var(--violet); background: rgba(180,140,255,.08); border: 1px solid rgba(180,140,255,.3); border-radius: 8px; padding: 10px; margin-top: 10px; }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .metric { display: none; font-size: 13px; color: var(--ink); margin-top: 6px; }
+  .metric b { color: var(--green); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--dim); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+  td.s-BREACH { color: var(--red); font-weight: 700; } td.s-PASS { color: var(--green); } td.s-WATCH { color: var(--amber); font-weight: 700; }
+  .tag { font-size: 10px; font-family: var(--mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--dim); }
+  details summary { cursor: pointer; color: var(--dim); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Covenant</b> Sentinel <span class="muted" style="font-weight:400">· ENID credit-monitoring desk</span></div>
+  <div class="url" id="urlbar">live · localhost</div>
+  <a class="nav" href="/">← Home</a>
+  <a class="nav" href="/youcom">You.com Explorer →</a>
+  <div class="spacer"></div>
+  <div class="modeToggle" title="LIVE fires You.com now; PRERUN uses the cached brief (live off)">
+    <span class="muted" style="font-size:11px">demo mode</span>
+    <button class="seg active" id="modeLive">LIVE</button>
+    <button class="seg" id="modePrerun">PRERUN</button>
+  </div>
+  <div class="legend">
+    <span class="muted">honesty labels</span>
+    <span class="chip SYNTHETIC">SYNTHETIC</span>
+    <span class="chip LIVE">LIVE</span>
+    <span class="chip PRERUN">PRERUN</span>
+  </div>
+</header>
+
+<main>
+  <!-- LEFT: borrower tile + attest -->
+  <section>
+    <div class="card tile">
+      <div class="name">Thornwick Logistics</div>
+      <div class="sub">sponsor Ardenmoor Capital · Total Net Leverage ≤ 6.50×</div>
+      <div class="badge green" id="certBadge">CERTIFICATE · IN COMPLIANCE</div>
+      <div class="ratio green" id="ratio">6.47<span class="x">×</span></div>
+      <div class="flipline" id="flipline">certified by the borrower · <span class="chip SYNTHETIC">SYNTHETIC</span></div>
+      <div class="bridge" id="bridge"></div>
+      <div class="memchip" id="memchip"></div>
+      <button class="scan" id="scanBtn">▶ Scan live web (last 24h)</button>
+    </div>
+
+    <div class="card gate" id="gateCard">
+      <h2>Human attest gate</h2>
+      <div class="muted" style="margin-bottom:10px">Sentinel does not act on this itself. It <b>proposes</b>; a human analyst attests.</div>
+      <div class="row">
+        <span class="badge red" id="proposalBadge">WRITE · PROPOSED</span>
+        <span class="tag">requires_attestation</span>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="attest" id="attestBtn">✔ Attest breach</button>
+        <button class="deny" id="denyBtn">Deny</button>
+      </div>
+      <div class="receipt" id="receipt"></div>
+    </div>
+
+    <div class="card">
+      <details>
+        <summary>Corpus — 6 borrowers (the kernel doesn't cry breach at everything)</summary>
+        <table id="corpus" style="margin-top:10px"><thead><tr><th>Borrower</th><th>Cov</th><th>Status</th><th>×</th><th></th></tr></thead><tbody></tbody></table>
+      </details>
+    </div>
+  </section>
+
+  <!-- RIGHT: scoreboard + headline + brief -->
+  <section>
+    <div class="card">
+      <h2>Event scoreboard</h2>
+      <div class="feed" id="feed"><div class="muted">Nothing scanned yet. Every borrower's certificate says the same thing: in compliance.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Triggering filing &amp; live web — You.com Search <span class="chip LIVE" id="searchLabel" style="display:none">LIVE</span></h2>
+      <div class="trigger" id="trigger"></div>
+      <div class="headline" id="headline"></div>
+      <div class="muted" id="searchWaiting">— on scan: the synthetic filing that moved the number, plus a live <span class="mono">freshness=week · livecrawl=news</span> crawl proving the pattern is current.</div>
+    </div>
+
+    <div class="card">
+      <h2>Cited brief — You.com Research (ARI) <span class="chip" id="ariLabel" style="display:none"></span></h2>
+      <div class="muted" id="ariWaiting">ARI fires <span class="mono">background:true</span> at scan (task_id in &lt;1s), polled to completion. #1 on DeepSearchQA (83.67%).</div>
+      <div class="brief" id="brief">
+        <p id="briefSummary"></p>
+        <ul class="actions" id="lenderActions"></ul>
+        <div class="sources" id="sources"></div>
+      </div>
+      <div class="metric" id="metric"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let SCAN = null;
+
+async function loadCorpus() {
+  try {
+    const r = await fetch("/api/corpus"); const { rows } = await r.json();
+    const tb = $("corpus").querySelector("tbody"); tb.innerHTML = "";
+    for (const x of rows) {
+      const tags = [x.conflict && "conflict", x.drift && "drift", x.memory && "memory"].filter(Boolean).map(t => `<span class="tag">${t}</span>`).join(" ");
+      tb.insertAdjacentHTML("beforeend", `<tr><td>${x.borrower}</td><td class="mono" style="font-size:11px">${x.covenant}</td><td class="s-${x.status}">${x.status}</td><td class="mono">${x.value}</td><td>${tags}</td></tr>`);
+    }
+  } catch {}
+}
+
+function chipHtml(l) { return `<span class="chip ${l}">${l}</span>`; }
+
+let feedSeq = 0;
+function pushEvent(e, delay) {
+  return new Promise((resolve) => setTimeout(() => {
+    if ($("feed").querySelector(".muted")) $("feed").innerHTML = "";
+    const label = e.provenance_label;
+    const div = document.createElement("div");
+    div.className = "ev " + e.event;
+    div.innerHTML = `<span class="seq">${String(e.seq).padStart(2,"0")}</span><span class="nm">${e.event}</span>${chipHtml(label)}`;
+    $("feed").appendChild(div);
+    resolve();
+  }, delay));
+}
+
+async function renderScoreboard(events, baseDelay) {
+  for (let i = 0; i < events.length; i++) await pushEvent(events[i], i === 0 ? 0 : baseDelay);
+}
+
+async function scan() {
+  $("scanBtn").disabled = true; $("scanBtn").textContent = "scanning live web…";
+  $("feed").innerHTML = "";
+  const res = await fetch("/api/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: DEMO_MODE }) }); SCAN = await res.json();
+
+  // scoreboard (animate the ticks)
+  await renderScoreboard(SCAN.scoreboard, 700);
+
+  // triggering filing (SYNTHETIC) + live web freshness (LIVE/SYNTHETIC label from the crawl)
+  const t = SCAN.trigger;
+  $("trigger").style.display = "block";
+  $("trigger").innerHTML = `<div class="h">${t.headline} ${chipHtml(t.label)}</div><div class="src">${t.source} · ${t.published_at || ""} — ${t.summary || ""}</div>`;
+  const hit = SCAN.search.hits[0];
+  $("searchLabel").style.display = "inline-block"; $("searchLabel").className = "chip " + SCAN.search.label; $("searchLabel").textContent = SCAN.search.label;
+  $("searchWaiting").style.display = "none";
+  if (hit) {
+    $("headline").style.display = "block";
+    const more = SCAN.search.hits.slice(1, 3).map(h => `<a href="${h.url}" target="_blank" rel="noopener">↗ ${h.title || h.url}</a>`).join(" · ");
+    $("headline").innerHTML = `<div class="h">Live web, ${SCAN.search.hits.length} sources this week — same pattern, real deals ${chipHtml(SCAN.search.label)}</div>` +
+      `<div class="src">↗ <a href="${hit.url}" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none">${hit.title || hit.url}</a> · ${hit.publisher || ""} · ${hit.published_at || ""}</div>` +
+      (more ? `<div class="more">${more}</div>` : "");
+  }
+
+  // the flip
+  const a = SCAN.headline;
+  $("ratio").className = "ratio red"; $("ratio").innerHTML = `${a.recomputed_value}<span class="x">×</span>`;
+  $("certBadge").className = "badge red"; $("certBadge").textContent = "RECOMPUTE · BREACH";
+  $("flipline").innerHTML = `certificate GREEN ${a.certified.certified_value}× → recompute BREACH ${a.recomputed_value}× · <span class="chip LIVE">LIVE</span> recompute on <span class="chip SYNTHETIC">SYNTHETIC</span> book`;
+  const b = SCAN.bridge;
+  const dis = a.recompute.disallowed_add_backs.map(d => `${d.category.replace(/_/g," ")} £${d.amount}m`).join(", ");
+  const adj = a.recompute.adjustments_applied.map(x => `£${x.amount}m`).join(", ");
+  $("bridge").style.display = "block";
+  $("bridge").innerHTML = `<b>EBITDA bridge</b> — certified adjusted EBITDA <b>£${b.certified_ebitda}m → £${b.recomputed_ebitda}m</b>. Disallowed: ${dis}. Revenue reversal: ${adj}. Net debt £${b.net_debt}m never moved. £${b.net_debt}m / £${b.recomputed_ebitda}m = <b>${a.recomputed_value}×</b> vs ${a.threshold.value}× limit.`;
+  if (a.memory.hit) {
+    const m = a.memory.matches[0];
+    $("memchip").style.display = "block";
+    $("memchip").innerHTML = `↳ cross-deal memory: ${m.relation.join(" + ")} → <b>${m.prior_facts_id}</b> (${(m.shared_add_back_category||"").replace(/_/g," ")} disallowed, same sponsor)`;
+  }
+
+  // ARI cited brief
+  $("ariWaiting").style.display = "none";
+  $("ariLabel").style.display = "inline-block"; $("ariLabel").className = "chip " + SCAN.ari.label; $("ariLabel").textContent = SCAN.ari.label;
+  $("brief").style.display = "block";
+  $("briefSummary").textContent = SCAN.ari.summary;
+  $("lenderActions").innerHTML = SCAN.ari.lender_actions.map(x => `<li>${x}</li>`).join("");
+  $("sources").innerHTML = `<div class="muted">${SCAN.ari.sources.length} cited sources · ${SCAN.ari.research_effort} · ${(SCAN.ari.latency_ms/1000).toFixed(1)}s</div>` +
+    SCAN.ari.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">↗ ${s.title || s.url}</a>`).join("");
+
+  // metric
+  $("metric").style.display = "block";
+  $("metric").innerHTML = `Signal → cited breach alert: <b>under a minute</b> — an analyst's afternoon in seconds. Powered by You.com Search + ARI.`;
+
+  // reveal the attest gate
+  $("gateCard").style.display = "block";
+  $("scanBtn").textContent = "✓ scanned";
+}
+
+async function decide(decision) {
+  if (!SCAN) return;
+  const res = await fetch("/api/attest", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scan_id: SCAN.scan_id, decision }) });
+  const out = await res.json();
+  const seqBase = SCAN.scoreboard.length;
+  await renderScoreboard(out.events, 500);
+  $("attestBtn").disabled = true; $("denyBtn").disabled = true;
+  if (out.outcome === "committed") {
+    $("proposalBadge").className = "badge green"; $("proposalBadge").textContent = "WRITE · COMMITTED";
+    $("receipt").style.display = "block";
+    $("receipt").innerHTML = `Breach notice issued · reservation-of-rights · covenant register · receipt ${out.serve_receipt.receipt_id.slice(0,18)}…<br>${chipHtml("SYNTHETIC")} recorded against the synthetic book — no external counterparty served.`;
+  } else {
+    $("proposalBadge").className = "badge"; $("proposalBadge").style.borderColor = "var(--line)"; $("proposalBadge").textContent = "WRITE · DENIED";
+    $("receipt").style.display = "block"; $("receipt").innerHTML = `Denied by analyst — no notice issued. ${chipHtml("LIVE")}`;
+  }
+}
+
+$("scanBtn").onclick = scan;
+$("attestBtn").onclick = () => decide("ATTEST");
+$("denyBtn").onclick = () => decide("DENY");
+let DEMO_MODE = "live";
+$("modeLive").onclick = () => { DEMO_MODE = "live"; $("modeLive").classList.add("active"); $("modePrerun").classList.remove("active"); };
+$("modePrerun").onclick = () => { DEMO_MODE = "prerun"; $("modePrerun").classList.add("active"); $("modeLive").classList.remove("active"); };
+$("urlbar").textContent = "live · " + location.host;
+loadCorpus();
+</script>
+</body>
+</html>

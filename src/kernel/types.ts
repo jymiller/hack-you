@@ -2,7 +2,7 @@
 // Retyped fresh from docs/KERNEL-SPEC.md (§1, §3, §7) and prerun/covenant-facts.schema.json (v1.0.0).
 // The kernel treats a FactsBundle as read-only input and returns an Assessment. Pure — no I/O.
 
-export type Provenance = "SYNTHETIC" | "REAL" | "PRERUN";
+export type Provenance = "SYNTHETIC" | "LIVE" | "PRERUN";
 
 export type Basis =
   | "borrower_certified"

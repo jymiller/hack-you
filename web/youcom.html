@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>You.com Explorer — Covenant Sentinel</title>
+<style>
+  :root {
+    --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
+    --green:#35d07f; --red:#ff5470; --amber:#ffb020; --cyan:#46c6ff; --violet:#b48cff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5; }
+  a { color:var(--cyan); }
+  header { display:flex; align-items:center; gap:14px; padding:13px 22px; border-bottom:1px solid var(--line); position:sticky; top:0; background:linear-gradient(180deg,#0e1524,#0b0f17); z-index:5; }
+  header .brand { font-weight:700; } header .brand b { color:var(--violet); }
+  header .spacer { flex:1; }
+  header .nav { font-size:12px; color:var(--dim); text-decoration:none; border:1px solid var(--line); padding:4px 10px; border-radius:6px; }
+  header .nav:hover { color:var(--ink); border-color:var(--cyan); }
+  .balance { font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line); padding:4px 10px; border-radius:999px; }
+  .balance b { color:var(--green); }
+  main { max-width:1080px; margin:0 auto; padding:22px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media(max-width:820px){ main{grid-template-columns:1fr;} }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card h2 { margin:0 0 4px; font-size:16px; }
+  .card .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; }
+  .card.wide { grid-column:1/-1; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  input, select { font-family:var(--sans); font-size:14px; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  input { flex:1; min-width:180px; }
+  button.go { font-weight:700; border:0; border-radius:8px; padding:9px 16px; cursor:pointer; }
+  button.searchBtn { background:var(--cyan); color:#04121c; } button.researchBtn { background:var(--violet); color:#1a0f2b; }
+  button.go:disabled { opacity:.5; cursor:default; }
+  .chip { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; letter-spacing:.4px; vertical-align:middle; }
+  .chip.SYNTHETIC { color:var(--dim); background:#1a2233; border:1px solid var(--line); }
+  .chip.LIVE { color:#051b10; background:var(--green); }
+  .chip.PRERUN { color:#1a0f2b; background:var(--violet); }
+  .meta { font-size:11.5px; color:var(--dim); margin:12px 0 6px; }
+  .hit { border-top:1px solid var(--line); padding:11px 0; }
+  .hit .t { font-weight:600; }
+  .hit .t a { color:var(--ink); text-decoration:none; } .hit .t a:hover { color:var(--cyan); }
+  .hit .src { font-size:11.5px; color:var(--faint); font-family:var(--mono); }
+  .hit .snip { font-size:13px; color:var(--dim); margin-top:4px; }
+  .summary { font-size:14px; margin:8px 0 12px; }
+  .hl { list-style:none; padding:0; margin:0 0 12px; display:flex; flex-direction:column; gap:7px; }
+  .hl li { border:1px solid var(--line); border-radius:8px; padding:8px 11px; background:var(--panel2); font-size:13px; }
+  .sources a { display:block; font-size:12px; color:var(--cyan); text-decoration:none; margin:3px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .muted { color:var(--dim); } .spin { color:var(--amber); font-family:var(--mono); font-size:12px; }
+  .ex { font-size:12px; color:var(--faint); } .ex a { color:var(--dim); cursor:pointer; text-decoration:underline; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>You.com</b> Explorer</div>
+  <span class="muted" style="font-size:12px">live Search · ARI research · balance</span>
+  <div class="spacer"></div>
+  <span class="balance" id="balance">balance …</span>
+  <a class="nav" href="/">← Home</a>
+  <a class="nav" href="/app">Sentinel desk →</a>
+</header>
+
+<main>
+  <!-- Live search -->
+  <div class="card">
+    <h2>Live web search <span class="chip LIVE" id="searchLbl" style="display:none">LIVE</span></h2>
+    <p class="sub">You.com Search — <span class="mono" style="font-family:var(--mono)">freshness</span> + <span class="mono" style="font-family:var(--mono)">livecrawl</span>, cited results.</p>
+    <div class="row">
+      <input id="q" placeholder="e.g. private credit EBITDA add-back disallowed" />
+      <select id="freshness"><option value="day">day</option><option value="week" selected>week</option><option value="month">month</option><option value="">any</option></select>
+      <button class="go searchBtn" id="searchGo">Search</button>
+    </div>
+    <div class="ex">try: <a data-q="leveraged loan covenant breach 2026">covenant breaches</a> · <a data-q="auditor change restatement private equity portfolio company">restatements</a></div>
+    <div id="searchOut"></div>
+  </div>
+
+  <!-- Financial research (ARI) -->
+  <div class="card">
+    <h2>Financial research <span class="chip LIVE" id="resLbl" style="display:none">LIVE</span></h2>
+    <p class="sub">You.com ARI — a cited financial brief on any company. #1 on DeepSearchQA (83.67%).</p>
+    <div class="row">
+      <input id="company" placeholder="e.g. Apple Inc — latest revenue, margins, debt" />
+      <button class="go researchBtn" id="researchGo">Research</button>
+    </div>
+    <div class="ex">try: <a data-c="NVIDIA Corporation latest quarterly revenue, margins, and guidance">NVIDIA</a> · <a data-c="Boeing debt, leverage, and free cash flow position">Boeing</a></div>
+    <div id="researchOut"></div>
+  </div>
+
+  <div class="card wide">
+    <p class="muted" style="margin:0;font-size:12.5px">Both panels hit You.com for real — the balance above ticks down with each call. Nothing here is synthetic; results are labeled <span class="chip LIVE">LIVE</span> when they fire, or <span class="chip SYNTHETIC">SYNTHETIC</span> if the key is missing.</p>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
+const chip = (l) => `<span class="chip ${l}">${l}</span>`;
+
+async function loadBalance() {
+  try {
+    const b = await (await fetch("/api/youcom/balance")).json();
+    $("balance").innerHTML = b.balance != null ? `You.com balance: <b>${Number(b.balance).toLocaleString()}</b>` : `balance: <span class="muted">n/a</span>`;
+  } catch { $("balance").textContent = "credit: n/a"; }
+}
+
+async function doSearch() {
+  const query = $("q").value.trim(); if (!query) return;
+  $("searchGo").disabled = true; $("searchOut").innerHTML = `<div class="spin">▓ searching the live web…</div>`;
+  try {
+    const r = await (await fetch("/api/youcom/search", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ query, freshness: $("freshness").value || undefined }) })).json();
+    $("searchLbl").style.display = "inline-block"; $("searchLbl").className = "chip " + r.label; $("searchLbl").textContent = r.label;
+    $("searchOut").innerHTML = `<div class="meta">${r.hits.length} results · ${r.latency_ms}ms · ${chip(r.label)}${r.note ? " · "+esc(r.note) : ""}</div>` +
+      r.hits.map(h => `<div class="hit"><div class="t"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title||h.url)}</a></div><div class="src">${esc(h.publisher||"")} ${h.published_at?"· "+esc(h.published_at):""}</div><div class="snip">${esc(h.snippet||"")}</div></div>`).join("");
+  } catch (e) { $("searchOut").innerHTML = `<div class="muted">search failed: ${esc(e.message)}</div>`; }
+  $("searchGo").disabled = false; loadBalance();
+}
+
+async function doResearch() {
+  const input = $("company").value.trim(); if (!input) return;
+  $("researchGo").disabled = true; $("researchOut").innerHTML = `<div class="spin">▓ You.com ARI researching… (~15s, cited)</div>`;
+  try {
+    const r = await (await fetch("/api/youcom/research", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ input }) })).json();
+    $("resLbl").style.display = "inline-block"; $("resLbl").className = "chip " + r.label; $("resLbl").textContent = r.label;
+    $("researchOut").innerHTML =
+      `<div class="meta">${r.research_effort} · ${(r.latency_ms/1000).toFixed(1)}s · ${chip(r.label)}</div>` +
+      `<div class="summary">${esc(r.summary)}</div>` +
+      (r.highlights?.length ? `<ul class="hl">${r.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>` : "") +
+      (r.sources?.length ? `<div class="meta">${r.sources.length} cited sources</div><div class="sources">${r.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.title||s.url)}</a>`).join("")}</div>` : "");
+  } catch (e) { $("researchOut").innerHTML = `<div class="muted">research failed: ${esc(e.message)}</div>`; }
+  $("researchGo").disabled = false; loadBalance();
+}
+
+$("searchGo").onclick = doSearch;
+$("researchGo").onclick = doResearch;
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+$("company").addEventListener("keydown", e => { if (e.key === "Enter") doResearch(); });
+document.querySelectorAll(".ex a[data-q]").forEach(a => a.onclick = () => { $("q").value = a.dataset.q; doSearch(); });
+document.querySelectorAll(".ex a[data-c]").forEach(a => a.onclick = () => { $("company").value = a.dataset.c; doResearch(); });
+loadBalance();
+</script>
+</body>
+</html>

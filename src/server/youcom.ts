@@ -1,7 +1,7 @@
 // You.com — two base hosts, one key (X-API-Key). Search + Contents at ydc-index.io/v1/*;
 // Research (ARI) + Finance at api.you.com/v1/*. Don't mix them.
-//   • Search   — GET /v1/search, freshness=day, livecrawl=news → the fresh restatement headline. [REAL]
-//   • Research — POST /v1/research, standard, background:true → task_id in <1s; poll until completed. [REAL]
+//   • Search   — GET /v1/search, freshness=day, livecrawl=news → the fresh restatement headline. [LIVE]
+//   • Research — POST /v1/research, standard, background:true → task_id in <1s; poll until completed. [LIVE]
 // Every path degrades to a labeled fallback so the demo never hangs on venue wifi:
 //   Search fallback → the SYNTHETIC fixture event (nothing was crawled — never mislabel a mock PRERUN).
 //   ARI fallback    → prerun/ari-lender-response-standard.json, a GENUINE cached API response. [PRERUN]
@@ -69,11 +69,15 @@ async function fetchJson(url: string, init: RequestInit, timeoutMs: number): Pro
 // ---- You.com Search — live-web freshness proof --------------------------
 export async function searchLiveWeb(
   query: string,
-  opts: { freshness?: "day" | "week" | "month"; livecrawl?: "news" | "all"; timeoutMs?: number } = {}
+  opts: { freshness?: "day" | "week" | "month"; livecrawl?: "news" | "all"; timeoutMs?: number; mode?: "live" | "prerun"; emptyFallback?: boolean } = {}
 ): Promise<SearchResult> {
   const key = apiKey();
   const started = Date.now();
-  if (!key) return synthSearchFallback(query, Date.now() - started, "no YDC_API_KEY — offline");
+  // Sentinel scan uses the Thornwick fixture as its fallback; the general explorer uses an empty result.
+  const fb = (ms: number, note: string): SearchResult =>
+    opts.emptyFallback ? { label: "SYNTHETIC", query, hits: [], latency_ms: ms, note } : synthSearchFallback(query, ms, note);
+  if (opts.mode === "prerun") return fb(0, "PRERUN mode — live crawl off");
+  if (!key) return fb(Date.now() - started, "no YDC_API_KEY — offline");
 
   const params = new URLSearchParams({
     query,
@@ -81,8 +85,9 @@ export async function searchLiveWeb(
     livecrawl: opts.livecrawl ?? "news",
   });
   try {
-    // Live shape: { results: { web: [{ url, title, description, page_age, snippets[] }] }, metadata }
-    const data = await fetchJson(`${SEARCH_HOST}/search?${params}`, { headers: { "X-API-Key": key } }, opts.timeoutMs ?? 8000);
+    // Live shape: { results: { web: [{ url, title, description, page_age, snippets[] }] }, metadata }.
+    // livecrawl=news can take ~6s, so allow generous headroom before falling back.
+    const data = await fetchJson(`${SEARCH_HOST}/search?${params}`, { headers: { "X-API-Key": key } }, opts.timeoutMs ?? 14000);
     const rawHits: any[] = data?.results?.web ?? data?.hits ?? data?.results ?? [];
     const hits: SearchHit[] = rawHits.slice(0, 6).map((h) => ({
       url: h.url ?? h.link ?? "",
@@ -91,9 +96,9 @@ export async function searchLiveWeb(
       snippet: Array.isArray(h.snippets) ? h.snippets[0] ?? null : h.snippet ?? h.description ?? null,
       published_at: h.published_at ?? h.page_age ?? null,
     }));
-    return { label: "REAL", query, hits, latency_ms: Date.now() - started };
+    return { label: "LIVE", query, hits, latency_ms: Date.now() - started };
   } catch (err) {
-    return synthSearchFallback(query, Date.now() - started, `live search failed: ${(err as Error).message}`);
+    return fb(Date.now() - started, `live search failed: ${(err as Error).message}`);
   }
 }
 
@@ -110,10 +115,11 @@ function domainOf(url?: string | null): string | null {
 // background:true returns a task_id in <1s; poll GET /v1/research/{task_id} until completed.
 export async function researchAri(
   question: string,
-  opts: { effort?: "standard" | "deep"; timeoutMs?: number; pollMs?: number } = {}
+  opts: { effort?: "standard" | "deep"; timeoutMs?: number; pollMs?: number; mode?: "live" | "prerun" } = {}
 ): Promise<AriResult> {
   const key = apiKey();
   const started = Date.now();
+  if (opts.mode === "prerun") return prerunAriFallback(question, 0, "PRERUN mode — live research off");
   if (!key) return prerunAriFallback(question, Date.now() - started, "no YDC_API_KEY — offline");
 
   const effort = opts.effort ?? "standard"; // never `exhaustive` live on stage
@@ -131,7 +137,7 @@ export async function researchAri(
       8000
     );
     const taskId: string | undefined = start?.task_id ?? start?.id;
-    if (!taskId) return normalizeAri(start, question, "REAL", Date.now() - started, null);
+    if (!taskId) return normalizeAri(start, question, "LIVE", Date.now() - started, null);
 
     // Poll the GET until terminal (the SSE /stream is heartbeat only).
     const deadline = started + budget;
@@ -140,7 +146,7 @@ export async function researchAri(
       const data = await fetchJson(`${RESEARCH_HOST}/research/${taskId}`, { headers: { "X-API-Key": key } }, 8000);
       const status = data?.status ?? data?.state;
       if (status === "completed" || data?.result || data?.response || data?.output) {
-        return normalizeAri(data, question, "REAL", Date.now() - started, taskId);
+        return normalizeAri(data, question, "LIVE", Date.now() - started, taskId);
       }
       if (status === "failed" || status === "error") throw new Error(`research task ${taskId} ${status}`);
       await sleep(pollMs);
@@ -238,5 +244,96 @@ export const ARI_QUESTION =
   "How do private-credit lenders typically respond when a sponsor-backed borrower restates accounts and disallows EBITDA add-backs after an auditor change?";
 
 // Thornwick is a SYNTHETIC borrower, so we don't pretend a live crawl finds it. The live Search
-// proves freshness on the REAL underlying theme the recompute is an instance of; hits are labelled REAL.
+// proves freshness on the real underlying theme the recompute is an instance of; hits are labelled LIVE.
 export const SEARCH_QUERY = "private credit borrower restated accounts disallowed EBITDA add-backs covenant breach";
+
+// ---- General You.com capabilities for the explorer page -----------------
+// The You.com MCP tool list confirms the account exposes: you-search, you-contents, you-research,
+// you-balance, you-discover — and NO dedicated Finance tool. So "financial data" is delivered via
+// you-research (ARI): a cited financial brief on any company. REST equivalents used here.
+
+export interface ResearchResult {
+  label: Provenance;
+  input: string;
+  summary: string;
+  highlights: string[];
+  sources: AriSource[];
+  research_effort: string;
+  latency_ms: number;
+  task_id?: string | null;
+  note?: string;
+}
+
+// Structured financial-brief schema (standard/deep support output_schema; lite does not).
+const FINANCE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["summary", "highlights"],
+  properties: {
+    summary: { type: "string", description: "3-5 sentence overview of the company's current financial position." },
+    highlights: { type: "array", items: { type: "string" }, description: "Key figures: revenue, growth, margins, net income, debt/leverage, recent guidance." },
+  },
+};
+
+// you-research (ARI) with structured output — powers the explorer's financial-brief panel.
+export async function youResearch(
+  input: string,
+  opts: { effort?: "lite" | "standard" | "deep"; schema?: object; timeoutMs?: number } = {}
+): Promise<ResearchResult> {
+  const key = apiKey();
+  const started = Date.now();
+  if (!key) {
+    return { label: "SYNTHETIC", input, summary: "No YDC_API_KEY set — live You.com research is off.", highlights: [], sources: [], research_effort: "n/a", latency_ms: 0, note: "offline" };
+  }
+  const effort = opts.effort ?? "standard";
+  const schema = opts.schema ?? FINANCE_SCHEMA;
+  const budget = opts.timeoutMs ?? 40000;
+  try {
+    const start = await fetchJson(
+      `${RESEARCH_HOST}/research`,
+      { method: "POST", headers: { "X-API-Key": key, "Content-Type": "application/json" }, body: JSON.stringify({ input, research_effort: effort, background: true, output_schema: schema }) },
+      8000
+    );
+    const taskId: string | undefined = start?.task_id ?? start?.id;
+    const deadline = started + budget;
+    let data: any = start;
+    while (taskId && Date.now() < deadline) {
+      await sleep(1500);
+      data = await fetchJson(`${RESEARCH_HOST}/research/${taskId}`, { headers: { "X-API-Key": key } }, 8000);
+      const st = data?.status ?? data?.state;
+      if (st === "completed" || data?.result || data?.response || data?.output) break;
+      if (st === "failed" || st === "error") throw new Error(`research task ${st}`);
+    }
+    const output = data?.result?.output ?? data?.response?.output ?? data?.output ?? {};
+    const content = output?.content;
+    let summary = "";
+    let highlights: string[] = [];
+    if (content && typeof content === "object") {
+      summary = content.summary ?? "";
+      highlights = Array.isArray(content.highlights) ? content.highlights : Array.isArray(content.lender_actions) ? content.lender_actions : [];
+    } else if (typeof content === "string") {
+      summary = content;
+    }
+    const sources: AriSource[] = (output?.sources ?? []).map((s: any) => ({
+      url: s.url, title: s.title ?? null, publisher: s.publisher ?? domainOf(s.url), snippet: Array.isArray(s.snippets) ? s.snippets[0] ?? null : s.snippet ?? null,
+    }));
+    return { label: "LIVE", input, summary, highlights, sources, research_effort: effort, latency_ms: Date.now() - started, task_id: taskId ?? null };
+  } catch (err) {
+    return { label: "SYNTHETIC", input, summary: `Live research failed: ${(err as Error).message}`, highlights: [], sources: [], research_effort: effort, latency_ms: Date.now() - started, note: "error" };
+  }
+}
+
+// you-balance — remaining You.com credit; a live "this is really hitting the API" proof.
+export async function youBalance(): Promise<{ label: Provenance; balance: number | null; note?: string }> {
+  const key = apiKey();
+  if (!key) return { label: "SYNTHETIC", balance: null, note: "offline" };
+  try {
+    // Live shape: { data: { type:"account", id, attributes: { balance } } }
+    const data = await fetchJson("https://api.you.com/v1/billing/account_balance", { headers: { "X-API-Key": key } }, 6000);
+    const bal = data?.data?.attributes?.balance ?? data?.balance ?? null;
+    if (bal != null) return { label: "LIVE", balance: Number(bal) };
+  } catch {
+    /* fall through */
+  }
+  return { label: "SYNTHETIC", balance: null, note: "balance unavailable" };
+}

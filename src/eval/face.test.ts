@@ -1,6 +1,6 @@
 // GATE 8 — FACE. The live scan wires You.com into the money-shot. Offline (no key) it degrades to
 // the labeled fallback: Search → SYNTHETIC fixture, ARI → the PRERUN cached response. The flip still
-// fires with sources shown; the recompute is REAL over the SYNTHETIC book.
+// fires with sources shown; the recompute is LIVE over the SYNTHETIC book.
 
 import { describe, expect, it } from "vitest";
 import { runScan, applyAttestation } from "../server/scan.js";

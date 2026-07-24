@@ -41,8 +41,8 @@ export class Scoreboard {
     this.seq = startSeq;
   }
 
-  // Emit the ordered feed for one assessment. `scanned` carries the trigger's label (REAL when a
-  // live You.com crawl fired); the recompute findings are REAL computations over the SYNTHETIC book.
+  // Emit the ordered feed for one assessment. `scanned` carries the trigger's label (LIVE when a
+  // live You.com crawl fired); the recompute findings are LIVE computations over the SYNTHETIC book.
   scan(
     a: Assessment,
     opts: {
@@ -61,11 +61,11 @@ export class Scoreboard {
     });
 
     if (a.status === "PASS") {
-      this.push("pass", a, "REAL", { recomputed_value: a.recomputed_value, threshold: a.threshold?.value, headroom: a.headroom, authoritative_basis: a.authoritative_basis });
+      this.push("pass", a, "LIVE", { recomputed_value: a.recomputed_value, threshold: a.threshold?.value, headroom: a.headroom, authoritative_basis: a.authoritative_basis });
     } else if (a.status === "WATCH") {
-      this.push("watch", a, "REAL", { recomputed_value: a.recomputed_value, threshold: a.threshold?.value, headroom: a.headroom, triggered_by: a.watch.triggered_by, trend: a.watch.trend.map((t) => ({ period_id: t.period_id, value: t.value })) });
+      this.push("watch", a, "LIVE", { recomputed_value: a.recomputed_value, threshold: a.threshold?.value, headroom: a.headroom, triggered_by: a.watch.triggered_by, trend: a.watch.trend.map((t) => ({ period_id: t.period_id, value: t.value })) });
     } else if (a.status === "BREACH") {
-      this.push("breach", a, "REAL", {
+      this.push("breach", a, "LIVE", {
         recomputed_value: a.recomputed_value,
         threshold: a.threshold?.value,
         headroom: a.headroom,
@@ -78,7 +78,7 @@ export class Scoreboard {
 
     if (a.drift.detected) {
       const d = a.drift.details[0];
-      this.push("drift_detected", a, "REAL", {
+      this.push("drift_detected", a, "LIVE", {
         kinds: a.drift.kinds,
         canonical_key: d?.canonical_key ?? null,
         prior_raw_name: d?.prior_raw_name ?? null,
@@ -95,7 +95,7 @@ export class Scoreboard {
       const seen = opts.memoryAlreadyCounted;
       if (!(opts.countMemoryOnce && seen && seen.has(key))) {
         const m = a.memory.matches[0];
-        this.push("memory_hit", a, "REAL", {
+        this.push("memory_hit", a, "LIVE", {
           sponsor_id: m?.sponsor_id,
           prior_facts_id: m?.prior_facts_id,
           relation: m?.relation ?? [],
@@ -109,7 +109,7 @@ export class Scoreboard {
 
   // The human gate outcome, then its consequence.
   attested(a: Assessment, attestation: Attestation): void {
-    this.push("attested", a, "REAL", {
+    this.push("attested", a, "LIVE", {
       proposal_id: attestation.proposal_id,
       decision: attestation.decision,
       analyst_id: attestation.attested_by.analyst_id,
@@ -127,7 +127,7 @@ export class Scoreboard {
         provenance_label: "SYNTHETIC",
       });
     } else {
-      this.push("write_denied", a, "REAL", {
+      this.push("write_denied", a, "LIVE", {
         proposal_id: result.proposal.proposal_id,
         denied_reason: result.denied_reason,
       });

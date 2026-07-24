@@ -17,7 +17,7 @@ const C = {
   red: "\x1b[31m", green: "\x1b[32m", yellow: "\x1b[33m", cyan: "\x1b[36m", magenta: "\x1b[35m",
 };
 const label = (l: Provenance) =>
-  l === "REAL" ? `${C.green}[REAL]${C.reset}` : l === "PRERUN" ? `${C.magenta}[PRERUN]${C.reset}` : `${C.dim}[SYNTHETIC]${C.reset}`;
+  l === "LIVE" ? `${C.green}[LIVE]${C.reset}` : l === "PRERUN" ? `${C.magenta}[PRERUN]${C.reset}` : `${C.dim}[SYNTHETIC]${C.reset}`;
 const statusColor = (s: string) => (s === "BREACH" ? C.red : s === "WATCH" ? C.yellow : s === "PASS" ? C.green : C.dim);
 
 function line() {
@@ -43,7 +43,7 @@ function moneyShot(): void {
     `  Certificate:  ${C.dim}${a.certified.certified_value}x — ${a.certified.certified_status}${C.reset}  ${label("SYNTHETIC")}`
   );
   console.log(
-    `  Recompute:    ${statusColor(a.status)}${C.bold}${a.recomputed_value}x — ${a.status}${C.reset}  (${a.authoritative_basis}, limit ${a.threshold?.value}x, headroom ${a.headroom?.toFixed(2)})  ${label("REAL")}`
+    `  Recompute:    ${statusColor(a.status)}${C.bold}${a.recomputed_value}x — ${a.status}${C.reset}  (${a.authoritative_basis}, limit ${a.threshold?.value}x, headroom ${a.headroom?.toFixed(2)})  ${label("LIVE")}`
   );
   console.log(
     `  ${C.bold}${a.certified.certification_conflict ? C.red + "FLIP: certificate GREEN, recompute BREACH" : "no conflict"}${C.reset}`
@@ -60,7 +60,7 @@ function moneyShot(): void {
   const receipt = serveIfCommitted(result, NOW, { note: "SYNTHETIC — notice recorded in the covenant register" });
 
   const sb = new Scoreboard(NOW);
-  sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "REAL", triggerSource: "you_research_ari" });
+  sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "LIVE", triggerSource: "you_research_ari" });
   sb.attested(a, attestation);
   sb.writeResult(a, result, receipt);
 

@@ -1,4 +1,4 @@
-// Live You.com smoke test — proves a REAL Search + ARI call routes through the API (the bounty
+// Live You.com smoke test — proves a LIVE Search + ARI call routes through the API (the bounty
 // needs ≥1 real endpoint hit, visible in usage logs). Uses the real client; falls back cleanly if
 // no key. Run: npm run smoke   (or: tsx scripts/youcom-smoke.ts). Never prints the key.
 import { fileURLToPath } from "node:url";
@@ -8,7 +8,7 @@ import { ARI_QUESTION, SEARCH_QUERY, researchAri, searchLiveWeb } from "../src/s
 try { process.loadEnvFile(join(dirname(fileURLToPath(import.meta.url)), "..", ".env")); } catch { /* no .env */ }
 
 const C = { g: "\x1b[32m", m: "\x1b[35m", d: "\x1b[2m", b: "\x1b[1m", r: "\x1b[0m" };
-const tag = (l: string) => (l === "REAL" ? `${C.g}[REAL]${C.r}` : l === "PRERUN" ? `${C.m}[PRERUN]${C.r}` : `${C.d}[${l}]${C.r}`);
+const tag = (l: string) => (l === "LIVE" ? `${C.g}[LIVE]${C.r}` : l === "PRERUN" ? `${C.m}[PRERUN]${C.r}` : `${C.d}[${l}]${C.r}`);
 
 console.log(`${C.b}You.com live smoke test${C.r}  (key ${process.env.YDC_API_KEY ? "present" : "ABSENT → fallback"})\n`);
 
@@ -24,5 +24,5 @@ console.log(`   ${C.d}summary:${C.r} ${a.summary.slice(0, 160)}…`);
 console.log(`   ${C.d}actions:${C.r} ${a.lender_actions.length}`);
 for (const src of a.sources.slice(0, 3)) console.log(`   ${C.d}↗${C.r} ${src.title ?? src.url}`);
 
-const realHit = s.label === "REAL" || a.label === "REAL";
-console.log(`\n${realHit ? C.g + "✓ at least one REAL You.com endpoint hit — usage logged." : C.m + "⚠ ran on fallback (no key) — set YDC_API_KEY for live."}${C.r}`);
+const realHit = s.label === "LIVE" || a.label === "LIVE";
+console.log(`\n${realHit ? C.g + "✓ at least one LIVE You.com endpoint hit — usage logged." : C.m + "⚠ ran on fallback (no key) — set YDC_API_KEY for live."}${C.r}`);

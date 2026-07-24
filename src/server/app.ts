@@ -7,6 +7,7 @@ import express from "express";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { applyAttestation, runScan, type ScanResult } from "./scan.js";
+import { searchLiveWeb, youResearch, youBalance } from "./youcom.js";
 import { loadCorpus, buildMemoryContext } from "../corpus.js";
 import { assess } from "../kernel/assess.js";
 import { certificateFor } from "../eval/helpers.js";
@@ -36,11 +37,43 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, youcom_key: !!process.env.YDC_API_KEY, service: "covenant-sentinel" });
 });
 
-app.post("/api/scan", async (_req, res) => {
+app.post("/api/scan", async (req, res) => {
   try {
-    const result = await runScan(nowIso());
+    const mode = req.body?.mode === "prerun" ? "prerun" : "live";
+    const result = await runScan(nowIso(), mode);
     sessions.set(result.scan_id, result);
     res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// Page routes: front page at /, Sentinel app at /app, You.com explorer at /youcom.
+app.get("/app", (_req, res) => res.sendFile(join(ROOT, "web", "app.html")));
+app.get("/youcom", (_req, res) => res.sendFile(join(ROOT, "web", "youcom.html")));
+
+// You.com explorer — live Search, ARI research (financial brief), and credit balance.
+app.post("/api/youcom/search", async (req, res) => {
+  const { query, freshness, livecrawl } = req.body ?? {};
+  if (!query || typeof query !== "string") return void res.status(400).json({ error: "query required" });
+  try {
+    res.json(await searchLiveWeb(query, { freshness: freshness ?? "week", livecrawl: livecrawl ?? "news", emptyFallback: true, timeoutMs: 15000 }));
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+app.post("/api/youcom/research", async (req, res) => {
+  const { input, effort } = req.body ?? {};
+  if (!input || typeof input !== "string") return void res.status(400).json({ error: "input required" });
+  try {
+    res.json(await youResearch(input, { effort: effort === "deep" ? "deep" : "standard" }));
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+app.get("/api/youcom/balance", async (_req, res) => {
+  try {
+    res.json(await youBalance());
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
   }

@@ -15,7 +15,7 @@ step until its one check is green.**
 - **FACE** — the vendor. Wrap the core in the You.com Research API (ARI): live web + citations.
 - **HARDEN** — issue the breach notice to the covenant register (SYNTHETIC) and rehearse until it runs clean, every time.
 
-**The demo is REAL the moment CORE's two starred checks pass** (step 3, the flip + step 7, the labels). FACE makes it
+**The demo is LIVE the moment CORE's two starred checks pass** (step 3, the flip + step 7, the labels). FACE makes it
 live; HARDEN makes it safe. Everything before that line is what you actually claim on stage — so all the risk is
 front-loaded into cheap, testable, offline arithmetic.
 
@@ -30,7 +30,7 @@ assess(facts, covenant, certificate, memory) -> Assessment
   classify PASS | WATCH | BREACH
   propose a write, gated behind human attest()   # it never writes itself
   + an ordered Event stream (the scoreboard)
-  + a REAL / PRERUN / SYNTHETIC label on every effect
+  + a LIVE / PRERUN / SYNTHETIC label on every effect
 ```
 
 ## The money-shot (SYNTHETIC data — `HANDOFF.md` §1)
@@ -52,7 +52,7 @@ GREEN, recompute BREACH.
 | 4 | Drift | catches `ebitda→adjusted_ebitda` (Northgate); the value-only path stays GREEN while the fingerprint path flips → assert the two diverge |
 | 5 | DENY gate | write pre-attest → `write_denied`; after `attest()` → `write_committed`; assert **zero** writes fire before attest |
 | 6 | Scoreboard | the money-shot emits the ordered event feed (`scanned→recomputed→breach→drift_detected→write_denied→attested→write_committed`) |
-| **7 ★** | **Labels** | every effect carries exactly one of REAL/PRERUN/SYNTHETIC → assert none unlabeled |
+| **7 ★** | **Labels** | every effect carries exactly one of LIVE/PRERUN/SYNTHETIC → assert none unlabeled |
 
 _(Steps 3 + 7 together are the "demo-flip eval" — the one gate that says the demo is real.)_
 
@@ -60,7 +60,7 @@ _(Steps 3 + 7 together are the "demo-flip eval" — the one gate that says the d
 
 | # | Capability | The check (gate) |
 |---|---|---|
-| 8 | You.com ARI | a live, cited news event (Ardenmoor restated) maps to Thornwick's restated facts → the flip fires **with sources shown**; live crawl = REAL. **Cache the call** for demo reliability. (API in `HANDOFF.md` §3) |
+| 8 | You.com ARI | a live, cited news event (Ardenmoor restated) maps to Thornwick's restated facts → the flip fires **with sources shown**; live crawl = LIVE. **Cache the call** for demo reliability. (API in `HANDOFF.md` §3) |
 
 **Phase 3 — HARDEN**
 

@@ -1,6 +1,6 @@
 // FACE — the live scan. Fires You.com Search (fresh headline) + ARI (cited brief) at t≈0, runs the
-// deterministic kernel over the SYNTHETIC book, and attaches the REAL/PRERUN citations to the finding.
-// The recompute is REAL over a SYNTHETIC book; the research is You.com's. Two endpoints, one per job.
+// deterministic kernel over the SYNTHETIC book, and attaches the LIVE/PRERUN citations to the finding.
+// The recompute is LIVE over a SYNTHETIC book; the research is You.com's. Two endpoints, one per job.
 
 import { assess } from "../kernel/assess.js";
 import { attest, makeAttestation, serveIfCommitted } from "../kernel/attest.js";
@@ -23,7 +23,7 @@ export interface ScanResult {
   assessments: Assessment[]; // leverage + interest_cover
   proposal: ProposedWrite | null;
   scoreboard: ScoreboardEvent[];
-  labels: { search: string; ari: string; recompute: "REAL"; downstream_serve: "SYNTHETIC" };
+  labels: { search: string; ari: string; recompute: "LIVE"; downstream_serve: "SYNTHETIC" };
 }
 
 function attachLiveCitations(a: Assessment, ari: AriResult, eventId: string): void {
@@ -36,7 +36,7 @@ function attachLiveCitations(a: Assessment, ari: AriResult, eventId: string): vo
   }
 }
 
-export async function runScan(now: string): Promise<ScanResult> {
+export async function runScan(now: string, mode: "live" | "prerun" = "live"): Promise<ScanResult> {
   const { bundle, memory } = withMemory("thornwick");
   const leverage = bundle.covenants.find((c) => c.covenant_id === "total_net_leverage")!;
   const interest = bundle.covenants.find((c) => c.covenant_id === "interest_cover")!;
@@ -47,8 +47,8 @@ export async function runScan(now: string): Promise<ScanResult> {
   // Fire both You.com endpoints concurrently at scan time. Search proves live freshness on the
   // real theme (week window widens the news hit rate); ARI builds the cited brief.
   const [search, ari] = await Promise.all([
-    searchLiveWeb(SEARCH_QUERY, { freshness: "week", livecrawl: "news" }),
-    researchAri(ARI_QUESTION),
+    searchLiveWeb(SEARCH_QUERY, { freshness: "week", livecrawl: "news", mode }),
+    researchAri(ARI_QUESTION, { mode }),
   ]);
 
   // The synthetic filing that triggered this scan (a synthetic borrower has no real headline).
@@ -102,7 +102,7 @@ export async function runScan(now: string): Promise<ScanResult> {
     assessments: [a, aIc],
     proposal: a.proposed_write,
     scoreboard: sb.events,
-    labels: { search: search.label, ari: ari.label, recompute: "REAL", downstream_serve: "SYNTHETIC" },
+    labels: { search: search.label, ari: ari.label, recompute: "LIVE", downstream_serve: "SYNTHETIC" },
   };
 }
 

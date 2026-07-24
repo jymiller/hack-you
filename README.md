@@ -51,7 +51,7 @@ wrap it in You.com, then harden it. Three phases, each gated on one runnable che
    downstream notice is structurally unreachable without a `CommittedWrite`, which only an ATTEST
    produces — the DENY/attest gate.
 
-Every effect carries exactly one honesty label — **SYNTHETIC** (corpus data), **REAL** (a live
+Every effect carries exactly one honesty label — **SYNTHETIC** (corpus data), **LIVE** (a live
 computation/crawl), **PRERUN** (a cached receipt) — and the event scoreboard (`scoreboard.ts`) makes
 green→breach legible: `scanned → breach → memory_hit → attested → write_committed`.
 
@@ -60,12 +60,12 @@ green→breach legible: `scanned → breach → memory_hit → attested → writ
 `src/server/youcom.ts` — two You.com endpoints, one per job:
 
 - **Search** `GET ydc-index.io/v1/search` (`freshness=day`, `livecrawl=news`) → the fresh restatement
-  headline. The visible live-data proof. `[REAL]`
+  headline. The visible live-data proof. `[LIVE]`
 - **Research (ARI)** `POST api.you.com/v1/research` (`standard`, `background:true` → `task_id` in <1s,
-  polled to completion) → the cited, structured brief. #1 on DeepSearchQA (83.67%). `[REAL]`
+  polled to completion) → the cited, structured brief. #1 on DeepSearchQA (83.67%). `[LIVE]`
 
 `src/server/scan.ts` fires both at scan time, runs the kernel over the SYNTHETIC book, and attaches
-the REAL/PRERUN citations to the finding. Recompute is REAL over a SYNTHETIC book.
+the LIVE/PRERUN citations to the finding. Recompute is LIVE over a SYNTHETIC book.
 
 ### Phase 3 — HARDEN
 

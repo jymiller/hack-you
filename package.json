@@ -1,0 +1,26 @@
+{
+  "name": "covenant-sentinel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ENID Covenant Sentinel — deterministic covenant kernel + You.com live research, built for the You.com Agentic hackathon.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "demo": "tsx scripts/demo.ts",
+    "dev": "tsx watch src/server/app.ts",
+    "start": "tsx src/server/app.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

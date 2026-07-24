@@ -1,0 +1,680 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://enid.local/schemas/covenant-facts/v1.json",
+  "title": "ENID Covenant Sentinel — Normalized Facts Bundle",
+  "description": "One facts bundle per borrower. The covenant kernel reads only this shape: assess(facts, covenant, certificate, memory) resolves covenants[] against periods[].observations[] and never trusts a certified number. Every object sets additionalProperties:false so any sub-object can be lifted verbatim into a You.com Research (ARI) output_schema without the HTTP 422.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "facts_id",
+    "provenance_label",
+    "units",
+    "basis_precedence",
+    "borrower",
+    "covenants",
+    "periods",
+    "documents"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "facts_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$",
+      "description": "Stable id of this bundle, e.g. 'thornwick-logistics'."
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "provenance_label": { "$ref": "#/$defs/provenance_label" },
+    "units": { "$ref": "#/$defs/units" },
+    "basis_precedence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/basis" },
+      "description": "Ordered, most authoritative first. The kernel resolves which observation is the truth for a period deterministically instead of guessing. Default: audited_restated > raw_financials > management_accounts > borrower_certified."
+    },
+    "borrower": { "$ref": "#/$defs/borrower" },
+    "covenants": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/covenant" }
+    },
+    "periods": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/period" }
+    },
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/document" }
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/event" },
+      "description": "Live-web signals (You.com Search / ARI) that caused a new observation to exist. Optional: the kernel stays a pure function of borrower+covenants+periods."
+    },
+    "memory": { "$ref": "#/$defs/memory" },
+    "notes": { "type": "string" }
+  },
+
+  "$defs": {
+
+    "provenance_label": {
+      "type": "string",
+      "enum": ["SYNTHETIC", "REAL", "PRERUN"],
+      "description": "Exactly one honesty label per on-stage artefact. Corpus data is SYNTHETIC; a live You.com crawl is REAL; a cached ActionLayer receipt is PRERUN."
+    },
+
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "magnitude"],
+      "properties": {
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "magnitude": {
+          "type": "string",
+          "enum": ["units", "thousands", "millions"]
+        },
+        "ratio_decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "default": 2
+        }
+      }
+    },
+
+    "basis": {
+      "type": "string",
+      "enum": [
+        "borrower_certified",
+        "management_accounts",
+        "raw_financials",
+        "audited_restated",
+        "agent_recomputed"
+      ],
+      "description": "Which vintage of the truth an observation represents. Restatement-over-time and under-reporting are both just two observations of the same period on different bases."
+    },
+
+    "measure_key": {
+      "type": "string",
+      "enum": [
+        "consolidated_ebitda",
+        "adjusted_ebitda",
+        "revenue",
+        "operating_profit",
+        "total_net_debt",
+        "senior_net_debt",
+        "gross_debt",
+        "term_loan",
+        "revolver_drawn",
+        "cash_and_equivalents",
+        "cash_interest",
+        "net_finance_charges",
+        "scheduled_amortisation",
+        "debt_service",
+        "cfads",
+        "cure_amount"
+      ],
+      "description": "Closed canonical vocabulary. A source field that maps to none of these must land in unmapped_fields — which is the schema-drift alarm, not an error."
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "WATCH", "BREACH", "INDETERMINATE"]
+    },
+
+    "borrower": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["borrower_id", "legal_name"],
+      "properties": {
+        "borrower_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+        "legal_name": { "type": "string", "minLength": 1 },
+        "short_name": { "type": "string" },
+        "sector": { "type": "string" },
+        "jurisdiction": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "sponsor": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["sponsor_id", "name"],
+          "properties": {
+            "sponsor_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+            "name": { "type": "string" }
+          }
+        },
+        "agent": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" },
+            "role": {
+              "type": "string",
+              "enum": ["agent", "security_agent", "agent_and_security_agent", "lender"]
+            }
+          }
+        },
+        "auditors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "financial_year_end": { "type": "string", "format": "date" },
+              "report_signed_on": { "type": "string", "format": "date" }
+            }
+          },
+          "description": "An auditor change between vintages is a first-class risk signal (Thornwick: Larkfield Downe -> Marbury Tolland, and the restatement followed)."
+        },
+        "facility": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "facility_name": { "type": "string" },
+            "agreement_date": { "type": "string", "format": "date" },
+            "agreement_doc_id": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "covenant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["covenant_id", "metric", "direction", "formula", "thresholds"],
+      "properties": {
+        "covenant_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "label": { "type": "string" },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "total_net_leverage",
+            "senior_net_leverage",
+            "interest_cover",
+            "debt_service_cover",
+            "fixed_charge_cover"
+          ]
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["max", "min"],
+          "description": "max = ceiling (leverage: breach when value > threshold). min = floor (ICR/DSCR: breach when value < threshold). One comparator serves all three mechanisms."
+        },
+        "formula": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["numerator_key", "denominator_key"],
+          "properties": {
+            "numerator_key": { "$ref": "#/$defs/measure_key" },
+            "denominator_key": { "$ref": "#/$defs/measure_key" },
+            "rounding": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "decimals"],
+              "properties": {
+                "mode": { "type": "string", "enum": ["half_up", "half_even", "truncate"] },
+                "decimals": { "type": "integer", "minimum": 0, "maximum": 6 }
+              }
+            }
+          }
+        },
+        "thresholds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "effective_from"],
+            "properties": {
+              "value": { "type": "number", "exclusiveMinimum": 0 },
+              "effective_from": { "type": "string", "format": "date" },
+              "effective_to": { "type": ["string", "null"], "format": "date" }
+            }
+          },
+          "description": "Stepdown schedule. The kernel selects the row whose window contains period.test_date; a period with no matching row is INDETERMINATE, never PASS."
+        },
+        "watch_rule": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "headroom_absolute": { "type": ["number", "null"], "minimum": 0 },
+            "headroom_pct": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "deteriorating_periods": { "type": ["integer", "null"], "minimum": 2 }
+          },
+          "description": "Turns WATCH into data instead of a hardcoded branch. Borrower B (4.0 -> 4.2 -> 4.4x) trips deteriorating_periods=3; Thornwick's 6.47x vs 6.50x trips headroom_absolute."
+        },
+        "clause_ref": { "type": "string" },
+        "source_doc_id": { "type": "string" },
+        "cure": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "equity_cure_permitted": { "type": "boolean" },
+            "max_over_life": { "type": ["integer", "null"], "minimum": 0 },
+            "max_per_four_quarters": { "type": ["integer", "null"], "minimum": 0 },
+            "consecutive_test_dates_allowed": { "type": "boolean" },
+            "cure_applies_to": { "type": "string", "enum": ["ebitda", "net_debt", "either"] }
+          }
+        }
+      }
+    },
+
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["period_id", "test_date", "observations"],
+      "properties": {
+        "period_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "label": { "type": "string" },
+        "test_date": { "type": "string", "format": "date" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "relevant_period": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "format": "date" },
+            "end": { "type": "string", "format": "date" }
+          }
+        },
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/observation" }
+        },
+        "expected_assessment": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/expected_assessment" },
+          "description": "Test oracle for the eval harness and the demo assertion. NOT an input to assess() — the kernel must never read it."
+        }
+      }
+    },
+
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observation_id", "basis", "as_of", "measures"],
+      "properties": {
+        "observation_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "basis": { "$ref": "#/$defs/basis" },
+        "as_of": {
+          "type": "string",
+          "format": "date",
+          "description": "When this vintage came into existence (cert signed 13 May 2026 vs audit signed 3 Jul 2026). Restatement-over-time is an as_of ordering, not a special case."
+        },
+        "source_doc_id": { "type": "string" },
+        "supersedes_observation_id": { "type": ["string", "null"] },
+        "provenance_label": { "$ref": "#/$defs/provenance_label" },
+        "measures": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/measure" }
+        },
+        "unmapped_fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["raw_name"],
+            "properties": {
+              "raw_name": { "type": "string" },
+              "raw_label": { "type": "string" },
+              "value": { "type": ["number", "string", "null"] },
+              "unit": { "type": ["string", "null"] }
+            }
+          },
+          "description": "Source fields that matched no canonical key. Northgate's newly-appearing 'adjusted_ebitda' lands here the moment the mapper is not updated — the drift alarm that value comparison misses."
+        },
+        "field_map_fingerprint": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "sha256 over the sorted canonical_key:raw_name pairs of measures[] plus sorted unmapped_fields[].raw_name. Kernel step 3 compares THIS between consecutive observations; equal values with an unequal fingerprint is exactly the Northgate silent rename."
+        },
+        "ebitda_build": { "$ref": "#/$defs/ebitda_build" },
+        "certified_results": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/certified_result" }
+        },
+        "signed_by": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "title": { "type": "string" },
+            "signed_on": { "type": "string", "format": "date" }
+          }
+        }
+      }
+    },
+
+    "measure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "value", "raw_name"],
+      "properties": {
+        "key": { "$ref": "#/$defs/measure_key" },
+        "value": { "type": ["number", "null"] },
+        "raw_name": {
+          "type": ["string", "null"],
+          "description": "Verbatim field/row name in the source document. Null means the canonical key was expected and absent. The (key -> raw_name) projection across measures IS the field map."
+        },
+        "raw_label": { "type": ["string", "null"] },
+        "unit": { "type": ["string", "null"] },
+        "sign_convention": {
+          "type": "string",
+          "enum": ["as_stated", "negated"],
+          "default": "as_stated",
+          "description": "Cash shows as (5.0) in the certificate but must subtract. Normalizing the sign at ingest stops a sign flip masquerading as a covenant move."
+        },
+        "state": {
+          "type": "string",
+          "enum": ["observed", "derived", "missing", "stale"],
+          "default": "observed"
+        },
+        "stale_from_period_id": {
+          "type": ["string", "null"],
+          "description": "Set when state=stale: the value was carried forward because the current document's field name did not resolve. This is the Northgate 'dashboard stays green' bug, made explicit."
+        },
+        "source_doc_id": { "type": ["string", "null"] },
+        "source_locator": { "type": ["string", "null"] }
+      }
+    },
+
+    "ebitda_build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_key", "base_amount", "total_key", "total_amount"],
+      "properties": {
+        "base_key": { "$ref": "#/$defs/measure_key" },
+        "base_amount": { "type": "number" },
+        "add_backs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/add_back" }
+        },
+        "adjustments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjustment" }
+        },
+        "total_key": { "$ref": "#/$defs/measure_key" },
+        "total_amount": {
+          "type": "number",
+          "description": "As asserted by the source. The kernel recomputes base + sum(allowed add_backs) + sum(adjustments) and treats any difference as a finding rather than adopting this number."
+        }
+      }
+    },
+
+    "add_back": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["add_back_id", "category", "amount", "allowed"],
+      "properties": {
+        "add_back_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "label": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": [
+            "run_rate_synergy",
+            "exceptional_restructuring",
+            "transaction_advisory",
+            "non_cash",
+            "pro_forma_acquisition",
+            "other"
+          ],
+          "description": "The cross-deal memory join key. sponsor_id + category='run_rate_synergy' + allowed=false is precisely what links Halveston 2024 to Thornwick 2026."
+        },
+        "limb_ref": { "type": "string" },
+        "amount": { "type": "number", "description": "As claimed by the borrower." },
+        "allowed": {
+          "type": ["boolean", "null"],
+          "description": "null = not yet adjudicated (a certified observation before any audit). false = disallowed. The kernel only ever sums allowed===true."
+        },
+        "allowed_amount": { "type": ["number", "null"] },
+        "disallowed_amount": { "type": ["number", "null"] },
+        "disallowed_reason": {
+          "type": ["string", "null"],
+          "enum": [
+            "not_factually_supportable",
+            "not_realised_in_window",
+            "exceeds_cap",
+            "double_counted",
+            "reclassified_recurring",
+            "outside_definition",
+            null
+          ]
+        },
+        "cap_check": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "basis_key": { "$ref": "#/$defs/measure_key" },
+            "cap_pct": { "type": "number", "minimum": 0, "maximum": 1 },
+            "cap_amount": { "type": "number" },
+            "within_cap": { "type": "boolean" }
+          },
+          "description": "Thornwick's 20%-of-pre-synergy-EBITDA cap. Recomputed, not trusted: the certificate's own cap arithmetic is a claim."
+        },
+        "evidence_doc_id": { "type": ["string", "null"] },
+        "first_claimed_period_id": { "type": ["string", "null"] }
+      }
+    },
+
+    "adjustment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adjustment_id", "type", "amount"],
+      "properties": {
+        "adjustment_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "label": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "revenue_reversal",
+            "cost_reclassification",
+            "impairment",
+            "pro_forma",
+            "equity_cure",
+            "other"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "Signed. Thornwick's IFRS 15 reversal is -1.7. Signed amounts keep the EBITDA bridge a single sum."
+        },
+        "reason": { "type": ["string", "null"] },
+        "evidence_doc_id": { "type": ["string", "null"] },
+        "affects_measure_key": { "$ref": "#/$defs/measure_key" }
+      }
+    },
+
+    "certified_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["covenant_id", "certified_status"],
+      "properties": {
+        "covenant_id": { "type": "string" },
+        "certified_value": {
+          "type": ["number", "null"],
+          "description": "The borrower's own ratio. Recorded so certified-vs-recomputed is a diff the UI can show, never an input to the classification."
+        },
+        "certified_threshold": { "type": ["number", "null"] },
+        "certified_status": {
+          "type": "string",
+          "enum": ["IN_COMPLIANCE", "NOT_IN_COMPLIANCE", "NOT_STATED"]
+        },
+        "certified_status_verbatim": {
+          "type": ["string", "null"],
+          "description": "Exact wording, e.g. 'no Default is continuing'. Borrower C's whole beat is this string sitting next to a recomputed 1.08x."
+        },
+        "calculation_text": { "type": ["string", "null"] }
+      }
+    },
+
+    "expected_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["covenant_id", "basis", "expected_status"],
+      "properties": {
+        "covenant_id": { "type": "string" },
+        "basis": { "$ref": "#/$defs/basis" },
+        "expected_value": { "type": ["number", "null"] },
+        "expected_status": { "$ref": "#/$defs/status" },
+        "expect_drift_detected": { "type": "boolean", "default": false },
+        "expect_certification_conflict": { "type": "boolean", "default": false },
+        "expect_memory_hit": { "type": "boolean", "default": false },
+        "rationale": { "type": "string" }
+      }
+    },
+
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["doc_id", "kind", "fingerprint"],
+      "properties": {
+        "doc_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "credit_agreement",
+            "compliance_certificate",
+            "management_accounts",
+            "audited_accounts",
+            "restatement_note",
+            "amendment_waiver",
+            "news_article",
+            "regulatory_filing",
+            "other"
+          ]
+        },
+        "title": { "type": "string" },
+        "doc_date": { "type": ["string", "null"], "format": "date" },
+        "party": { "type": ["string", "null"] },
+        "source_uri": { "type": ["string", "null"] },
+        "fingerprint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algo", "value"],
+          "properties": {
+            "algo": { "type": "string", "enum": ["sha256"] },
+            "value": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "computed_at": { "type": ["string", "null"], "format": "date-time" },
+            "byte_length": { "type": ["integer", "null"], "minimum": 0 }
+          },
+          "description": "Content hash. A changed fingerprint under an unchanged doc_id/doc_date means the document was rewritten underneath the file name — kernel step 3, and the audit trail the security judge looks for."
+        },
+        "extraction": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "type": "string", "enum": ["text", "ocr", "manual"] },
+            "model": { "type": ["string", "null"] },
+            "extracted_at": { "type": ["string", "null"], "format": "date-time" },
+            "page_count": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "provenance_label": { "$ref": "#/$defs/provenance_label" }
+      }
+    },
+
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "kind", "observed_at", "headline", "retrieved_via", "provenance_label"],
+      "properties": {
+        "event_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "restatement",
+            "auditor_change",
+            "rating_action",
+            "regulatory_filing",
+            "news",
+            "market_move",
+            "other"
+          ]
+        },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "headline": { "type": "string" },
+        "summary": { "type": ["string", "null"] },
+        "entity_refs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "borrower_ids": { "type": "array", "items": { "type": "string" } },
+            "sponsor_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "retrieved_via": {
+          "type": "string",
+          "enum": ["you_search", "you_research_ari", "you_finance", "you_contents", "manual"]
+        },
+        "research_effort": {
+          "type": ["string", "null"],
+          "enum": ["lite", "standard", "deep", "exhaustive", null]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string" },
+              "title": { "type": ["string", "null"] },
+              "publisher": { "type": ["string", "null"] },
+              "published_at": { "type": ["string", "null"] },
+              "snippet": { "type": ["string", "null"] }
+            }
+          },
+          "description": "Maps 1:1 onto ARI output.sources[]. These are the visible inline citations in the drift alert."
+        },
+        "derived_observation_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The live-event -> facts-delta bridge: which observations this event caused to exist."
+        },
+        "provenance_label": { "$ref": "#/$defs/provenance_label" }
+      }
+    },
+
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sponsor_id": { "type": ["string", "null"] },
+        "pattern_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "e.g. 'run_rate_synergy_disallowed', 'restated_after_auditor_change'."
+        },
+        "related_deals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["facts_id", "relation"],
+            "properties": {
+              "facts_id": { "type": "string" },
+              "borrower_id": { "type": ["string", "null"] },
+              "relation": {
+                "type": "string",
+                "enum": [
+                  "same_sponsor",
+                  "same_lender",
+                  "same_auditor",
+                  "same_addback_pattern",
+                  "same_group"
+                ]
+              },
+              "note": { "type": ["string", "null"] }
+            }
+          },
+          "description": "Cross-deal retrieval edges. Thornwick -> Halveston via same_sponsor + same_addback_pattern is the memory_hit event on the scoreboard."
+        }
+      }
+    }
+  }
+}

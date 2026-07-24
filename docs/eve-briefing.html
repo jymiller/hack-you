@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You.com Hackathon — Eve Briefing (decide the open calls)</title>
+</head>
+<body>
+<style>
+  :root{--bg:#f3f4f1;--surface:#fbfcfa;--ink:#1d2420;--muted:#5c675f;--line:#d8ddd6;--accent:#a86414;--accent-soft:#f4e7d2;--good:#2e6b46;--good-soft:#e2ede5;--risk:#a33a2e;--risk-soft:#f2e2df;--agent:#3d5a80;--agent-soft:#e4ebf3;--gold:#b8860b;--gold-soft:#f7edcf;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--serif:"Charter","Iowan Old Style",Georgia,serif}
+  @media(prefers-color-scheme:dark){:root{--bg:#14181a;--surface:#1c2224;--ink:#e6e9e4;--muted:#97a29a;--line:#2d3538;--accent:#e0a24e;--accent-soft:#33291a;--good:#7cbd97;--good-soft:#1c2b22;--risk:#d98a7c;--risk-soft:#33211d;--agent:#8fb3d9;--agent-soft:#1e2a36;--gold:#e0b64e;--gold-soft:#2a2416}}
+  :root[data-theme="light"]{--bg:#f3f4f1;--surface:#fbfcfa;--ink:#1d2420;--muted:#5c675f;--line:#d8ddd6;--accent:#a86414;--accent-soft:#f4e7d2;--good:#2e6b46;--good-soft:#e2ede5;--risk:#a33a2e;--risk-soft:#f2e2df;--agent:#3d5a80;--agent-soft:#e4ebf3;--gold:#b8860b;--gold-soft:#f7edcf}
+  :root[data-theme="dark"]{--bg:#14181a;--surface:#1c2224;--ink:#e6e9e4;--muted:#97a29a;--line:#2d3538;--accent:#e0a24e;--accent-soft:#33291a;--good:#7cbd97;--good-soft:#1c2b22;--risk:#d98a7c;--risk-soft:#33211d;--agent:#8fb3d9;--agent-soft:#1e2a36;--gold:#e0b64e;--gold-soft:#2a2416}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.55;margin:0}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 22px 80px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h1{font-size:29px;line-height:1.14;margin:0 0 10px;text-wrap:balance}
+  .lede{color:var(--muted);max-width:70ch;margin:0 0 18px}
+  h2{font-size:21px;margin:38px 0 6px;padding-top:14px;border-top:2px solid var(--line)}
+  h3{font-size:16.5px;margin:20px 0 6px}
+  h4{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:14px 0 6px}
+  p{margin:0 0 11px}
+  ul,ol{margin:0 0 12px;padding-left:22px}
+  li{margin-bottom:5px}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  a:hover{border-bottom-color:var(--accent)}
+  code{font-family:var(--mono);font-size:.85em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+  b{font-weight:650}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;border:1px solid currentColor;border-radius:3px;padding:2px 7px;vertical-align:middle}
+  .tag.good{color:var(--good);background:var(--good-soft)} .tag.risk{color:var(--risk);background:var(--risk-soft)} .tag.warn{color:var(--accent);background:var(--accent-soft)} .tag.wait{color:var(--muted);background:var(--surface)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:15px 18px;margin:12px 0}
+  .card.rec{border-left:3px solid var(--good)}
+  .card.you{border-left:3px solid var(--gold);background:var(--gold-soft)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 14px;display:block;overflow-x:auto;white-space:nowrap}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft);font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  td{white-space:normal}
+  .status{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .status:last-child{border-bottom:0}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .dot.g{background:var(--good)} .dot.r{background:var(--risk)} .dot.y{background:var(--gold)}
+  .status .lbl{font-weight:650;flex:0 0 168px}
+  .status .say{color:var(--muted);font-size:13px}
+  .bar{display:flex;align-items:center;gap:10px;margin:5px 0}
+  .bar .bn{font-family:var(--mono);font-size:12px;flex:0 0 150px}
+  .bar .track{flex:1;height:15px;background:var(--accent-soft);border-radius:4px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--accent);border-radius:4px}
+  .bar .pct{font-family:var(--mono);font-size:12px;color:var(--muted);flex:0 0 38px;text-align:right}
+  .flag{background:var(--risk-soft);border:1px solid var(--risk);border-left:3px solid var(--risk);border-radius:7px;padding:12px 15px;margin:14px 0;font-size:13.5px}
+  .flag b{color:var(--risk)}
+  .win{background:var(--gold-soft);border:1px solid var(--gold);border-radius:7px;padding:12px 15px;margin:14px 0;font-size:13.5px}
+  .ask{background:var(--agent-soft);border:1px solid var(--agent);border-left:3px solid var(--agent);border-radius:7px;padding:12px 15px;margin:12px 0;font-size:13.5px}
+  .ask b{color:var(--agent)}
+  .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+</style>
+<div class="wrap">
+  <p class="eyebrow">Thu Jul 23 · night before · decision briefing</p>
+  <h1>You.com hackathon — the open calls are yours</h1>
+  <p class="lede">Everything I could verify or prep tonight is done or running. What's left are <b>your decisions</b> — mostly about deploy, and two side-quests. This lays out the criteria, the sponsors, what each judge rewards, and the real tradeoffs, so you can make the calls. My recommendations are marked, but they're recommendations — the <span class="tag warn">your call</span> boxes are where I need you.</p>
+
+  <h2>Where tonight stands</h2>
+  <div class="card">
+    <div class="status"><span class="dot g"></span><span class="lbl">You.com Search</span><span class="say">✅ live · <b>sub-second</b> · <code>freshness=day</code> returns <b>today-dated</b> results (Jul 23) — the "this is really live" beat works</span></div>
+    <div class="status"><span class="dot g"></span><span class="lbl">You.com Research (ARI)</span><span class="say">✅ live · 8 real cited sources banked as a PRERUN receipt · <b>13.3s</b> latency — solved with background mode (below)</span></div>
+    <div class="status"><span class="dot g"></span><span class="lbl">You.com balance</span><span class="say">✅ <b>$199.92</b> — plenty; ARI is ~$12/1k calls</span></div>
+    <div class="status"><span class="dot g"></span><span class="lbl">Novita</span><span class="say">✅ auth good · 141 models · <code>opencode.json</code> written (GLM-5.2 primary, Kimi-K2.7 fallback) — the build harness</span></div>
+    <div class="status"><span class="dot y"></span><span class="lbl">Fixtures + kernel spec</span><span class="say">⏳ generating now — 6 borrowers, one Facts schema, every ratio adversarially re-checked; kernel spec + demo script</span></div>
+    <div class="status"><span class="dot r"></span><span class="lbl">AWS keys</span><span class="say">⛔ empty in <code>.env</code> — only you can add them (see deploy decision)</span></div>
+    <div class="status"><span class="dot r"></span><span class="lbl">ActionLayer key</span><span class="say">⛔ empty · MCP session is authed but expires ~00:34 PDT — side-quest, your call</span></div>
+    <div class="status"><span class="dot y"></span><span class="lbl">Opsera</span><span class="say">⏳ self-serve tonight (not booth-only as we thought) — the $500 side-quest, your call</span></div>
+  </div>
+
+  <h2>What we're building — "Covenant Sentinel"</h2>
+  <p>A real-time agent that watches the live web for events threatening a borrower's loan covenant, does <b>cited</b> deep research via You.com's Research API, <b>recomputes</b> the covenant on your own books, and routes a breach to a human analyst to sign off. The persona pitch: <em>"an analyst covers 40 borrowers and can't read every filing — Sentinel catches the one covenant that silently breached, with citations, in under a minute."</em></p>
+  <div class="win"><b>The money-shot (the whole demo hinges on this):</b> a live ARI crawl surfaces fresh news that sponsor Ardenmoor restated its accounts <span class="tag good">real</span> → the kernel recomputes borrower Thornwick from a certified <b>6.47× GREEN</b> to <b>7.59× BREACH</b> on synthetic books <span class="tag wait">synthetic</span> → a cited research package routes to the analyst → after sign-off, a notice is served <span class="tag warn">prerun</span>. One truth on screen: <em>the certificate reads GREEN, the recompute says BREACH.</em></div>
+
+  <h2>The judging criteria</h2>
+  <p style="font-size:13px;color:var(--muted)">2025-series rubric — <span class="tag warn">confirm on arrival</span>, it's usually reused.</p>
+  <div class="card">
+    <div class="bar"><span class="bn">Innovation</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="pct">25</span></div>
+    <div class="bar"><span class="bn">Technical</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="pct">25</span></div>
+    <div class="bar"><span class="bn">Impact</span><span class="track"><span class="fill" style="width:80%"></span></span><span class="pct">20</span></div>
+    <div class="bar"><span class="bn">UX</span><span class="track"><span class="fill" style="width:60%"></span></span><span class="pct">15</span></div>
+    <div class="bar"><span class="bn">Presentation+Docs</span><span class="track"><span class="fill" style="width:60%"></span></span><span class="pct">15</span></div>
+  </div>
+  <p><b>Impact + UX + Presentation = 50%</b> — the half strong engineers under-invest in. A rehearsed 3-minute pitch, a clean structured UI, one real metric, and a solid README + backup video is how this is won. The other 50% (Innovation + Technical) is carried by the money-shot and deep, correct You.com use.</p>
+
+  <h2>The judges — build for Kruti</h2>
+  <table>
+    <tr><th>Judge</th><th>Role</th><th>What earns their points</th></tr>
+    <tr><td><b>Kruti Tailor</b></td><td>Sr. AI Eng, <b>You.com</b></td><td><b>THE judge.</b> Deep, correct You.com stack use — use ARI well, cite its benchmark (#1 DeepSearchQA, 83.67%), right endpoint per job, show <code>sources[]</code> as visible citations.</td></tr>
+    <tr><td><b>Rutansh Trivedi</b></td><td>Sr. Staff Eng, Palo Alto Networks</td><td>Security / robustness — our <b>audit trail + human sign-off gate</b> lands here, and it's the same story that wins the Opsera bonus.</td></tr>
+    <tr><td><b>Rajani Thakur</b></td><td>Eng Lead, Microsoft</td><td>Production-readiness — clean architecture, error handling, latency, evals. Not demo-ware.</td></tr>
+    <tr><td><b>Sandeep Salwan</b></td><td>SWE, <b>Amazon</b></td><td>Clean AWS deploy. This is the <b>only</b> judge who specifically rewards where you host — see the deploy decision.</td></tr>
+  </table>
+
+  <h2>The sponsors &amp; the prize</h2>
+  <p>1st place ≈ <b>$5,400 bundle</b>: ~$1k cash/GC + credits from the sponsors, plus a standalone <b>$500 Opsera</b> bonus that stacks on any placement.</p>
+  <table>
+    <tr><th>Sponsor</th><th>In the prize?</th><th>Role in our build</th></tr>
+    <tr><td><b>You.com</b></td><td>credits + the event</td><td><b>The core.</b> Search + ARI. This is what Kruti scores.</td></tr>
+    <tr><td><b>AWS</b></td><td>venue + $25 credits</td><td>Deploy target — Sandeep's points. Your account. See below.</td></tr>
+    <tr><td><b>Replit</b></td><td>credits</td><td>Alternative deploy — <b>you have an account</b>. Sponsor-aligned.</td></tr>
+    <tr><td><b>Render</b></td><td>$50 credit</td><td>Alternative deploy — the one I can script most of.</td></tr>
+    <tr><td><b>CrewAI</b></td><td>credits</td><td>Optional — build the agent as a CrewAI multi-agent system to straddle two tracks.</td></tr>
+    <tr><td><b>Opsera</b></td><td>$500 standalone</td><td>Security-gate side-quest. Self-serve tonight.</td></tr>
+  </table>
+
+  <h2 id="deploy">▶ Decision 1 — where do we deploy?</h2>
+  <p>This is the one you asked about. Key finding tonight: <b>AWS App Runner (the path in the old design doc) was closed to new customers Apr 30 2026.</b> A fresh AWS account now uses <b>ECS Express Mode</b> — more setup. So I'd split "deploy" into two separate jobs:</p>
+
+  <div class="card rec">
+    <h3 style="margin-top:2px">Job A — the guaranteed live URL for the demo <span class="tag good">my pick: cloudflared</span></h3>
+    <p style="margin:0"><b>cloudflared tunnel</b> — already installed, 60 seconds, zero accounts: <code>cloudflared tunnel --url http://localhost:8000</code> gives an instant <code>*.trycloudflare.com</code> HTTPS URL serving your laptop, citing live You.com sources. This makes the "deployed live URL" submission gate <b>bulletproof</b> — it can't fail on venue wifi the way a cloud build can. Only catch: laptop stays awake on wifi. This runs regardless of what you pick for Job B.</p>
+  </div>
+
+  <h3>Job B — a hosted deploy for judge Sandeep's points <span class="tag warn">your call</span></h3>
+  <p>Optional, done <b>early Friday</b>, never at the expense of the demo. Three ways, and you have standing in two of them (AWS + Replit):</p>
+  <table>
+    <tr><th>Option</th><th>Effort</th><th>Judge value</th><th>The honest tradeoff</th></tr>
+    <tr><td><b>AWS ECS Express</b></td><td>35–50 min</td><td>★★★ (Sandeep + venue + credits)</td><td>Highest points, highest cost. Needs your AWS keys tonight; account setup, IAM roles, and $25-credit redemption are <b>console-only</b> (you drive them). Docker build/push. "My own AWS account" story.</td></tr>
+    <tr><td><b>Replit</b></td><td>~15 min, browser</td><td>★ (sponsor, no judge tie)</td><td><b>You have an account</b> and it's a prize sponsor. You drive it in-browser (I can't script it from here). Gives a <code>.replit.app</code> URL — clean, hosted, satisfies the gate.</td></tr>
+    <tr><td><b>Render</b></td><td>8–12 min</td><td>— (neutral)</td><td>The one I can script most of (public-repo deploy, one browser step for the API key). Reliable, but no judge tie and not "your account." Use <code>starter</code> plan, not free (free cold-starts ~50s mid-demo).</td></tr>
+  </table>
+
+  <div class="you">
+    <b>My recommendation:</b> <b>cloudflared for the demo</b> (guaranteed), and if you want Sandeep's points, <b>AWS ECS Express early Friday</b> since you asked to use your own AWS account and it's the one deploy a judge actually scores — but only if you add AWS keys tonight and we time-box it to the first 45 min. If the AWS console dance feels like a Friday-morning risk, <b>Replit is the graceful middle</b>: your account, a sponsor, a real hosted URL, no judge downside beyond "not AWS." Render is my third choice — reliable but it wins nothing extra.
+    <br><br><b>What I need from you:</b> (1) for AWS — decide if you'll paste IAM access keys into <code>.env</code> tonight; I can't create them. (2) for Replit — if you'd rather go that route, have your login ready and we'll stand it up together Friday. Either way cloudflared is the safety net.
+  </div>
+
+  <h2>▶ Decision 2 — the Opsera $500 side-quest <span class="tag warn">your call</span></h2>
+  <p>We were wrong that Opsera is booth-only. <b>Opsera Agents is self-serve tonight</b> (Google sign-in, no card, free tier), with a Claude Code plugin — run its security/compliance agent over the repo, screenshot the scan, and that's your $500 slide (and it flatters Rutansh, the Palo Alto judge). The only catch: new accounts may hit an approval gate that might not clear tonight — if so, the booth is the Friday unblock.</p>
+  <div class="ask"><b>Your call:</b> want to sign in at <code>agent.opsera.ai</code> with Google tonight? It's ~10 min and the only part I can't do (you own the OAuth). If yes, I'll walk the plugin install right after. If the account approval stalls, we fall back to the booth Friday — no loss.</div>
+
+  <h2>▶ Decision 3 — ActionLayer <span class="tag warn">your call</span></h2>
+  <p>ActionLayer is <b>not a You.com sponsor</b> and earns no bonus here — it's the "serve the notice" last-mile flourish at the very end of the demo, shown PRERUN. It's a nice bookend (You.com pulls signal in, ActionLayer pushes the serve out) but it's the most cuttable piece. Firing a PRERUN receipt tonight burns your won credits and needs the MCP session before it expires (~00:34 PDT).</p>
+  <div class="ask"><b>Your call:</b> three ways — (a) fire one PRERUN receipt tonight while the session's live, (b) do it Friday at the venue, or (c) drop ActionLayer entirely and keep the 3-minute demo tighter on the You.com core. My lean: <b>(c) drop it for the pitch</b> unless the "serve the notice" bookend really moves you — the judges score You.com depth, not last-mile breadth.</div>
+
+  <h2>The ARI latency fix (already solved)</h2>
+  <p>ARI takes 13.3s — fatal dead air in a 180s demo <em>if</em> called synchronously. The fix, verified in the docs tonight: <code>{"background": true}</code> returns instantly with a <code>task_id</code> + <code>stream_url</code>; fire it at the <b>first slide</b>, narrate the persona while it runs, and pull the finished cited result ~15s later exactly when you need it on screen. The demo script (generating now) is built around this beat.</p>
+
+  <h2>Plan of attack</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Rest of tonight</h4>
+      <ol style="margin:0">
+        <li><b>Done:</b> keys verified, PRERUN sources banked, opencode harness, the <code>additionalProperties:false</code> 422 trap solved.</li>
+        <li><b>Finishing now:</b> 6 verified fixtures, Facts schema, kernel spec, demo script.</li>
+        <li><b>Your calls:</b> AWS keys? Opsera sign-in? ActionLayer?</li>
+        <li>Record the backup demo video once the script lands.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h4>Friday (5.5-hr clock)</h4>
+      <ol style="margin:0">
+        <li>Re-type the kernel <b>fresh from spec</b> (the rule: data/design/credits pre-built, code written on the day).</li>
+        <li>Wrap it as a You.com tool; wire live ARI/Search → Facts-delta.</li>
+        <li>Thin scoreboard UI; the green→breach money-shot.</li>
+        <li>cloudflared up (60s); Job-B deploy in the first 45 min if chosen.</li>
+        <li>Opsera scan slide; rehearse to the clock.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="flag"><b>Loose end to note:</b> the strategy doc <code>hackathon-prep/.../product-design.html</code> still shows the App Runner Terraform, which is now dead for new AWS accounts. Not urgent (the build repo is what matters Friday), but flag it if that doc gets reused.</div>
+
+  <div class="foot">
+    Verified live tonight (Jul 23, 2026): You.com Search/ARI/balance, Novita auth + slugs, opencode schema, AWS App Runner closure, Opsera self-serve, ARI background mode. Build repo: <code>~/Downloads/source/hack-you</code>. All borrower data SYNTHETIC; all kernel code written fresh during the event. Your calls: deploy (AWS/Replit/Render + cloudflared), Opsera sign-in, ActionLayer.
+  </div>
+</div>
+</body>
+</html>

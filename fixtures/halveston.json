@@ -1,0 +1,541 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "halveston-services",
+  "generated_at": "2026-07-23T20:00:00Z",
+  "provenance_label": "SYNTHETIC",
+  "notes": "SYNTHETIC corpus fixture. All entities are invented; no real company, fund, auditor, or person is depicted. This is the cross-deal memory PRECEDENT for Thornwick: same sponsor (Ardenmoor Capital Partners), same disallowed run-rate synergy add-back, dated two years earlier (FY ended 31 Mar 2024). ARITHMETIC (ties exactly, GBP millions): net debt is CONSTANT across both observations = term_loan 120.0 + revolver_drawn 30.0 = gross_debt 150.0, minus cash_and_equivalents 10.0 = total_net_debt 140.0. EBITDA build = operating_profit 14.0 + D&A 6.0 + exceptional_restructuring 2.5 + run_rate_synergy 3.5. CERTIFIED: EBITDA 26.0 (synergy included, unadjudicated) -> leverage 140.0 / 26.0 = 5.384615... -> 5.38x <= 6.00x = PASS. RECOMPUTED/AUDITED: the 3.5 run-rate synergy is disallowed (not_factually_supportable) -> EBITDA 14.0 + 6.0 + 2.5 = 22.5 -> leverage 140.0 / 22.5 = 6.222222... -> 6.22x > 6.00x = BREACH. Only EBITDA moves; net debt is unchanged. Synergy cap = 20% x pre-synergy EBITDA 22.5 = 4.5; the 3.5 claim is WITHIN cap, so the disallowance rests on factual support, not the cap - the identical fingerprint to Thornwick 2026. field_map_fingerprint is IDENTICAL across both observations (no rename): the move is precedence resolution, not schema drift.",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "halveston",
+    "legal_name": "Halveston Services Holdings Limited",
+    "short_name": "Halveston",
+    "sector": "Facilities management & logistics support",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "ardenmoor",
+      "name": "Ardenmoor Capital Partners"
+    },
+    "agent": {
+      "name": "Cheswold Trust Bank plc",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Corfield Hale LLP",
+        "financial_year_end": "2023-03-31",
+        "report_signed_on": "2023-06-20"
+      },
+      {
+        "name": "Marbury Tolland LLP",
+        "financial_year_end": "2024-03-31",
+        "report_signed_on": "2024-07-03"
+      }
+    ],
+    "facility": {
+      "facility_name": "Senior Facilities Agreement",
+      "agreement_date": "2022-06-30",
+      "agreement_doc_id": "doc-halveston-cfa"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "hv-leverage",
+      "label": "Total Net Leverage",
+      "metric": "total_net_leverage",
+      "direction": "max",
+      "formula": {
+        "numerator_key": "total_net_debt",
+        "denominator_key": "consolidated_ebitda",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 6.0,
+          "effective_from": "2022-06-30",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.25,
+        "headroom_pct": null,
+        "deteriorating_periods": null
+      },
+      "clause_ref": "Clause 22.2 (Financial Covenant - Total Net Leverage)",
+      "source_doc_id": "doc-halveston-cfa",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 5,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "ebitda"
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "fy2024-q4",
+      "label": "FY2024 (year ended 31 Mar 2024)",
+      "test_date": "2024-03-31",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "hv-fy2024-certified",
+          "basis": "borrower_certified",
+          "as_of": "2024-05-13",
+          "source_doc_id": "doc-halveston-cc-fy24",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 26.0,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (post-synergies)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 9"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 140.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Total Net Debt",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 5"
+            },
+            {
+              "key": "gross_debt",
+              "value": 150.0,
+              "raw_name": "Gross Debt",
+              "raw_label": "Gross financial indebtedness",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 3"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 10.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Cash and cash equivalents",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 4"
+            },
+            {
+              "key": "term_loan",
+              "value": 120.0,
+              "raw_name": "Term Loan B",
+              "raw_label": "Term Loan B (drawn)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 1"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 30.0,
+              "raw_name": "RCF Drawn",
+              "raw_label": "Revolving credit facility (drawn)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-cc-fy24",
+              "source_locator": "Compliance Certificate, Schedule 1, line 2"
+            }
+          ],
+          "field_map_fingerprint": "d579aa300e242d4ecbafd6bf17b9aab2fcf22131f818229362aad500669e0614",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 14.0,
+            "add_backs": [
+              {
+                "add_back_id": "hv-fy24-da",
+                "label": "Depreciation & amortisation",
+                "category": "non_cash",
+                "limb_ref": "Schedule 1, paragraph (a)",
+                "amount": 6.0,
+                "allowed": true,
+                "allowed_amount": 6.0,
+                "disallowed_amount": null,
+                "disallowed_reason": null,
+                "evidence_doc_id": "doc-halveston-cc-fy24",
+                "first_claimed_period_id": "fy2024-q4"
+              },
+              {
+                "add_back_id": "hv-fy24-exc",
+                "label": "Depot rationalisation restructuring costs",
+                "category": "exceptional_restructuring",
+                "limb_ref": "Schedule 1, paragraph (c)",
+                "amount": 2.5,
+                "allowed": true,
+                "allowed_amount": 2.5,
+                "disallowed_amount": null,
+                "disallowed_reason": null,
+                "evidence_doc_id": "doc-halveston-cc-fy24",
+                "first_claimed_period_id": "fy2024-q4"
+              },
+              {
+                "add_back_id": "hv-fy24-syn",
+                "label": "Run-rate procurement synergies (Project Harbour)",
+                "category": "run_rate_synergy",
+                "limb_ref": "Schedule 1, paragraph (e)",
+                "amount": 3.5,
+                "allowed": null,
+                "allowed_amount": null,
+                "disallowed_amount": null,
+                "disallowed_reason": null,
+                "cap_check": {
+                  "basis_key": "consolidated_ebitda",
+                  "cap_pct": 0.2,
+                  "cap_amount": 5.2,
+                  "within_cap": true
+                },
+                "evidence_doc_id": "doc-halveston-cc-fy24",
+                "first_claimed_period_id": "fy2024-q4"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 26.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "hv-leverage",
+              "certified_value": 5.38,
+              "certified_threshold": 6.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "The Group was in compliance with all Financial Covenants as at the Test Date and no Default or Event of Default is continuing.",
+              "calculation_text": "Total Net Debt GBP 140.0m / Adjusted EBITDA GBP 26.0m = 5.38x (Financial Covenant: not to exceed 6.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Miriam Aldous",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2024-05-13"
+          }
+        },
+        {
+          "observation_id": "hv-fy2024-audited-restated",
+          "basis": "audited_restated",
+          "as_of": "2024-07-03",
+          "source_doc_id": "doc-halveston-audit-fy24",
+          "supersedes_observation_id": "hv-fy2024-certified",
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 22.5,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (restated)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 4 (Adjusted EBITDA reconciliation)"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 140.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Total Net Debt",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 18 (Net debt)"
+            },
+            {
+              "key": "gross_debt",
+              "value": 150.0,
+              "raw_name": "Gross Debt",
+              "raw_label": "Gross financial indebtedness",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 18 (Net debt)"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 10.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Cash and cash equivalents",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 18 (Net debt)"
+            },
+            {
+              "key": "term_loan",
+              "value": 120.0,
+              "raw_name": "Term Loan B",
+              "raw_label": "Term Loan B (drawn)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 18 (Net debt)"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 30.0,
+              "raw_name": "RCF Drawn",
+              "raw_label": "Revolving credit facility (drawn)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-halveston-audit-fy24",
+              "source_locator": "Restated financial statements, note 18 (Net debt)"
+            }
+          ],
+          "field_map_fingerprint": "d579aa300e242d4ecbafd6bf17b9aab2fcf22131f818229362aad500669e0614",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 14.0,
+            "add_backs": [
+              {
+                "add_back_id": "hv-fy24-da",
+                "label": "Depreciation & amortisation",
+                "category": "non_cash",
+                "limb_ref": "Schedule 1, paragraph (a)",
+                "amount": 6.0,
+                "allowed": true,
+                "allowed_amount": 6.0,
+                "disallowed_amount": null,
+                "disallowed_reason": null,
+                "evidence_doc_id": "doc-halveston-audit-fy24",
+                "first_claimed_period_id": "fy2024-q4"
+              },
+              {
+                "add_back_id": "hv-fy24-exc",
+                "label": "Depot rationalisation restructuring costs",
+                "category": "exceptional_restructuring",
+                "limb_ref": "Schedule 1, paragraph (c)",
+                "amount": 2.5,
+                "allowed": true,
+                "allowed_amount": 2.5,
+                "disallowed_amount": null,
+                "disallowed_reason": null,
+                "evidence_doc_id": "doc-halveston-audit-fy24",
+                "first_claimed_period_id": "fy2024-q4"
+              },
+              {
+                "add_back_id": "hv-fy24-syn",
+                "label": "Run-rate procurement synergies (Project Harbour)",
+                "category": "run_rate_synergy",
+                "limb_ref": "Schedule 1, paragraph (e)",
+                "amount": 3.5,
+                "allowed": false,
+                "allowed_amount": 0.0,
+                "disallowed_amount": 3.5,
+                "disallowed_reason": "not_factually_supportable",
+                "cap_check": {
+                  "basis_key": "consolidated_ebitda",
+                  "cap_pct": 0.2,
+                  "cap_amount": 4.5,
+                  "within_cap": true
+                },
+                "evidence_doc_id": "doc-halveston-restatement",
+                "first_claimed_period_id": "fy2024-q4"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 22.5
+          },
+          "signed_by": {
+            "name": "Marbury Tolland LLP",
+            "title": "Statutory Auditor",
+            "signed_on": "2024-07-03"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "hv-leverage",
+          "basis": "borrower_certified",
+          "expected_value": 5.38,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "Borrower certificate asserts Total Net Debt GBP 140.0m / Adjusted EBITDA GBP 26.0m = 5.38x against the 6.00x ceiling, so on its face IN_COMPLIANCE. The GBP 3.5m Project Harbour run-rate synergy add-back is claimed but unadjudicated (allowed=null); the kernel records the certified number but never classifies from it. This row is the claim, not the truth; it must lose to audited_restated on precedence. certification_conflict is a PERIOD-level fact (the certificate's IN_COMPLIANCE disagrees with the resolved 6.22x BREACH) and is therefore true on BOTH rows of this period, matching borrower-c."
+        },
+        {
+          "covenant_id": "hv-leverage",
+          "basis": "audited_restated",
+          "expected_value": 6.22,
+          "expected_status": "BREACH",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": true,
+          "rationale": "Audit disallows the GBP 3.5m run-rate synergy as not_factually_supportable. Recomputed EBITDA = base 14.0 + D&A 6.0 + exceptional 2.5 = 22.5 (down from certified 26.0); net debt unchanged at 140.0; leverage = 140.0 / 22.5 = 6.22x > 6.00x = BREACH. certification_conflict: certificate said 5.38x IN_COMPLIANCE. memory_hit: same sponsor Ardenmoor + same run_rate_synergy add-back disallowed for the same reason as Thornwick FY2026 (this deal is the two-years-earlier precedent). No drift: field map is identical across observations, so the change is precedence resolution, not a rename."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "doc-halveston-cfa",
+      "kind": "credit_agreement",
+      "title": "Senior Facilities Agreement",
+      "doc_date": "2022-06-30",
+      "party": "Halveston Services Holdings Limited / Cheswold Trust Bank plc",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "459431a7002795b0c9a2b57376e6cd52966725f47e264dc11be97e49a2ebb6cc",
+        "computed_at": null,
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "doc-halveston-cc-fy24",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate - FY2024",
+      "doc_date": "2024-05-13",
+      "party": "Halveston Services Holdings Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "2e99ec683076e3e8d47bd6ac82c704abda43f467aed6fa0d406840748599e5a1",
+        "computed_at": null,
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "text",
+        "model": null,
+        "extracted_at": null,
+        "page_count": 4
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "doc-halveston-audit-fy24",
+      "kind": "audited_accounts",
+      "title": "Restated Audited Financial Statements - FY2024",
+      "doc_date": "2024-07-03",
+      "party": "Marbury Tolland LLP",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "f4764aa74ff2e83cf92e29dfb4cbeb296b7fb106ba6866218c1be3b1276a33bf",
+        "computed_at": null,
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "ocr",
+        "model": "deepseek-ocr",
+        "extracted_at": null,
+        "page_count": 88
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "doc-halveston-restatement",
+      "kind": "restatement_note",
+      "title": "Restatement Note to FY2024 Accounts (Adjusted EBITDA)",
+      "doc_date": "2024-07-03",
+      "party": "Marbury Tolland LLP",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "aac1fb15a5e0702d7fe2a35700ed834240b04c4bf28b5b2011dc148e4a875eaa",
+        "computed_at": null,
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "hv-fy2024-auditor-change",
+      "kind": "auditor_change",
+      "observed_at": "2024-04-15T09:00:00Z",
+      "headline": "Halveston Services replaces auditor Corfield Hale LLP with Marbury Tolland LLP ahead of FY2024 sign-off",
+      "summary": "Auditor rotation immediately preceded the FY2024 restatement - the same leading-signal pattern later seen at Thornwick (Larkfield Downe -> Marbury Tolland).",
+      "entity_refs": {
+        "borrower_ids": ["halveston"],
+        "sponsor_ids": ["ardenmoor"]
+      },
+      "retrieved_via": "manual",
+      "research_effort": null,
+      "sources": [],
+      "derived_observation_ids": [],
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "event_id": "hv-fy2024-restatement",
+      "kind": "restatement",
+      "observed_at": "2024-07-03T09:00:00Z",
+      "headline": "Halveston Services FY2024 accounts restated: GBP 3.5m run-rate synergy add-back removed",
+      "summary": "New auditor Marbury Tolland LLP disallowed the Project Harbour run-rate procurement synergy add-back as not factually supportable. Adjusted EBITDA restated from GBP 26.0m to GBP 22.5m; Total Net Leverage rises from a certified 5.38x to a recomputed 6.22x, breaching the 6.00x covenant.",
+      "entity_refs": {
+        "borrower_ids": ["halveston"],
+        "sponsor_ids": ["ardenmoor"]
+      },
+      "retrieved_via": "manual",
+      "research_effort": null,
+      "sources": [],
+      "derived_observation_ids": ["hv-fy2024-audited-restated"],
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "memory": {
+    "sponsor_id": "ardenmoor",
+    "pattern_tags": [
+      "run_rate_synergy_disallowed",
+      "not_factually_supportable",
+      "restated_after_auditor_change"
+    ],
+    "related_deals": [
+      {
+        "facts_id": "thornwick-logistics",
+        "borrower_id": "thornwick",
+        "relation": "same_sponsor",
+        "note": "Both borrowers are sponsored by Ardenmoor Capital Partners (sponsor_id ardenmoor)."
+      },
+      {
+        "facts_id": "thornwick-logistics",
+        "borrower_id": "thornwick",
+        "relation": "same_addback_pattern",
+        "note": "Identical run_rate_synergy add-back disallowed as not_factually_supportable. Halveston GBP 3.5m (FY2024) is the two-years-earlier precedent for Thornwick GBP 3.0m (FY2026); this is the memory_hit edge on the scoreboard."
+      },
+      {
+        "facts_id": "thornwick-logistics",
+        "borrower_id": "thornwick",
+        "relation": "same_auditor",
+        "note": "Marbury Tolland LLP is the incoming auditor that disallowed the synergy add-back at both deals, in each case following an auditor rotation."
+      }
+    ]
+  }
+}

@@ -1,0 +1,833 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "northgate",
+  "generated_at": "2026-07-23T22:15:00Z",
+  "provenance_label": "SYNTHETIC",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "northgate",
+    "legal_name": "Northgate Regional Airport Holdings Limited",
+    "short_name": "Northgate Airport (NRA-1)",
+    "sector": "Airport infrastructure / regulated transport concession",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "castlereach-infra",
+      "name": "Castlereach Infrastructure Partners LLP"
+    },
+    "agent": {
+      "name": "Vantell Trustee Services Limited",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Halstead Voss LLP",
+        "financial_year_end": "2025-12-31",
+        "report_signed_on": "2026-03-10"
+      }
+    ],
+    "facility": {
+      "facility_name": "NRA-1 Senior Facilities Agreement (GBP 420m)",
+      "agreement_date": "2023-06-15",
+      "agreement_doc_id": "cfa-2023"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "interest-cover",
+      "label": "Interest Cover (Consolidated EBITDA : Net Finance Charges), minimum 1.40:1",
+      "metric": "interest_cover",
+      "direction": "min",
+      "formula": {
+        "numerator_key": "consolidated_ebitda",
+        "denominator_key": "net_finance_charges",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 1.4,
+          "effective_from": "2023-06-15",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.1,
+        "headroom_pct": null,
+        "deteriorating_periods": 3
+      },
+      "clause_ref": "Clause 21.2(b) (Financial Covenants) - Interest Cover",
+      "source_doc_id": "cfa-2023",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 4,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "ebitda"
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "p-2025-q4",
+      "label": "Test date 31 Dec 2025 (LTM)",
+      "test_date": "2025-12-31",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-q4-2025-ma",
+          "basis": "management_accounts",
+          "as_of": "2026-01-30",
+          "source_doc_id": "ma-2025-q4",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 38.0,
+              "raw_name": "EBITDA",
+              "raw_label": "Row literally labelled 'EBITDA' in the Q4 pack - this is the field the lender's mapper binds to",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "P&L summary, row 14"
+            },
+            {
+              "key": "operating_profit",
+              "value": 25.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "P&L summary, row 11"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 25.0,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Net finance charges, LTM (fixed/hedged)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "P&L summary, row 19"
+            },
+            {
+              "key": "term_loan",
+              "value": 350.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Senior term loan A (fixed-rate, 2030 maturity)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "Balance sheet, term loan"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 45.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "Revolving credit facility drawn (GBP 70m committed)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "Balance sheet, RCF"
+            },
+            {
+              "key": "gross_debt",
+              "value": 395.0,
+              "raw_name": "Gross debt",
+              "raw_label": "Total senior financial indebtedness drawn",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "Balance sheet, gross debt"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 30.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Unrestricted cash (excludes GBP 12m DSRA)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "Balance sheet, cash"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 365.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Gross debt 395.0 less unrestricted cash 30.0",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2025-q4",
+              "source_locator": "Balance sheet, net debt"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "5330675e3927e0d54aacf9678a99dd147501f0a7b17f025c33573b20936ec168",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 25.0,
+            "add_backs": [
+              {
+                "add_back_id": "nra-q4-2025-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 13.0,
+                "allowed": true,
+                "allowed_amount": 13.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "ma-2025-q4",
+                "first_claimed_period_id": null
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 38.0
+          }
+        },
+        {
+          "observation_id": "obs-q4-2025-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-02-12",
+          "source_doc_id": "cc-2025-q4",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 38.0,
+              "raw_name": "EBITDA",
+              "raw_label": "Certified Consolidated EBITDA, LTM",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, line 3"
+            },
+            {
+              "key": "operating_profit",
+              "value": 25.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, line 1"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 25.0,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Certified Net Finance Charges, LTM",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, line 8"
+            },
+            {
+              "key": "term_loan",
+              "value": 350.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Senior term loan A (fixed-rate, 2030 maturity)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, term loan"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 45.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "Revolving credit facility drawn (GBP 70m committed)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, RCF"
+            },
+            {
+              "key": "gross_debt",
+              "value": 395.0,
+              "raw_name": "Gross debt",
+              "raw_label": "Total senior financial indebtedness drawn",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, gross debt"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 30.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Unrestricted cash (excludes GBP 12m DSRA)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, cash"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 365.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Gross debt 395.0 less unrestricted cash 30.0",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2025-q4",
+              "source_locator": "Schedule 1, net debt"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "5330675e3927e0d54aacf9678a99dd147501f0a7b17f025c33573b20936ec168",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 25.0,
+            "add_backs": [
+              {
+                "add_back_id": "nra-q4-2025-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 13.0,
+                "allowed": true,
+                "allowed_amount": 13.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "ma-2025-q4",
+                "first_claimed_period_id": null
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 38.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "interest-cover",
+              "certified_value": 1.52,
+              "certified_threshold": 1.4,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "The Borrower confirms that the Interest Cover Ratio for the Relevant Period was 1.52:1 and that no Default is continuing.",
+              "calculation_text": "Interest Cover = EBITDA 38.0 / Net Finance Charges 25.0 = 1.52x (>= 1.40x floor). [SYNTHETIC - honest vintage: certified value equals the recompute.]"
+            }
+          ],
+          "signed_by": {
+            "name": "P. Nandakumar",
+            "title": "Group Finance Director",
+            "signed_on": "2026-02-12"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "interest-cover",
+          "basis": "management_accounts",
+          "expected_value": 1.52,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "Recompute from the build: operating profit 25.0 + D&A 13.0 = EBITDA 38.0; 38.0 / 25.0 = 1.52x vs 1.40x floor, headroom 0.12x (> watch band 0.10x) => PASS. Field map is clean: consolidated_ebitda binds to a row literally named 'EBITDA'."
+        },
+        {
+          "covenant_id": "interest-cover",
+          "basis": "borrower_certified",
+          "expected_value": 1.52,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "Certificate states 1.52x; recompute agrees (38.0 / 25.0). This is the clean prior that establishes the baseline field map - it exists so that the Q1 rename is detectable as a change rather than as a one-off oddity."
+        }
+      ]
+    },
+    {
+      "period_id": "p-2026-q1",
+      "label": "Test date 31 Mar 2026 (LTM)",
+      "test_date": "2026-03-31",
+      "sequence": 1,
+      "relevant_period": {
+        "start": "2025-04-01",
+        "end": "2026-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-q1-2026-ma",
+          "basis": "management_accounts",
+          "as_of": "2026-04-30",
+          "source_doc_id": "ma-2026-q1",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 38.0,
+              "raw_name": null,
+              "raw_label": "No row named 'EBITDA' exists in the Q1 pack; the ETL carried the Q4 value forward. This is the stale read that keeps the dashboard GREEN at 1.52x. The kernel MUST NOT consume a measure with state='stale' - it recomputes from ebitda_build.",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "stale",
+              "source_doc_id": null,
+              "source_locator": null,
+              "stale_from_period_id": "p-2025-q4"
+            },
+            {
+              "key": "operating_profit",
+              "value": 20.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items (traffic -11% YoY)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "P&L summary, row 11"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 25.0,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Net finance charges, LTM (unchanged - fixed/hedged)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "P&L summary, row 19"
+            },
+            {
+              "key": "term_loan",
+              "value": 350.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Senior term loan A (fixed-rate, 2030 maturity)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "Balance sheet, term loan"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 45.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "Revolving credit facility drawn (GBP 70m committed)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "Balance sheet, RCF"
+            },
+            {
+              "key": "gross_debt",
+              "value": 395.0,
+              "raw_name": "Gross debt",
+              "raw_label": "Total senior financial indebtedness drawn",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "Balance sheet, gross debt"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 30.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Unrestricted cash (excludes GBP 12m DSRA)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "Balance sheet, cash"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 365.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Gross debt 395.0 less unrestricted cash 30.0",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "ma-2026-q1",
+              "source_locator": "Balance sheet, net debt"
+            }
+          ],
+          "unmapped_fields": [
+            {
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (management basis, incl. exceptional add-backs) - the row that replaced 'EBITDA' in the Q1 pack",
+              "value": 40.0,
+              "unit": "GBP_millions"
+            }
+          ],
+          "field_map_fingerprint": "59958b62e3cf471b1757de9f298586b9e18cd409acfd84296bb7c8d99fa2542e",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 20.0,
+            "add_backs": [
+              {
+                "add_back_id": "nra-q1-2026-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 13.25,
+                "allowed": true,
+                "allowed_amount": 13.25,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "ma-2026-q1",
+                "first_claimed_period_id": null
+              },
+              {
+                "add_back_id": "nra-q1-2026-exceptional",
+                "label": "Terminal 2 reconfiguration and route-network restructuring costs",
+                "category": "exceptional_restructuring",
+                "limb_ref": "not within any limb of the Consolidated EBITDA definition",
+                "amount": 6.75,
+                "allowed": false,
+                "allowed_amount": 0.0,
+                "disallowed_amount": 6.75,
+                "disallowed_reason": "outside_definition",
+                "cap_check": null,
+                "evidence_doc_id": "ma-2026-q1",
+                "first_claimed_period_id": "p-2026-q1"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "adjusted_ebitda",
+            "total_amount": 40.0
+          }
+        },
+        {
+          "observation_id": "obs-q1-2026-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-05-14",
+          "source_doc_id": "cc-2026-q1",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 40.0,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Certificate now sources the covenant numerator from a row labelled 'Adjusted EBITDA' (40.0) where Q4 sourced it from 'EBITDA' (38.0). Same key, renamed field, different quantity.",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, line 3"
+            },
+            {
+              "key": "operating_profit",
+              "value": 20.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, line 1"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 25.0,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Certified Net Finance Charges, LTM",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, line 8"
+            },
+            {
+              "key": "term_loan",
+              "value": 350.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Senior term loan A (fixed-rate, 2030 maturity)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, term loan"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 45.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "Revolving credit facility drawn (GBP 70m committed)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, RCF"
+            },
+            {
+              "key": "gross_debt",
+              "value": 395.0,
+              "raw_name": "Gross debt",
+              "raw_label": "Total senior financial indebtedness drawn",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, gross debt"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 30.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Unrestricted cash (excludes GBP 12m DSRA)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, cash"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 365.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Gross debt 395.0 less unrestricted cash 30.0",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 1, net debt"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "fe581d8dc2c5f906b14aab3da9073da316fc82b6045c0140cb39659ec3b3ac64",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 20.0,
+            "add_backs": [
+              {
+                "add_back_id": "nra-q1-2026-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 13.25,
+                "allowed": true,
+                "allowed_amount": 13.25,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "ma-2026-q1",
+                "first_claimed_period_id": null
+              },
+              {
+                "add_back_id": "nra-q1-2026-exceptional",
+                "label": "Terminal 2 reconfiguration and route-network restructuring costs",
+                "category": "exceptional_restructuring",
+                "limb_ref": "not within any limb of the Consolidated EBITDA definition",
+                "amount": 6.75,
+                "allowed": false,
+                "allowed_amount": 0.0,
+                "disallowed_amount": 6.75,
+                "disallowed_reason": "outside_definition",
+                "cap_check": null,
+                "evidence_doc_id": "ma-2026-q1",
+                "first_claimed_period_id": "p-2026-q1"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "adjusted_ebitda",
+            "total_amount": 40.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "interest-cover",
+              "certified_value": 1.6,
+              "certified_threshold": 1.4,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "The Borrower confirms that the Interest Cover Ratio for the Relevant Period was 1.60:1 and that no Default is continuing.",
+              "calculation_text": "Interest Cover = Adjusted EBITDA 40.0 / Net Finance Charges 25.0 = 1.60x (>= 1.40x floor). [SYNTHETIC - the numerator was silently re-sourced: Q4 used the row 'EBITDA' (38.0), Q1 uses 'Adjusted EBITDA' (40.0 = 20.0 operating profit + 13.25 D&A + 6.75 exceptional add-backs). On the covenant's own definition the numerator is 33.25, giving 1.33x.]"
+            }
+          ],
+          "signed_by": {
+            "name": "P. Nandakumar",
+            "title": "Group Finance Director",
+            "signed_on": "2026-05-14"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "interest-cover",
+          "basis": "management_accounts",
+          "expected_value": 1.33,
+          "expected_status": "BREACH",
+          "expect_drift_detected": true,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "management_accounts outranks borrower_certified, so this row resolves the period. The consolidated_ebitda MEASURE on this observation is state='stale' (38.0 carried forward from p-2025-q4 because no row named 'EBITDA' exists in the Q1 pack) and must not be consumed. Recompute from the build instead: operating profit 20.0 + allowed D&A 13.25 = 33.25 (the 6.75 exceptional add-back is allowed=false, outside the Consolidated EBITDA definition). 33.25 / 25.0 = 1.33x < 1.40x floor => BREACH, shortfall 0.07x. Drift is detected by comparing FIELD MAPS, not values: the stale value 38.0 is IDENTICAL to Q4's 38.0, so a value-diff monitor sees no change and the dashboard stays green at 1.52x; the field_map_fingerprint differs (Q4 map has 'consolidated_ebitda:EBITDA'; Q1 map has consolidated_ebitda unbound plus a newly-appearing unmapped field 'Adjusted EBITDA')."
+        },
+        {
+          "covenant_id": "interest-cover",
+          "basis": "borrower_certified",
+          "expected_value": 1.6,
+          "expected_status": "PASS",
+          "expect_drift_detected": true,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "Taken at face value the certificate passes: Adjusted EBITDA 40.0 / 25.0 = 1.60x >= 1.40x. This row is the claim, not the truth, and loses to management_accounts on precedence. The drift flag fires on this vintage too: the same canonical key consolidated_ebitda binds to raw_name 'EBITDA' in p-2025-q4 and to raw_name 'Adjusted EBITDA' in p-2026-q1 - a renamed field carrying a materially different quantity (40.0 includes 6.75 of exceptional add-backs that 38.0 did not)."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "cfa-2023",
+      "kind": "credit_agreement",
+      "title": "NRA-1 Senior Facilities Agreement dated 15 June 2023 (GBP 420m)",
+      "doc_date": "2023-06-15",
+      "party": "Northgate Regional Airport Holdings Limited / Vantell Trustee Services Limited (Agent)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "a9676ef23b96df2d9be66211d29b548fac0fbdae7b481781b59216516e292312",
+        "computed_at": "2026-07-23T22:15:00Z",
+        "byte_length": 512884
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "ma-2025-q4",
+      "kind": "management_accounts",
+      "title": "Monthly management pack - quarter to 31 December 2025",
+      "doc_date": "2026-01-30",
+      "party": "Northgate Regional Airport Holdings Limited (finance function)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "38846489e0f21bf10c1d94002b15f85b239bc49cbaf1ef364734a5b96d7b1584",
+        "computed_at": "2026-07-23T22:15:00Z",
+        "byte_length": 74311
+      },
+      "extraction": {
+        "method": "text",
+        "model": null,
+        "extracted_at": "2026-02-02T09:00:00Z",
+        "page_count": 12
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-2025-q4",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate - test date 31 December 2025",
+      "doc_date": "2026-02-12",
+      "party": "Northgate Regional Airport Holdings Limited (Borrower)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "80a85871fcc13ebb842db3c72e08cf5ad399311b30fc203154757beafbf6b33c",
+        "computed_at": "2026-07-23T22:15:00Z",
+        "byte_length": 18902
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "ma-2026-q1",
+      "kind": "management_accounts",
+      "title": "Monthly management pack - quarter to 31 March 2026 (reporting template v4.2 - covenant EBITDA line relabelled)",
+      "doc_date": "2026-04-30",
+      "party": "Northgate Regional Airport Holdings Limited (finance function)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "35b1ce868cc30b0dec94e86743039a08b01dfea5476487aa1b515e6e370024d8",
+        "computed_at": "2026-07-23T22:15:00Z",
+        "byte_length": 76140
+      },
+      "extraction": {
+        "method": "text",
+        "model": null,
+        "extracted_at": "2026-05-04T09:00:00Z",
+        "page_count": 12
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-2026-q1",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate - test date 31 March 2026",
+      "doc_date": "2026-05-14",
+      "party": "Northgate Regional Airport Holdings Limited (Borrower)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "7f375310dd043632d69bd208e1a6cc3675be2849e1ea40626cb81b3234301df1",
+        "computed_at": "2026-07-23T22:15:00Z",
+        "byte_length": 19244
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "evt-northgate-traffic-q1-2026",
+      "kind": "news",
+      "observed_at": "2026-05-06T08:30:00Z",
+      "headline": "Northgate Airport Q1 passenger volumes down 11% year on year as Terminal 2 reconfiguration overruns",
+      "summary": "Traffic decline pushes LTM operating profit from 25.0 to 20.0. In the same reporting cycle the finance function migrates to template v4.2 and the covenant EBITDA line is relabelled 'Adjusted EBITDA'. SYNTHETIC placeholder event: on stage this slot is filled by a REAL You.com Search/ARI result and re-labelled accordingly.",
+      "entity_refs": {
+        "borrower_ids": [
+          "northgate"
+        ],
+        "sponsor_ids": [
+          "castlereach-infra"
+        ]
+      },
+      "retrieved_via": "manual",
+      "research_effort": null,
+      "sources": [],
+      "derived_observation_ids": [
+        "obs-q1-2026-ma",
+        "obs-q1-2026-cert"
+      ],
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "memory": {
+    "sponsor_id": "castlereach-infra",
+    "pattern_tags": [
+      "schema_field_rename",
+      "stale_field_carry_forward",
+      "adjusted_ebitda_substituted_for_ebitda"
+    ],
+    "related_deals": []
+  },
+  "notes": "SYNTHETIC fixture. Northgate Airport (NRA-1) - schema-drift / silent field-rename beat. Interest Cover floor 1.40:1 (Consolidated EBITDA : Net Finance Charges). TRUE trajectory 1.52x (Q4 FY2025, PASS) -> 1.33x (Q1 FY2026, BREACH). ARITHMETIC. Denominator is flat at 25.0 in both periods (fixed/hedged infra debt) and net debt is flat at 365.0 (term loan 350.0 + RCF drawn 45.0 = gross debt 395.0; less cash 30.0), so the ONLY thing that moves is EBITDA and its label. Q4 FY2025: operating profit 25.0 + D&A 13.0 = EBITDA 38.0; 38.0 / 25.0 = 1.52x vs 1.40x => PASS (headroom 0.12x). Q1 FY2026 truth: operating profit 20.0 + allowed D&A 13.25 = Consolidated EBITDA 33.25; 33.25 / 25.0 = 1.33x vs 1.40x => BREACH (shortfall 0.07x). Q1 FY2026 as certified: 20.0 + 13.25 + 6.75 exceptional add-backs = 'Adjusted EBITDA' 40.0; 40.0 / 25.0 = 1.60x => reads IN_COMPLIANCE. Q1 FY2026 as a stale-field reader sees it: no row named 'EBITDA' resolves, so 38.0 is carried forward from p-2025-q4; 38.0 / 25.0 = 1.52x => dashboard frozen GREEN. THE KILLER SUBTLETY. Both field maps are encoded. On the borrower_certified vintage the canonical key consolidated_ebitda binds to raw_name 'EBITDA' (38.0) in p-2025-q4 and to raw_name 'Adjusted EBITDA' (40.0) in p-2026-q1 - same key, renamed field, materially different quantity. On the management_accounts vintage the mapper's rule does not resolve at all in Q1, so consolidated_ebitda is state='stale' with stale_from_period_id='p-2025-q4' holding the UNCHANGED value 38.0, while the newly-appearing row lands in unmapped_fields as 'Adjusted EBITDA' = 40.0. Because the stale value equals the prior value exactly, a value-diff monitor detects nothing; only comparing the field MAP (field_map_fingerprint) between consecutive observations catches it. That is kernel step 3. FINGERPRINT RECIPE (reproducible): field_map_fingerprint = sha256(\"\\n\".join(sorted('<canonical_key>:<raw_name or empty>' for each measure) + sorted(raw_name for each unmapped_field))). Document fingerprints are sha256('northgate-synthetic::' + doc_id) - synthetic stand-ins, not hashes of real files. SCHEMA NOTE: no deviation from covenant-facts v1.0.0 was required; the drift is expressible with measure.state='stale' + stale_from_period_id, unmapped_fields, and field_map_fingerprint exactly as designed. All entities are invented - no real airport, company, fund, auditor or person."
+}

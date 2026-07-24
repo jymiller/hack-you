@@ -1,0 +1,297 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "marrowfield-water",
+  "generated_at": "2026-07-23T21:30:00Z",
+  "provenance_label": "SYNTHETIC",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "borrower-c",
+    "legal_name": "Marrowfield Water Networks Limited",
+    "short_name": "Marrowfield",
+    "sector": "Regulated water utility (project-financed)",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "brackwater-capital",
+      "name": "Brackwater Capital LLP"
+    },
+    "agent": {
+      "name": "Cardross Bank plc",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Fennimore Clyde LLP",
+        "financial_year_end": "2026-03-31"
+      }
+    ],
+    "facility": {
+      "facility_name": "Senior Facilities Agreement 2022",
+      "agreement_date": "2022-06-30",
+      "agreement_doc_id": "cfa-2022"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "dscr_floor",
+      "label": "Debt Service Cover Ratio (minimum 1.20:1)",
+      "metric": "debt_service_cover",
+      "direction": "min",
+      "formula": {
+        "numerator_key": "cfads",
+        "denominator_key": "debt_service",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 1.2,
+          "effective_from": "2022-06-30",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.03,
+        "headroom_pct": null,
+        "deteriorating_periods": null
+      },
+      "clause_ref": "Clause 23.2 (Financial Covenants) \u2014 Debt Service Cover Ratio",
+      "source_doc_id": "cfa-2022",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 5,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "either"
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "fy2026-q4",
+      "label": "Test date 31 Mar 2026 (LTM)",
+      "test_date": "2026-03-31",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2025-04-01",
+        "end": "2026-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-cert-2026q4",
+          "basis": "borrower_certified",
+          "as_of": "2026-05-13",
+          "source_doc_id": "cc-2026-q1",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "cfads",
+              "value": 27.9,
+              "raw_name": "Cash Flow Available for Debt Service",
+              "raw_label": "CFADS per Compliance Certificate (incl. GBP 0.9m non-recurring insurance recovery)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 2, line 11"
+            },
+            {
+              "key": "debt_service",
+              "value": 22.5,
+              "raw_name": "Debt Service",
+              "raw_label": "Debt Service per Compliance Certificate (understated: one amort instalment omitted)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 2, line 14"
+            },
+            {
+              "key": "cash_interest",
+              "value": 12.0,
+              "raw_name": "Cash Interest",
+              "raw_label": "Cash interest paid",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 2, line 12"
+            },
+            {
+              "key": "scheduled_amortisation",
+              "value": 10.5,
+              "raw_name": "Scheduled Amortisation",
+              "raw_label": "Scheduled amortisation (as certified; excludes 25-Mar instalment)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-2026-q1",
+              "source_locator": "Schedule 2, line 13"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "7c4234d5b087aad6e24933d59ce2331b2024eb5aed630b345d4401dd48d4581b",
+          "certified_results": [
+            {
+              "covenant_id": "dscr_floor",
+              "certified_value": 1.24,
+              "certified_threshold": 1.2,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "The Borrower confirms that the Debt Service Cover Ratio for the Relevant Period was 1.24:1 and that no Default or Event of Default is continuing.",
+              "calculation_text": "DSCR = CFADS 27.9 / Debt Service 22.5 = 1.24x (>= 1.20x floor). [SYNTHETIC \u2014 certified figures are overstated: CFADS includes a 0.9m non-recurring insurance recovery and Debt Service omits the 2.5m 25-Mar amortisation instalment.]"
+            }
+          ],
+          "signed_by": {
+            "name": "R. Ashcombe",
+            "title": "Chief Financial Officer",
+            "signed_on": "2026-05-13"
+          }
+        },
+        {
+          "observation_id": "obs-raw-2026q4",
+          "basis": "raw_financials",
+          "as_of": "2026-04-30",
+          "source_doc_id": "raw-2026-q1",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "cfads",
+              "value": 27.0,
+              "raw_name": "Cash Flow Available for Debt Service",
+              "raw_label": "CFADS from raw ledger (operating; excludes non-recurring items)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "raw-2026-q1",
+              "source_locator": "Cash flow tab, cell F42"
+            },
+            {
+              "key": "debt_service",
+              "value": 25.0,
+              "raw_name": "Debt Service",
+              "raw_label": "Debt Service from raw ledger (full scheduled amortisation)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "raw-2026-q1",
+              "source_locator": "Cash flow tab, cell F55"
+            },
+            {
+              "key": "cash_interest",
+              "value": 12.0,
+              "raw_name": "Cash Interest",
+              "raw_label": "Cash interest paid",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "raw-2026-q1",
+              "source_locator": "Cash flow tab, cell F51"
+            },
+            {
+              "key": "scheduled_amortisation",
+              "value": 13.0,
+              "raw_name": "Scheduled Amortisation",
+              "raw_label": "Scheduled amortisation (full: incl. 25-Mar-2026 instalment of 2.5)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "raw-2026-q1",
+              "source_locator": "Cash flow tab, cell F53"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "7c4234d5b087aad6e24933d59ce2331b2024eb5aed630b345d4401dd48d4581b"
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "dscr_floor",
+          "basis": "borrower_certified",
+          "expected_value": 1.24,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "On the borrower's own certified figures (CFADS 27.9 / DS 22.5) the ratio is 1.24x >= 1.20x, so the certificate self-reports IN_COMPLIANCE. This row is the claim, not the truth; it must lose to raw_financials on precedence."
+        },
+        {
+          "covenant_id": "dscr_floor",
+          "basis": "raw_financials",
+          "expected_value": 1.08,
+          "expected_status": "BREACH",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "raw_financials outranks borrower_certified in basis_precedence, so the kernel resolves the period on CFADS 27.0 / DS 25.0 = 1.08x < 1.20x floor => BREACH. The certified 1.24x IN_COMPLIANCE sits next to a recomputed 1.08x \u2014 the false self-certification beat (no schema drift; field map fingerprint is identical across both vintages)."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "cfa-2022",
+      "kind": "credit_agreement",
+      "title": "Senior Facilities Agreement dated 30 June 2022",
+      "doc_date": "2022-06-30",
+      "party": "Marrowfield Water Networks Limited / Cardross Bank plc (Agent)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "ab88c45f906c4fbce7634488a7ca7588a537000def801efc8c40d1e57d48a0a0",
+        "computed_at": "2026-07-23T21:30:00Z",
+        "byte_length": 418293
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-2026-q1",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate \u2014 test date 31 March 2026",
+      "doc_date": "2026-05-13",
+      "party": "Marrowfield Water Networks Limited (Borrower)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "5aab2b3578637060b1983b68cb5ea791c1cdeae01f74e40af4694afe3bff942f",
+        "computed_at": "2026-07-23T21:30:00Z",
+        "byte_length": 20544
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "raw-2026-q1",
+      "kind": "management_accounts",
+      "title": "Raw management accounts / cash-flow ledger \u2014 quarter to 31 March 2026",
+      "doc_date": "2026-04-30",
+      "party": "Marrowfield Water Networks Limited (finance function)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "f93f45d4843e736a5c2d64c256fdb2c735f66e93169e7fea82b0713e4e8591e4",
+        "computed_at": "2026-07-23T21:30:00Z",
+        "byte_length": 61120
+      },
+      "extraction": {
+        "method": "text",
+        "model": null,
+        "extracted_at": "2026-05-20T09:00:00Z",
+        "page_count": 9
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "notes": "SYNTHETIC fixture. Borrower C \u2014 under-reporting / false self-certification beat. DSCR floor 1.20x. Certificate self-certifies 1.24x IN_COMPLIANCE (CFADS 27.9 / DS 22.5); raw financials yield 1.08x BREACH (CFADS 27.0 / DS 25.0). Misstatement = CFADS overstated by 0.9 (non-recurring insurance recovery folded into operating CFADS) + Debt Service understated by 2.5 (25-Mar-2026 scheduled amortisation instalment omitted). Cash interest 12.0 is honest on both bases. No schema drift (field_map_fingerprint identical across vintages) \u2014 the flip is precedence resolution (raw_financials > borrower_certified), not a rename. field_map_fingerprint is the real sha256 of '\\n'.join(sorted('key:raw_name') + sorted(unmapped raw_names)), so a kernel that recomputes it at ingest reproduces the stored value exactly. watch_rule.headroom_absolute is deliberately 0.03: the certified 1.24x sits 0.04 above the 1.20x floor, so it must fall OUTSIDE the watch band and classify PASS on the borrower's own numbers \u2014 Borrower C is the false-certification beat, not the WATCH beat (that is Borrower B, via deteriorating_periods). All entities invented; no real company, fund, or person."
+}

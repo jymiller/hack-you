@@ -1,0 +1,735 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "thornwick",
+  "generated_at": "2026-07-23T00:00:00Z",
+  "provenance_label": "SYNTHETIC",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "thornwick",
+    "legal_name": "Thornwick Logistics Holdings plc",
+    "short_name": "Thornwick Logistics",
+    "sector": "Freight forwarding / contract logistics",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "ardenmoor",
+      "name": "Ardenmoor Capital Partners LLP"
+    },
+    "agent": {
+      "name": "Cheswick Bank plc",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Larkfield Downe LLP",
+        "financial_year_end": "2024-12-31",
+        "report_signed_on": "2025-04-11"
+      },
+      {
+        "name": "Marbury Tolland LLP",
+        "financial_year_end": "2025-12-31",
+        "report_signed_on": "2026-07-03"
+      }
+    ],
+    "facility": {
+      "facility_name": "Senior Facilities Agreement (Term Loan B + RCF)",
+      "agreement_date": "2024-06-28",
+      "agreement_doc_id": "ca-thornwick"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "total_net_leverage",
+      "label": "Total Net Leverage (Total Net Debt : Adjusted EBITDA)",
+      "metric": "total_net_leverage",
+      "direction": "max",
+      "formula": {
+        "numerator_key": "total_net_debt",
+        "denominator_key": "adjusted_ebitda",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 6.5,
+          "effective_from": "2024-06-28",
+          "effective_to": "2026-06-29"
+        },
+        {
+          "value": 6.25,
+          "effective_from": "2026-06-30",
+          "effective_to": "2027-06-29"
+        },
+        {
+          "value": 6.0,
+          "effective_from": "2027-06-30",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": null,
+      "clause_ref": "Clause 23.1(a) (Financial Covenants — Total Net Leverage)",
+      "source_doc_id": "ca-thornwick",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 5,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "either"
+      }
+    },
+    {
+      "covenant_id": "interest_cover",
+      "label": "Interest Cover (Adjusted EBITDA : Cash Interest)",
+      "metric": "interest_cover",
+      "direction": "min",
+      "formula": {
+        "numerator_key": "adjusted_ebitda",
+        "denominator_key": "cash_interest",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 2.0,
+          "effective_from": "2024-06-28",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": null,
+      "clause_ref": "Clause 23.1(b) (Financial Covenants — Interest Cover)",
+      "source_doc_id": "ca-thornwick",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 5,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "ebitda"
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "q4-2025",
+      "label": "Q ended 31 Dec 2025 (FY2025 year end)",
+      "test_date": "2025-12-31",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-thornwick-q4-2025-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-02-12",
+          "source_doc_id": "cc-thornwick-q4-2025",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 33.2,
+              "raw_name": "Consolidated EBITDA",
+              "raw_label": "Consolidated EBITDA (LTM)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q4-2025",
+              "source_locator": "Schedule 1, line 4"
+            },
+            {
+              "key": "adjusted_ebitda",
+              "value": 34.2,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (LTM, as defined)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q4-2025",
+              "source_locator": "Schedule 1, line 12"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 217.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Consolidated Total Net Debt",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q4-2025",
+              "source_locator": "Schedule 2, line 7"
+            },
+            {
+              "key": "cash_interest",
+              "value": 16.3,
+              "raw_name": "Cash Interest",
+              "raw_label": "Cash Interest (LTM, 12 months to test date)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q4-2025",
+              "source_locator": "Schedule 3, line 2"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "d2fa8dbd3133ffd100c586d02fb948d5f737fbaf0793084f93c6597d9a9a1e03",
+          "ebitda_build": {
+            "base_key": "consolidated_ebitda",
+            "base_amount": 33.2,
+            "add_backs": [
+              {
+                "add_back_id": "tw-exc-q4-2025",
+                "label": "Exceptional restructuring costs (depot closure programme)",
+                "category": "exceptional_restructuring",
+                "limb_ref": "Clause 1.1, limb (c)",
+                "amount": 1.0,
+                "allowed": true,
+                "allowed_amount": 1.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "cc-thornwick-q4-2025",
+                "first_claimed_period_id": "q4-2025"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "adjusted_ebitda",
+            "total_amount": 34.2
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total_net_leverage",
+              "certified_value": 6.35,
+              "certified_threshold": 6.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Total Net Debt GBP 217.0m / Adjusted EBITDA GBP 34.2m = 6.35x (limit 6.50x)."
+            },
+            {
+              "covenant_id": "interest_cover",
+              "certified_value": 2.1,
+              "certified_threshold": 2.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Adjusted EBITDA GBP 34.2m / Cash Interest GBP 16.3m = 2.10x (floor 2.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Elspeth Carrowmore",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2026-02-12"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "borrower_certified",
+          "expected_value": 6.35,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "217.0 / 34.2 = 6.34503 -> 6.35x vs the 6.50x ceiling in force at 31 Dec 2025; 0.15x headroom. Adjusted EBITDA recomputes from the build (33.2 + 1.0 exceptional = 34.2), so certified == recomputed. PASS. This is the last clean pre-event baseline."
+        },
+        {
+          "covenant_id": "interest_cover",
+          "basis": "borrower_certified",
+          "expected_value": 2.1,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "34.2 / 16.3 = 2.09816 -> 2.10x vs the 2.00x floor; 0.10x headroom. Certified == recomputed. PASS."
+        }
+      ]
+    },
+    {
+      "period_id": "q1-2026",
+      "label": "Q ended 31 Mar 2026",
+      "test_date": "2026-03-31",
+      "sequence": 1,
+      "relevant_period": {
+        "start": "2025-04-01",
+        "end": "2026-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-thornwick-q1-2026-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-05-13",
+          "source_doc_id": "cc-thornwick-q1-2026",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 29.5,
+              "raw_name": "Consolidated EBITDA",
+              "raw_label": "Consolidated EBITDA (LTM)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q1-2026",
+              "source_locator": "Schedule 1, line 4"
+            },
+            {
+              "key": "adjusted_ebitda",
+              "value": 34.0,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (LTM, as defined)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q1-2026",
+              "source_locator": "Schedule 1, line 12"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 220.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Consolidated Total Net Debt",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q1-2026",
+              "source_locator": "Schedule 2, line 7"
+            },
+            {
+              "key": "cash_interest",
+              "value": 16.5,
+              "raw_name": "Cash Interest",
+              "raw_label": "Cash Interest (LTM, 12 months to test date)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "cc-thornwick-q1-2026",
+              "source_locator": "Schedule 3, line 2"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "d2fa8dbd3133ffd100c586d02fb948d5f737fbaf0793084f93c6597d9a9a1e03",
+          "ebitda_build": {
+            "base_key": "consolidated_ebitda",
+            "base_amount": 29.5,
+            "add_backs": [
+              {
+                "add_back_id": "tw-syn-q1-2026",
+                "label": "Run-rate cost synergies from the Calderbeck depot integration (limb (f): creditable only to the extent realised within the Relevant Period and capped at 20% of pre-synergy Adjusted EBITDA)",
+                "category": "run_rate_synergy",
+                "limb_ref": "Clause 1.1 (definition of Adjusted EBITDA), limb (f)",
+                "amount": 3.2,
+                "allowed": null,
+                "allowed_amount": 3.2,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": {
+                  "basis_key": "adjusted_ebitda",
+                  "cap_pct": 0.2,
+                  "cap_amount": 6.16,
+                  "within_cap": true
+                },
+                "evidence_doc_id": "cc-thornwick-q1-2026",
+                "first_claimed_period_id": "q1-2026"
+              },
+              {
+                "add_back_id": "tw-exc-q1-2026",
+                "label": "Exceptional restructuring costs (depot closure programme)",
+                "category": "exceptional_restructuring",
+                "limb_ref": "Clause 1.1, limb (c)",
+                "amount": 1.0,
+                "allowed": null,
+                "allowed_amount": 1.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "cc-thornwick-q1-2026",
+                "first_claimed_period_id": "q4-2025"
+              },
+              {
+                "add_back_id": "tw-txn-q1-2026",
+                "label": "Transaction advisory fees (aborted Peverell Freight acquisition)",
+                "category": "transaction_advisory",
+                "limb_ref": "Clause 1.1, limb (d)",
+                "amount": 0.3,
+                "allowed": null,
+                "allowed_amount": 0.3,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "cc-thornwick-q1-2026",
+                "first_claimed_period_id": "q1-2026"
+              }
+            ],
+            "adjustments": [],
+            "total_key": "adjusted_ebitda",
+            "total_amount": 34.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total_net_leverage",
+              "certified_value": 6.47,
+              "certified_threshold": 6.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Total Net Debt GBP 220.0m / Adjusted EBITDA GBP 34.0m = 6.47x (limit 6.50x)."
+            },
+            {
+              "covenant_id": "interest_cover",
+              "certified_value": 2.06,
+              "certified_threshold": 2.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Adjusted EBITDA GBP 34.0m / Cash Interest GBP 16.5m = 2.06x (floor 2.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Elspeth Carrowmore",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2026-05-13"
+          }
+        },
+        {
+          "observation_id": "obs-thornwick-q1-2026-restated",
+          "basis": "audited_restated",
+          "as_of": "2026-07-03",
+          "source_doc_id": "aa-thornwick-fy2025-restated",
+          "supersedes_observation_id": "obs-thornwick-q1-2026-cert",
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "consolidated_ebitda",
+              "value": 27.8,
+              "raw_name": "Consolidated EBITDA",
+              "raw_label": "Consolidated EBITDA (LTM)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "aa-thornwick-fy2025-restated",
+              "source_locator": "Schedule 1, line 4"
+            },
+            {
+              "key": "adjusted_ebitda",
+              "value": 29.0,
+              "raw_name": "Adjusted EBITDA",
+              "raw_label": "Adjusted EBITDA (LTM, as defined)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "aa-thornwick-fy2025-restated",
+              "source_locator": "Schedule 1, line 12"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 220.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Consolidated Total Net Debt",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "aa-thornwick-fy2025-restated",
+              "source_locator": "Schedule 2, line 7"
+            },
+            {
+              "key": "cash_interest",
+              "value": 16.5,
+              "raw_name": "Cash Interest",
+              "raw_label": "Cash Interest (LTM, 12 months to test date)",
+              "unit": "GBP_millions",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "aa-thornwick-fy2025-restated",
+              "source_locator": "Schedule 3, line 2"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "d2fa8dbd3133ffd100c586d02fb948d5f737fbaf0793084f93c6597d9a9a1e03",
+          "ebitda_build": {
+            "base_key": "consolidated_ebitda",
+            "base_amount": 29.5,
+            "add_backs": [
+              {
+                "add_back_id": "tw-syn-q1-2026",
+                "label": "Run-rate cost synergies from the Calderbeck depot integration (limb (f): creditable only to the extent realised within the Relevant Period and capped at 20% of pre-synergy Adjusted EBITDA)",
+                "category": "run_rate_synergy",
+                "limb_ref": "Clause 1.1 (definition of Adjusted EBITDA), limb (f)",
+                "amount": 3.2,
+                "allowed": false,
+                "allowed_amount": 0.2,
+                "disallowed_amount": 3.0,
+                "disallowed_reason": "not_realised_in_window",
+                "cap_check": {
+                  "basis_key": "adjusted_ebitda",
+                  "cap_pct": 0.2,
+                  "cap_amount": 6.16,
+                  "within_cap": true
+                },
+                "evidence_doc_id": "aa-thornwick-fy2025-restated",
+                "first_claimed_period_id": "q1-2026"
+              },
+              {
+                "add_back_id": "tw-exc-q1-2026",
+                "label": "Exceptional restructuring costs (depot closure programme)",
+                "category": "exceptional_restructuring",
+                "limb_ref": "Clause 1.1, limb (c)",
+                "amount": 1.0,
+                "allowed": true,
+                "allowed_amount": 1.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "aa-thornwick-fy2025-restated",
+                "first_claimed_period_id": "q4-2025"
+              },
+              {
+                "add_back_id": "tw-txn-q1-2026",
+                "label": "Transaction advisory fees (aborted Peverell Freight acquisition)",
+                "category": "transaction_advisory",
+                "limb_ref": "Clause 1.1, limb (d)",
+                "amount": 0.3,
+                "allowed": false,
+                "allowed_amount": 0.0,
+                "disallowed_amount": 0.3,
+                "disallowed_reason": "outside_definition",
+                "cap_check": null,
+                "evidence_doc_id": "aa-thornwick-fy2025-restated",
+                "first_claimed_period_id": "q1-2026"
+              }
+            ],
+            "adjustments": [
+              {
+                "adjustment_id": "tw-ifrs15-rev-q1-2026",
+                "label": "Reversal of early-recognised freight contract revenue (IFRS 15 restatement, FY2025)",
+                "type": "revenue_reversal",
+                "amount": -1.7,
+                "reason": "Revenue on multi-year freight contracts recognised at contract signature rather than over the performance period; reversed on restatement of FY2025.",
+                "evidence_doc_id": "rn-thornwick-fy2025",
+                "affects_measure_key": "consolidated_ebitda"
+              }
+            ],
+            "total_key": "adjusted_ebitda",
+            "total_amount": 29.0
+          },
+          "certified_results": [],
+          "signed_by": {
+            "name": "Rowan Tolland",
+            "title": "Engagement Partner, Marbury Tolland LLP",
+            "signed_on": "2026-07-03"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "borrower_certified",
+          "expected_value": 6.47,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "As certified on 13 May 2026: 220.0 / 34.0 = 6.47059 -> 6.47x vs the 6.50x ceiling; 0.03x headroom. Adjusted EBITDA 34.0 = 29.5 + 3.2 + 1.0 + 0.3, every add-back still unadjudicated (allowed = null). PASS — this is the GREEN the certificate asserts and the demo starts from."
+        },
+        {
+          "covenant_id": "interest_cover",
+          "basis": "borrower_certified",
+          "expected_value": 2.06,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "As certified: 34.0 / 16.5 = 2.06061 -> 2.06x vs the 2.00x floor; 0.06x headroom. PASS."
+        },
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "audited_restated",
+          "expected_value": 7.59,
+          "expected_status": "BREACH",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": true,
+          "rationale": "Restated 3 Jul 2026: Adjusted EBITDA recomputes to 29.5 - 1.7 (IFRS 15 revenue reversal) + 0.2 (only realised synergy) + 1.0 (exceptional) + 0.0 (transaction fees disallowed) = 29.0. Net debt never moved (220.0). 220.0 / 29.0 = 7.58621 -> 7.59x vs the 6.50x ceiling -> BREACH by 1.09x. audited_restated outranks borrower_certified in basis_precedence, so this supersedes the 6.47x PASS: certification conflict (certificate says IN_COMPLIANCE). memory_hit: run_rate_synergy disallowed under sponsor ardenmoor matches the Halveston pattern. No field-map drift — the fingerprint is unchanged; only the values were restated."
+        },
+        {
+          "covenant_id": "interest_cover",
+          "basis": "audited_restated",
+          "expected_value": 1.76,
+          "expected_status": "BREACH",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": true,
+          "expect_memory_hit": false,
+          "rationale": "Restated: 29.0 / 16.5 = 1.75758 -> 1.76x vs the 2.00x floor -> BREACH by 0.24x. Cash interest is unchanged at 16.5 on both vintages; the entire move comes from the EBITDA restatement. memory_hit is recorded once, on the leverage covenant, so the scoreboard counts one retrieval."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "ca-thornwick",
+      "kind": "credit_agreement",
+      "title": "Senior Facilities Agreement — Thornwick Logistics Holdings plc",
+      "doc_date": "2024-06-28",
+      "party": "Thornwick Logistics Holdings plc / Cheswick Bank plc (Agent)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "9261a69649324b2ebecb40ce876f6414c14a1878f0655f539e4ab092225309dc",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "extraction": null,
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-thornwick-q4-2025",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate — Q ended 31 Dec 2025",
+      "doc_date": "2026-02-12",
+      "party": "Thornwick Logistics Holdings plc",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "b144653e0cd9303abcdf890e98e3e5493c6bfb29395a0347756fa0e457151398",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T00:00:00Z",
+        "page_count": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-thornwick-q1-2026",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate — Q ended 31 Mar 2026",
+      "doc_date": "2026-05-13",
+      "party": "Thornwick Logistics Holdings plc",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "2fe7d0bb87ab258a3df3f5e7cca43587cdc0c22df3f19e168b4cf59a4e86a1d7",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T00:00:00Z",
+        "page_count": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "aa-thornwick-fy2025-restated",
+      "kind": "audited_accounts",
+      "title": "Audited Financial Statements FY2025 (restated) — Thornwick Logistics Holdings plc",
+      "doc_date": "2026-07-03",
+      "party": "Marbury Tolland LLP (auditor)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "e74e79f1c31f52f5555fd70e097e10e186b8919de1db75ef2aeecd6e8daf1347",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T00:00:00Z",
+        "page_count": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "rn-thornwick-fy2025",
+      "kind": "restatement_note",
+      "title": "Prior-Period Restatement Note — FY2025 (IFRS 15 revenue recognition)",
+      "doc_date": "2026-07-03",
+      "party": "Marbury Tolland LLP (auditor)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "64cfce58cb3aafc557506ac8ff5fbbea703eeec92048b43b4752924bdcb1f83b",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T00:00:00Z",
+        "page_count": null
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "ev-thornwick-fy2025-restatement",
+      "kind": "restatement",
+      "observed_at": "2026-07-03T09:00:00Z",
+      "headline": "Thornwick Logistics Holdings restates FY2025 accounts following auditor change",
+      "summary": "PLACEHOLDER, NOT A CRAWL. Models the live-web signal that triggers the recompute: FY2025 restated by incoming auditor Marbury Tolland LLP (replacing Larkfield Downe LLP), reversing GBP 1.7m of early-recognised freight revenue and disallowing GBP 3.0m of unrealised run-rate synergies. At runtime this row is replaced by a REAL You.com Search/ARI result; retrieved_via is 'manual' and the label is SYNTHETIC precisely because nothing was fetched to build it.",
+      "entity_refs": {
+        "borrower_ids": [
+          "thornwick"
+        ],
+        "sponsor_ids": [
+          "ardenmoor"
+        ]
+      },
+      "retrieved_via": "manual",
+      "research_effort": null,
+      "sources": [
+        {
+          "url": "https://synthetic.enid.local/thornwick/fy2025-restatement-note",
+          "title": "Prior-Period Restatement Note — FY2025",
+          "publisher": "SYNTHETIC corpus fixture (no live source)",
+          "published_at": "2026-07-03",
+          "snippet": "Synthetic placeholder. Does not resolve; carries no real citation. Live ARI output.sources[] replaces this at runtime."
+        }
+      ],
+      "derived_observation_ids": [
+        "obs-thornwick-q1-2026-restated"
+      ],
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "memory": {
+    "sponsor_id": "ardenmoor",
+    "pattern_tags": [
+      "run_rate_synergy_disallowed",
+      "restated_after_auditor_change",
+      "underlying_ebitda_decline_masked_by_new_addback"
+    ],
+    "related_deals": [
+      {
+        "facts_id": "halveston",
+        "borrower_id": "halveston",
+        "relation": "same_sponsor",
+        "note": "Ardenmoor Capital Partners LLP also sponsors Halveston. FORWARD REFERENCE: confirm facts_id once the Halveston fixture lands."
+      },
+      {
+        "facts_id": "halveston",
+        "borrower_id": "halveston",
+        "relation": "same_addback_pattern",
+        "note": "Same fingerprint: category='run_rate_synergy' with allowed=false. Halveston GBP 3.5m disallowed in FY2024; Thornwick GBP 3.0m disallowed in FY2025 — the cross-deal memory_hit."
+      }
+    ]
+  },
+  "notes": "SYNTHETIC fixture — every entity is invented (Thornwick Logistics Holdings plc, Ardenmoor Capital Partners LLP, Cheswick Bank plc, Larkfield Downe LLP, Marbury Tolland LLP, Peverell Freight, and all named signatories). No real company, fund, or person. All amounts GBP millions.\n\nMECHANISM: restatement over time — the headline money-shot. One test date (31 Mar 2026) carries two observations of the same quarter on different bases, and the flip is pure basis_precedence resolution (audited_restated > borrower_certified), not a special case.\n\nARITHMETIC (every ratio reproducible from the measures; rounding half_up to 2 dp):\n  q4-2025 (borrower_certified, as_of 2026-02-12) — baseline:\n    Adjusted EBITDA  = 33.2 (Consolidated EBITDA) + 1.0 (exceptional) = 34.2\n    Leverage         = 217.0 / 34.2 = 6.345029... -> 6.35x  vs 6.50x ceiling -> PASS\n    Interest cover   = 34.2 / 16.3  = 2.098159... -> 2.10x  vs 2.00x floor   -> PASS\n  q1-2026 (borrower_certified, as_of 2026-05-13) — the certificate:\n    Adjusted EBITDA  = 29.5 + 3.2 (synergies) + 1.0 (exceptional) + 0.3 (transaction) = 34.0\n    Leverage         = 220.0 / 34.0 = 6.470588... -> 6.47x  vs 6.50x ceiling -> PASS\n    Interest cover   = 34.0 / 16.5  = 2.060606... -> 2.06x  vs 2.00x floor   -> PASS\n  q1-2026 (audited_restated, as_of 2026-07-03) — the recompute:\n    Consolidated EBITDA = 29.5 - 1.7 (IFRS 15 revenue reversal) = 27.8\n    Adjusted EBITDA  = 29.5 + (0.2 + 1.0 + 0.0 allowed add-backs) + (-1.7) = 29.0\n    Leverage         = 220.0 / 29.0 = 7.586206... -> 7.59x  vs 6.50x ceiling -> BREACH\n    Interest cover   = 29.0 / 16.5  = 1.757575... -> 1.76x  vs 2.00x floor   -> BREACH\n  Net debt is 220.0 on BOTH q1-2026 vintages — the entire move is EBITDA 34.0 -> 29.0.\n\nEBITDA BRIDGE CONVENTION: ebitda_build.base_amount on the restated observation is 29.5, the Consolidated EBITDA as originally certified; the signed revenue_reversal adjustment (-1.7) restates it to the 27.8 recorded in measures[]. The kernel's recompute (base + sum(allowed add-backs) + sum(adjustments)) therefore reproduces 29.0 in one sum. On the certified observation every add-back has allowed=null (claimed, not yet adjudicated); the audit sets allowed=false on the synergy and the transaction fees. add_back_ids are deliberately shared across the two q1-2026 observations so the certified-vs-restated adjudication diff joins on add_back_id.\n\nSYNERGY CAP, RECOMPUTED NOT TRUSTED: pre-synergy Adjusted EBITDA = 34.0 - 3.2 = 30.8; 20% cap = 6.16; claimed 3.2 <= 6.16 so within_cap = true. The 20% cap is therefore NOT the binding test. The limb requires synergies to be BOTH within the cap AND realised in the Relevant Period; only 0.2 was realised, so 3.0 is disallowed with disallowed_reason='not_realised_in_window'. (The brief described this as 'cap + not realised'; both tests are represented in the data, but on these numbers no 20% cap can bite on a 3.2 add-back against ~30x EBITDA, so the arithmetically supportable reason is non-realisation. Flagged rather than silently fudged.) The 0.3 transaction advisory fee is disallowed as 'outside_definition' — fees on an aborted acquisition fall outside limb (d).\n\nNO SCHEMA DRIFT: field_map_fingerprint is identical across all three observations (sha256 over newline-joined sorted 'canonical_key:raw_name' pairs, same algorithm as the sibling fixtures). Same field map, different values = restatement. That is the deliberate contrast with Northgate, where the values hold still and the field map moves. unmapped_fields is empty everywhere.\n\nNARRATIVE THE NUMBERS CARRY: underlying Consolidated EBITDA actually FELL 33.2 -> 29.5 between the two quarters while headline Adjusted EBITDA held flat at 34.2 -> 34.0, because the borrower introduced a new 3.2 run-rate synergy add-back at q1-2026 (first_claimed_period_id='q1-2026'). The deterioration was masked by the add-back; the audit removes the mask.\n\nwatch_rule IS DELIBERATELY null ON BOTH COVENANTS. The certified 6.47x sits 0.03x under the ceiling, so any realistic proximity band (the sibling fixtures use headroom_absolute 0.25) would classify it WATCH and pre-empt the flip. The demo and the brief both require the certificate to read GREEN/PASS and the recompute to read BREACH, so Thornwick carries no watch band; WATCH is Borrower B's mechanism (trend-driven).\n\nSCOPE NOTE: the FY2025 restatement is dated 3 Jul 2026 and logically also touches the 31 Dec 2025 test date, but q4-2025 deliberately carries ONLY the pre-restatement borrower_certified vintage. It exists to establish the 'was green' baseline; no audited_restated observation is supplied for it, so the kernel resolves q4-2025 on borrower_certified and returns PASS. A full restatement cascade onto q4-2025 is out of scope.\n\ndocument.fingerprint.value is a deterministic placeholder: sha256('SYNTHETIC-PLACEHOLDER|<doc_id>|<title>|<doc_date>'). There is no real underlying file, so it hashes a declared string rather than pretending to hash a document. events[] holds one SYNTHETIC placeholder with retrieved_via='manual' and a non-resolving URL — nothing was crawled to build this fixture; the live REAL You.com ARI result replaces it at runtime. expected_assessment[] is a test oracle only and must never be read by assess()."
+}

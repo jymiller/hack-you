@@ -1,0 +1,355 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "borrower-b",
+  "generated_at": "2026-07-23T00:00:00Z",
+  "provenance_label": "SYNTHETIC",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "borrower-b",
+    "legal_name": "Brenmark Grid Holdings Limited",
+    "short_name": "Brenmark Grid",
+    "sector": "Regulated utilities / infrastructure services",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "cindermere-capital",
+      "name": "Cindermere Capital Partners LLP"
+    },
+    "agent": {
+      "name": "Halstow Agency Services Limited",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Trensham Vale LLP",
+        "financial_year_end": "2025-06-30",
+        "report_signed_on": "2025-09-18"
+      }
+    ],
+    "facility": {
+      "facility_name": "Senior Facilities Agreement (Term Loan + RCF)",
+      "agreement_date": "2024-06-15",
+      "agreement_doc_id": "ca-borrower-b"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "total_net_leverage",
+      "label": "Total Net Leverage (Consolidated Total Net Debt : Consolidated EBITDA)",
+      "metric": "total_net_leverage",
+      "direction": "max",
+      "formula": {
+        "numerator_key": "total_net_debt",
+        "denominator_key": "consolidated_ebitda",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 5.0,
+          "effective_from": "2024-06-15",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.25,
+        "headroom_pct": null,
+        "deteriorating_periods": 3
+      },
+      "clause_ref": "Clause 22.1 (Financial Covenant — Total Net Leverage)",
+      "source_doc_id": "ca-borrower-b",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 4,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "either"
+      }
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "b-p1",
+      "label": "Q ended 30 Sep 2025",
+      "test_date": "2025-09-30",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2024-10-01",
+        "end": "2025-09-30"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-b-p1-cert",
+          "basis": "borrower_certified",
+          "as_of": "2025-11-14",
+          "source_doc_id": "cc-borrower-b-p1",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            { "key": "operating_profit", "value": 25.0, "raw_name": "Operating Profit", "raw_label": "Operating profit (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 1, line 3" },
+            { "key": "consolidated_ebitda", "value": 50.0, "raw_name": "Consolidated EBITDA", "raw_label": "Consolidated EBITDA (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 1, line 9" },
+            { "key": "term_loan", "value": 180.0, "raw_name": "Term Loan Facility", "raw_label": "Term Loan Facility (drawn)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 2, line 1" },
+            { "key": "revolver_drawn", "value": 40.0, "raw_name": "Revolving Facility (drawn)", "raw_label": "RCF drawings", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 2, line 2" },
+            { "key": "cash_and_equivalents", "value": 20.0, "raw_name": "Cash and Cash Equivalents", "raw_label": "Cash and cash equivalents", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 2, line 5" },
+            { "key": "total_net_debt", "value": 200.0, "raw_name": "Consolidated Total Net Debt", "raw_label": "Consolidated Total Net Debt", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p1", "source_locator": "Schedule 2, line 8" }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "ddd1a8cf7776dab13d1ff8fa4009fa79c138a88eb6b165e0a2a567e83870a2ca",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 25.0,
+            "add_backs": [
+              { "add_back_id": "b-da-p1", "label": "Depreciation & amortisation", "category": "non_cash", "amount": 22.0, "allowed": true, "allowed_amount": 22.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p1", "first_claimed_period_id": "b-p1" },
+              { "add_back_id": "b-exc-p1", "label": "Exceptional restructuring costs", "category": "exceptional_restructuring", "amount": 3.0, "allowed": true, "allowed_amount": 3.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p1", "first_claimed_period_id": "b-p1" }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 50.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total_net_leverage",
+              "certified_value": 4.0,
+              "certified_threshold": 5.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Consolidated Total Net Debt GBP 200.0m / Consolidated EBITDA GBP 50.0m = 4.00x (limit 5.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Marion Sedgeworth",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2025-11-14"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "borrower_certified",
+          "expected_value": 4.0,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "200.0 / 50.0 = 4.00x vs 5.00x ceiling; 1.00x headroom. First test — no prior points, deteriorating trend not yet established. Certified 4.00x == recomputed 4.00x (all add-backs allowed). PASS."
+        }
+      ]
+    },
+    {
+      "period_id": "b-p2",
+      "label": "Q ended 31 Dec 2025",
+      "test_date": "2025-12-31",
+      "sequence": 1,
+      "relevant_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-b-p2-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-02-13",
+          "source_doc_id": "cc-borrower-b-p2",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            { "key": "operating_profit", "value": 25.0, "raw_name": "Operating Profit", "raw_label": "Operating profit (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 1, line 3" },
+            { "key": "consolidated_ebitda", "value": 50.0, "raw_name": "Consolidated EBITDA", "raw_label": "Consolidated EBITDA (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 1, line 9" },
+            { "key": "term_loan", "value": 180.0, "raw_name": "Term Loan Facility", "raw_label": "Term Loan Facility (drawn)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 2, line 1" },
+            { "key": "revolver_drawn", "value": 50.0, "raw_name": "Revolving Facility (drawn)", "raw_label": "RCF drawings", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 2, line 2" },
+            { "key": "cash_and_equivalents", "value": 20.0, "raw_name": "Cash and Cash Equivalents", "raw_label": "Cash and cash equivalents", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 2, line 5" },
+            { "key": "total_net_debt", "value": 210.0, "raw_name": "Consolidated Total Net Debt", "raw_label": "Consolidated Total Net Debt", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p2", "source_locator": "Schedule 2, line 8" }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "ddd1a8cf7776dab13d1ff8fa4009fa79c138a88eb6b165e0a2a567e83870a2ca",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 25.0,
+            "add_backs": [
+              { "add_back_id": "b-da-p2", "label": "Depreciation & amortisation", "category": "non_cash", "amount": 22.0, "allowed": true, "allowed_amount": 22.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p2", "first_claimed_period_id": "b-p1" },
+              { "add_back_id": "b-exc-p2", "label": "Exceptional restructuring costs", "category": "exceptional_restructuring", "amount": 3.0, "allowed": true, "allowed_amount": 3.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p2", "first_claimed_period_id": "b-p1" }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 50.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total_net_leverage",
+              "certified_value": 4.2,
+              "certified_threshold": 5.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Consolidated Total Net Debt GBP 210.0m / Consolidated EBITDA GBP 50.0m = 4.20x (limit 5.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Marion Sedgeworth",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2026-02-13"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "borrower_certified",
+          "expected_value": 4.2,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "210.0 / 50.0 = 4.20x vs 5.00x ceiling; 0.80x headroom. Two rising points (4.00 -> 4.20); deteriorating_periods=3 not yet met, so still PASS. Certified 4.20x == recomputed 4.20x."
+        }
+      ]
+    },
+    {
+      "period_id": "b-p3",
+      "label": "Q ended 31 Mar 2026",
+      "test_date": "2026-03-31",
+      "sequence": 2,
+      "relevant_period": {
+        "start": "2025-04-01",
+        "end": "2026-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-b-p3-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-05-15",
+          "source_doc_id": "cc-borrower-b-p3",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            { "key": "operating_profit", "value": 25.0, "raw_name": "Operating Profit", "raw_label": "Operating profit (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 1, line 3" },
+            { "key": "consolidated_ebitda", "value": 50.0, "raw_name": "Consolidated EBITDA", "raw_label": "Consolidated EBITDA (LTM)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 1, line 9" },
+            { "key": "term_loan", "value": 180.0, "raw_name": "Term Loan Facility", "raw_label": "Term Loan Facility (drawn)", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 2, line 1" },
+            { "key": "revolver_drawn", "value": 60.0, "raw_name": "Revolving Facility (drawn)", "raw_label": "RCF drawings", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 2, line 2" },
+            { "key": "cash_and_equivalents", "value": 20.0, "raw_name": "Cash and Cash Equivalents", "raw_label": "Cash and cash equivalents", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 2, line 5" },
+            { "key": "total_net_debt", "value": 220.0, "raw_name": "Consolidated Total Net Debt", "raw_label": "Consolidated Total Net Debt", "unit": "GBP_millions", "sign_convention": "as_stated", "state": "observed", "source_doc_id": "cc-borrower-b-p3", "source_locator": "Schedule 2, line 8" }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "ddd1a8cf7776dab13d1ff8fa4009fa79c138a88eb6b165e0a2a567e83870a2ca",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 25.0,
+            "add_backs": [
+              { "add_back_id": "b-da-p3", "label": "Depreciation & amortisation", "category": "non_cash", "amount": 22.0, "allowed": true, "allowed_amount": 22.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p3", "first_claimed_period_id": "b-p1" },
+              { "add_back_id": "b-exc-p3", "label": "Exceptional restructuring costs", "category": "exceptional_restructuring", "amount": 3.0, "allowed": true, "allowed_amount": 3.0, "disallowed_amount": 0.0, "disallowed_reason": null, "evidence_doc_id": "cc-borrower-b-p3", "first_claimed_period_id": "b-p1" }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 50.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total_net_leverage",
+              "certified_value": 4.4,
+              "certified_threshold": 5.0,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "In compliance. No Default or Event of Default is continuing.",
+              "calculation_text": "Consolidated Total Net Debt GBP 220.0m / Consolidated EBITDA GBP 50.0m = 4.40x (limit 5.00x)."
+            }
+          ],
+          "signed_by": {
+            "name": "Marion Sedgeworth",
+            "title": "Group Chief Financial Officer",
+            "signed_on": "2026-05-15"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total_net_leverage",
+          "basis": "borrower_certified",
+          "expected_value": 4.4,
+          "expected_status": "WATCH",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "220.0 / 50.0 = 4.40x vs 5.00x ceiling; 0.60x headroom. Headroom (0.60x) still exceeds the 0.25x proximity trigger, so WATCH is NOT proximity-driven. This is the THIRD consecutive rise (4.00 -> 4.20 -> 4.40x), meeting watch_rule.deteriorating_periods=3 -> WATCH on TREND. Recompute agrees with the certificate (no drift, no conflict); the borrower is honest and never breaches — the deteriorating trajectory is the sole signal."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "ca-borrower-b",
+      "kind": "credit_agreement",
+      "title": "Senior Facilities Agreement — Brenmark Grid Holdings Limited",
+      "doc_date": "2024-06-15",
+      "party": "Brenmark Grid Holdings Limited / Halstow Agency Services Limited (Agent)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "aeedc0f7f40a5f1376157c1f6a7463033bfe99a6f1dd73663c09154b42aa35a2",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-borrower-b-p1",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate — Q ended 30 Sep 2025",
+      "doc_date": "2025-11-14",
+      "party": "Brenmark Grid Holdings Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "43dec80ca96b0c0794885a21ec58dd64e6864094fdfdff6160c3ace1365ad945",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-borrower-b-p2",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate — Q ended 31 Dec 2025",
+      "doc_date": "2026-02-13",
+      "party": "Brenmark Grid Holdings Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "1300315b9da2a5c39db0626ad7ec92303ce4c38ebbd899307e80b84948251b9f",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "cc-borrower-b-p3",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate — Q ended 31 Mar 2026",
+      "doc_date": "2026-05-15",
+      "party": "Brenmark Grid Holdings Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "739239376e57962730ec30e3e0cc043bdce9985809c21ca86901a02fa6f21f64",
+        "computed_at": "2026-07-23T00:00:00Z",
+        "byte_length": null
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "memory": {
+    "sponsor_id": "cindermere-capital",
+    "pattern_tags": ["leverage_creep_three_consecutive_quarters"],
+    "related_deals": []
+  },
+  "notes": "SYNTHETIC fixture. Borrower B is the WATCH / deteriorating-trend case (control contrast to the breach cases). Total Net Leverage = total_net_debt / consolidated_ebitda. EBITDA is flat at 50.0 across all three quarters (recomputed from operating_profit 25.0 + D&A 22.0 + exceptional 3.0 = 50.0, every add-back allowed, so certified == recomputed and there is NO drift/conflict). Consolidated Total Net Debt climbs 200.0 -> 210.0 -> 220.0, driven by rising RCF drawings (40 -> 50 -> 60) with term loan flat at 180 and cash flat at 20 (net debt = 180 + revolver - 20). Leverage therefore creeps 4.00x -> 4.20x -> 4.40x against a flat 5.00x ceiling and NEVER breaches (headroom 1.00 / 0.80 / 0.60x). WATCH is trend-based: watch_rule.deteriorating_periods=3 fires at b-p3 on the third consecutive rise, NOT on proximity (0.60x headroom > 0.25x trigger). field_map_fingerprint is identical across all three periods, documenting zero schema drift. expected_assessment is a test oracle only and is not read by assess(). Arithmetic per period: P1 200.0/50.0=4.00; P2 210.0/50.0=4.20; P3 220.0/50.0=4.40."
+}

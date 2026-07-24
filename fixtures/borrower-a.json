@@ -1,0 +1,521 @@
+{
+  "schema_version": "1.0.0",
+  "facts_id": "borrower-a",
+  "generated_at": "2026-07-23T21:00:00Z",
+  "provenance_label": "SYNTHETIC",
+  "units": {
+    "currency": "GBP",
+    "magnitude": "millions",
+    "ratio_decimals": 2
+  },
+  "basis_precedence": [
+    "audited_restated",
+    "raw_financials",
+    "management_accounts",
+    "borrower_certified"
+  ],
+  "borrower": {
+    "borrower_id": "borrower-a",
+    "legal_name": "Merribrook Industrial Group Limited",
+    "short_name": "Merribrook",
+    "sector": "Specialty industrial manufacturing",
+    "jurisdiction": "GB",
+    "sponsor": {
+      "sponsor_id": "calderhythe",
+      "name": "Calderhythe Partners LLP"
+    },
+    "agent": {
+      "name": "Brightwell Trust Company Limited",
+      "role": "agent_and_security_agent"
+    },
+    "auditors": [
+      {
+        "name": "Penfold Rowe LLP",
+        "financial_year_end": "2025-12-31",
+        "report_signed_on": "2026-03-10"
+      }
+    ],
+    "facility": {
+      "facility_name": "Senior Facilities Agreement",
+      "agreement_date": "2024-02-15",
+      "agreement_doc_id": "doc-merribrook-cfa"
+    }
+  },
+  "covenants": [
+    {
+      "covenant_id": "total-net-leverage",
+      "label": "Total Net Leverage (Total Net Debt : Consolidated EBITDA)",
+      "metric": "total_net_leverage",
+      "direction": "max",
+      "formula": {
+        "numerator_key": "total_net_debt",
+        "denominator_key": "consolidated_ebitda",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 3.5,
+          "effective_from": "2024-02-15",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.25,
+        "headroom_pct": null,
+        "deteriorating_periods": 3
+      },
+      "clause_ref": "Clause 23.1(a) Financial Covenants - Leverage",
+      "source_doc_id": "doc-merribrook-cfa",
+      "cure": {
+        "equity_cure_permitted": true,
+        "max_over_life": 5,
+        "max_per_four_quarters": 2,
+        "consecutive_test_dates_allowed": false,
+        "cure_applies_to": "either"
+      }
+    },
+    {
+      "covenant_id": "interest-cover",
+      "label": "Interest Cover (Consolidated EBITDA : Net Finance Charges)",
+      "metric": "interest_cover",
+      "direction": "min",
+      "formula": {
+        "numerator_key": "consolidated_ebitda",
+        "denominator_key": "net_finance_charges",
+        "rounding": {
+          "mode": "half_up",
+          "decimals": 2
+        }
+      },
+      "thresholds": [
+        {
+          "value": 2.5,
+          "effective_from": "2024-02-15",
+          "effective_to": null
+        }
+      ],
+      "watch_rule": {
+        "headroom_absolute": 0.25,
+        "headroom_pct": null,
+        "deteriorating_periods": 3
+      },
+      "clause_ref": "Clause 23.1(b) Financial Covenants - Interest Cover",
+      "source_doc_id": "doc-merribrook-cfa",
+      "cure": null
+    }
+  ],
+  "periods": [
+    {
+      "period_id": "p-2025-q4",
+      "label": "FY2025 Q4 (year-end)",
+      "test_date": "2025-12-31",
+      "sequence": 0,
+      "relevant_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-q4-2025-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-01-30",
+          "source_doc_id": "doc-merribrook-cc-q4-2025",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "operating_profit",
+              "value": 40.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.1 EBITDA build, line 1"
+            },
+            {
+              "key": "consolidated_ebitda",
+              "value": 48.0,
+              "raw_name": "Consolidated EBITDA",
+              "raw_label": "Consolidated EBITDA (LTM)",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.1 EBITDA build, total"
+            },
+            {
+              "key": "term_loan",
+              "value": 120.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Facility B term loan",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.2 Net debt, line 1"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 0.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "RCF drawings",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.2 Net debt, line 2"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 24.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Free cash and cash equivalents",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.2 Net debt, line 3 (deducted)"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 96.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Total Net Debt",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.2 Net debt, total"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 12.0,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Net Finance Charges (LTM)",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q4-2025",
+              "source_locator": "Sch.3 Interest cover, denominator"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "ba62450021d281bbeae3d9f4ef0d3daa1ff3882fc293b65b2b7254d971a4be94",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 40.0,
+            "add_backs": [
+              {
+                "add_back_id": "obs-q4-2025-cert-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 8.0,
+                "allowed": true,
+                "allowed_amount": 8.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "doc-merribrook-cc-q4-2025",
+                "first_claimed_period_id": null
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 48.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total-net-leverage",
+              "certified_value": 2.0,
+              "certified_threshold": 3.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "No Default or Event of Default is continuing.",
+              "calculation_text": "Total Net Debt GBP 96.0m / Consolidated EBITDA GBP 48.0m = 2.00x (limit 3.50x)."
+            },
+            {
+              "covenant_id": "interest-cover",
+              "certified_value": 4.0,
+              "certified_threshold": 2.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "No Default or Event of Default is continuing.",
+              "calculation_text": "Consolidated EBITDA GBP 48.0m / Net Finance Charges GBP 12.0m = 4.00x (floor 2.50x)."
+            }
+          ],
+          "signed_by": {
+            "name": "R. Calloway",
+            "title": "Chief Financial Officer",
+            "signed_on": "2026-01-30"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total-net-leverage",
+          "basis": "borrower_certified",
+          "expected_value": 2.0,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "Net debt 96.0 / EBITDA 48.0 = 2.00x vs 3.50x ceiling; headroom 1.50x. Certified value equals recompute."
+        },
+        {
+          "covenant_id": "interest-cover",
+          "basis": "borrower_certified",
+          "expected_value": 4.0,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "EBITDA 48.0 / net finance charges 12.0 = 4.00x vs 2.50x floor; headroom 1.50x. Certified value equals recompute."
+        }
+      ]
+    },
+    {
+      "period_id": "p-2026-q1",
+      "label": "FY2026 Q1",
+      "test_date": "2026-03-31",
+      "sequence": 1,
+      "relevant_period": {
+        "start": "2025-04-01",
+        "end": "2026-03-31"
+      },
+      "observations": [
+        {
+          "observation_id": "obs-q1-2026-cert",
+          "basis": "borrower_certified",
+          "as_of": "2026-04-29",
+          "source_doc_id": "doc-merribrook-cc-q1-2026",
+          "supersedes_observation_id": null,
+          "provenance_label": "SYNTHETIC",
+          "measures": [
+            {
+              "key": "operating_profit",
+              "value": 42.0,
+              "raw_name": "Operating profit",
+              "raw_label": "Operating profit before exceptional items",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.1 EBITDA build, line 1"
+            },
+            {
+              "key": "consolidated_ebitda",
+              "value": 50.0,
+              "raw_name": "Consolidated EBITDA",
+              "raw_label": "Consolidated EBITDA (LTM)",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.1 EBITDA build, total"
+            },
+            {
+              "key": "term_loan",
+              "value": 118.0,
+              "raw_name": "Term Loan Facility",
+              "raw_label": "Facility B term loan",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.2 Net debt, line 1"
+            },
+            {
+              "key": "revolver_drawn",
+              "value": 0.0,
+              "raw_name": "Revolving Facility (drawn)",
+              "raw_label": "RCF drawings",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.2 Net debt, line 2"
+            },
+            {
+              "key": "cash_and_equivalents",
+              "value": 28.0,
+              "raw_name": "Cash and cash equivalents",
+              "raw_label": "Free cash and cash equivalents",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.2 Net debt, line 3 (deducted)"
+            },
+            {
+              "key": "total_net_debt",
+              "value": 90.0,
+              "raw_name": "Total Net Debt",
+              "raw_label": "Total Net Debt",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.2 Net debt, total"
+            },
+            {
+              "key": "net_finance_charges",
+              "value": 12.5,
+              "raw_name": "Net Finance Charges",
+              "raw_label": "Net Finance Charges (LTM)",
+              "unit": "GBP_m",
+              "sign_convention": "as_stated",
+              "state": "observed",
+              "source_doc_id": "doc-merribrook-cc-q1-2026",
+              "source_locator": "Sch.3 Interest cover, denominator"
+            }
+          ],
+          "unmapped_fields": [],
+          "field_map_fingerprint": "ba62450021d281bbeae3d9f4ef0d3daa1ff3882fc293b65b2b7254d971a4be94",
+          "ebitda_build": {
+            "base_key": "operating_profit",
+            "base_amount": 42.0,
+            "add_backs": [
+              {
+                "add_back_id": "obs-q1-2026-cert-da",
+                "label": "Depreciation and amortisation",
+                "category": "non_cash",
+                "limb_ref": "EBITDA def. limb (a) - depreciation & amortisation",
+                "amount": 8.0,
+                "allowed": true,
+                "allowed_amount": 8.0,
+                "disallowed_amount": 0.0,
+                "disallowed_reason": null,
+                "cap_check": null,
+                "evidence_doc_id": "doc-merribrook-cc-q1-2026",
+                "first_claimed_period_id": null
+              }
+            ],
+            "adjustments": [],
+            "total_key": "consolidated_ebitda",
+            "total_amount": 50.0
+          },
+          "certified_results": [
+            {
+              "covenant_id": "total-net-leverage",
+              "certified_value": 1.8,
+              "certified_threshold": 3.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "No Default or Event of Default is continuing.",
+              "calculation_text": "Total Net Debt GBP 90.0m / Consolidated EBITDA GBP 50.0m = 1.80x (limit 3.50x)."
+            },
+            {
+              "covenant_id": "interest-cover",
+              "certified_value": 4.0,
+              "certified_threshold": 2.5,
+              "certified_status": "IN_COMPLIANCE",
+              "certified_status_verbatim": "No Default or Event of Default is continuing.",
+              "calculation_text": "Consolidated EBITDA GBP 50.0m / Net Finance Charges GBP 12.5m = 4.00x (floor 2.50x)."
+            }
+          ],
+          "signed_by": {
+            "name": "R. Calloway",
+            "title": "Chief Financial Officer",
+            "signed_on": "2026-04-29"
+          }
+        }
+      ],
+      "expected_assessment": [
+        {
+          "covenant_id": "total-net-leverage",
+          "basis": "borrower_certified",
+          "expected_value": 1.8,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "Net debt 90.0 / EBITDA 50.0 = 1.80x vs 3.50x ceiling; headroom 1.70x. Leverage improved 2.00x -> 1.80x (moving away from ceiling), so watch_rule.deteriorating_periods does not trip. Certified value equals recompute."
+        },
+        {
+          "covenant_id": "interest-cover",
+          "basis": "borrower_certified",
+          "expected_value": 4.0,
+          "expected_status": "PASS",
+          "expect_drift_detected": false,
+          "expect_certification_conflict": false,
+          "expect_memory_hit": false,
+          "rationale": "EBITDA 50.0 / net finance charges 12.5 = 4.00x vs 2.50x floor; headroom 1.50x. Certified value equals recompute."
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "doc-merribrook-cfa",
+      "kind": "credit_agreement",
+      "title": "Senior Facilities Agreement",
+      "doc_date": "2024-02-15",
+      "party": "Merribrook Industrial Group Limited / Brightwell Trust Company (Agent)",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "dd0abe37aa6d9eae6fb6b8c1a1ccf0d9f7281659a7cf01af4b91f9f1dc251541",
+        "computed_at": "2026-07-23T21:00:00Z",
+        "byte_length": 70
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T21:00:00Z",
+        "page_count": 214
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "doc-merribrook-cc-q4-2025",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate - Q4 2025",
+      "doc_date": "2026-01-30",
+      "party": "Merribrook Industrial Group Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "56262c4840c80783e0720eecfc5c55a8b1736520d92a6b993f008b484da57643",
+        "computed_at": "2026-07-23T21:00:00Z",
+        "byte_length": 82
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T21:00:00Z",
+        "page_count": 4
+      },
+      "provenance_label": "SYNTHETIC"
+    },
+    {
+      "doc_id": "doc-merribrook-cc-q1-2026",
+      "kind": "compliance_certificate",
+      "title": "Compliance Certificate - Q1 2026",
+      "doc_date": "2026-04-29",
+      "party": "Merribrook Industrial Group Limited",
+      "source_uri": null,
+      "fingerprint": {
+        "algo": "sha256",
+        "value": "5dedd91165d1031dad950830f0380eb4fb98344dd3f049107c82df7175ddb77d",
+        "computed_at": "2026-07-23T21:00:00Z",
+        "byte_length": 82
+      },
+      "extraction": {
+        "method": "manual",
+        "model": null,
+        "extracted_at": "2026-07-23T21:00:00Z",
+        "page_count": 4
+      },
+      "provenance_label": "SYNTHETIC"
+    }
+  ],
+  "memory": {
+    "sponsor_id": "calderhythe",
+    "pattern_tags": [],
+    "related_deals": []
+  },
+  "notes": "SYNTHETIC control fixture (Borrower A). Invented entities only. This is the clean-PASS baseline that proves the kernel does not cry breach at everything: every covenant passes with comfortable headroom, the certificate matches the recompute exactly, there are no add-back games (the only add-back is allowed non-cash D&A), and the field map is stable across both certificates so no schema drift is detected. Arithmetic (GBP millions): EBITDA build = operating_profit + allowed D&A add-back; Q4-2025 40.0+8.0=48.0, Q1-2026 42.0+8.0=50.0. Net debt = term_loan + revolver_drawn - cash; Q4-2025 120.0+0.0-24.0=96.0, Q1-2026 118.0+0.0-28.0=90.0. Leverage = total_net_debt / consolidated_ebitda; Q4-2025 96.0/48.0=2.00x, Q1-2026 90.0/50.0=1.80x; ceiling 3.50x. Interest cover = consolidated_ebitda / net_finance_charges; Q4-2025 48.0/12.0=4.00x, Q1-2026 50.0/12.5=4.00x; floor 2.50x. Leverage improves 2.00x -> 1.80x, so watch_rule.deteriorating_periods (=3) never trips: definitively PASS, not WATCH. field_map_fingerprint algorithm: sha256 of ('\\n'.join(sorted('key:raw_name')) + '\\n#UNMAPPED#\\n' + '\\n'.join(sorted(unmapped_raw_names))). document.fingerprint.value = sha256('SYNTHETIC::' + doc_id + '::' + title + '::' + doc_date). expected_assessment[] is a test oracle only and must not be read by assess()."
+}

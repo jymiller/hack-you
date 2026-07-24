@@ -66,9 +66,14 @@
   .ev.write_committed .nm { color: var(--violet); }
 
   /* headline + brief */
-  .headline { border-left: 3px solid var(--cyan); padding-left: 12px; display: none; }
+  .trigger { border-left: 3px solid var(--dim); padding-left: 12px; margin-bottom: 12px; display: none; }
+  .trigger .h { font-weight: 700; }
+  .trigger .src { font-size: 12px; color: var(--dim); }
+  .headline { border-left: 3px solid var(--green); padding-left: 12px; display: none; }
   .headline .h { font-weight: 700; }
   .headline .src { font-size: 12px; color: var(--dim); }
+  .headline .more { font-size: 12px; color: var(--dim); margin-top: 4px; }
+  .headline .more a { color: var(--cyan); text-decoration: none; }
   .brief { display: none; }
   .brief p { margin: 6px 0 12px; }
   .actions { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
@@ -146,9 +151,10 @@
     </div>
 
     <div class="card">
-      <h2>Live signal — You.com Search <span class="chip REAL" id="searchLabel" style="display:none">REAL</span></h2>
+      <h2>Triggering filing &amp; live web — You.com Search <span class="chip REAL" id="searchLabel" style="display:none">REAL</span></h2>
+      <div class="trigger" id="trigger"></div>
       <div class="headline" id="headline"></div>
-      <div class="muted" id="searchWaiting">— fires <span class="mono">freshness=day · livecrawl=news</span> on scan</div>
+      <div class="muted" id="searchWaiting">— on scan: the synthetic filing that moved the number, plus a live <span class="mono">freshness=week · livecrawl=news</span> crawl proving the pattern is current.</div>
     </div>
 
     <div class="card">
@@ -206,12 +212,20 @@ async function scan() {
   // scoreboard (animate the ticks)
   await renderScoreboard(SCAN.scoreboard, 700);
 
-  // live headline
+  // triggering filing (SYNTHETIC) + live web freshness (REAL/SYNTHETIC label from the crawl)
+  const t = SCAN.trigger;
+  $("trigger").style.display = "block";
+  $("trigger").innerHTML = `<div class="h">${t.headline} ${chipHtml(t.label)}</div><div class="src">${t.source} · ${t.published_at || ""} — ${t.summary || ""}</div>`;
   const hit = SCAN.search.hits[0];
   $("searchLabel").style.display = "inline-block"; $("searchLabel").className = "chip " + SCAN.search.label; $("searchLabel").textContent = SCAN.search.label;
   $("searchWaiting").style.display = "none";
-  $("headline").style.display = "block";
-  $("headline").innerHTML = `<div class="h">${hit.title}</div><div class="src">${hit.publisher || ""} · ${hit.published_at || ""} · <span class="mono">${hit.url}</span></div>`;
+  if (hit) {
+    $("headline").style.display = "block";
+    const more = SCAN.search.hits.slice(1, 3).map(h => `<a href="${h.url}" target="_blank" rel="noopener">↗ ${h.title || h.url}</a>`).join(" · ");
+    $("headline").innerHTML = `<div class="h">Live web, ${SCAN.search.hits.length} sources this week — same pattern, real deals ${chipHtml(SCAN.search.label)}</div>` +
+      `<div class="src">↗ <a href="${hit.url}" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:none">${hit.title || hit.url}</a> · ${hit.publisher || ""} · ${hit.published_at || ""}</div>` +
+      (more ? `<div class="more">${more}</div>` : "");
+  }
 
   // the flip
   const a = SCAN.headline;

@@ -18,6 +18,7 @@ export interface ScanResult {
   search: SearchResult;
   ari: AriResult;
   headline: Assessment; // Thornwick total_net_leverage — the money-shot
+  trigger: { headline: string; summary: string | null; published_at: string | null; source: string; label: "SYNTHETIC" }; // the synthetic filing that triggered the scan
   bridge: { certified_ebitda: number | null; recomputed_ebitda: number | null; net_debt: number | null; certified_ratio: number | null; recomputed_ratio: number | null; threshold: number | null };
   assessments: Assessment[]; // leverage + interest_cover
   proposal: ProposedWrite | null;
@@ -43,11 +44,22 @@ export async function runScan(now: string): Promise<ScanResult> {
   const certLev = certificate(bundle, "q1-2026", "total_net_leverage");
   const certIc = certificate(bundle, "q1-2026", "interest_cover");
 
-  // Fire both You.com endpoints concurrently at scan time.
+  // Fire both You.com endpoints concurrently at scan time. Search proves live freshness on the
+  // real theme (week window widens the news hit rate); ARI builds the cited brief.
   const [search, ari] = await Promise.all([
-    searchLiveWeb(SEARCH_QUERY, { freshness: "day", livecrawl: "news" }),
+    searchLiveWeb(SEARCH_QUERY, { freshness: "week", livecrawl: "news" }),
     researchAri(ARI_QUESTION),
   ]);
+
+  // The synthetic filing that triggered this scan (a synthetic borrower has no real headline).
+  const triggerEvent = (bundle.events ?? []).find((e) => e.event_id === TRIGGER_EVENT_ID);
+  const trigger = {
+    headline: triggerEvent?.headline ?? "Thornwick Logistics Holdings restates FY2025 accounts following auditor change",
+    summary: "FY2025 restated by incoming auditor Marbury Tolland LLP: £1.7m early-recognised revenue reversed, £3.0m unrealised run-rate synergies disallowed.",
+    published_at: "2026-07-03",
+    source: "ENID synthetic corpus fixture",
+    label: "SYNTHETIC" as const,
+  };
 
   const a = assess(bundle, leverage, certLev, memory, { now, event_ids: [TRIGGER_EVENT_ID] });
   const aIc = assess(bundle, interest, certIc, memory, { now, event_ids: [TRIGGER_EVENT_ID] });
@@ -85,6 +97,7 @@ export async function runScan(now: string): Promise<ScanResult> {
     search,
     ari,
     headline: a,
+    trigger,
     bridge,
     assessments: [a, aIc],
     proposal: a.proposed_write,

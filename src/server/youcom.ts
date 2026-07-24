@@ -81,18 +81,28 @@ export async function searchLiveWeb(
     livecrawl: opts.livecrawl ?? "news",
   });
   try {
+    // Live shape: { results: { web: [{ url, title, description, page_age, snippets[] }] }, metadata }
     const data = await fetchJson(`${SEARCH_HOST}/search?${params}`, { headers: { "X-API-Key": key } }, opts.timeoutMs ?? 8000);
-    const rawHits: any[] = data?.hits ?? data?.results ?? data?.web?.results ?? [];
+    const rawHits: any[] = data?.results?.web ?? data?.hits ?? data?.results ?? [];
     const hits: SearchHit[] = rawHits.slice(0, 6).map((h) => ({
       url: h.url ?? h.link ?? "",
       title: h.title ?? null,
-      publisher: h.publisher ?? h.source ?? null,
+      publisher: h.publisher ?? h.source ?? domainOf(h.url ?? h.link),
       snippet: Array.isArray(h.snippets) ? h.snippets[0] ?? null : h.snippet ?? h.description ?? null,
       published_at: h.published_at ?? h.page_age ?? null,
     }));
     return { label: "REAL", query, hits, latency_ms: Date.now() - started };
   } catch (err) {
     return synthSearchFallback(query, Date.now() - started, `live search failed: ${(err as Error).message}`);
+  }
+}
+
+function domainOf(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return null;
   }
 }
 
@@ -109,9 +119,15 @@ export async function researchAri(
   const effort = opts.effort ?? "standard"; // never `exhaustive` live on stage
   const budget = opts.timeoutMs ?? 30000;
   try {
+    // The query field is `input` (not `query`). An output_schema returns structured content
+    // {summary, lender_actions[]} matching the PRERUN cache (every object needs additionalProperties:false).
     const start = await fetchJson(
       `${RESEARCH_HOST}/research`,
-      { method: "POST", headers: { "X-API-Key": key, "Content-Type": "application/json" }, body: JSON.stringify({ query: question, research_effort: effort, background: true }) },
+      {
+        method: "POST",
+        headers: { "X-API-Key": key, "Content-Type": "application/json" },
+        body: JSON.stringify({ input: question, research_effort: effort, background: true, output_schema: ARI_OUTPUT_SCHEMA }),
+      },
       8000
     );
     const taskId: string | undefined = start?.task_id ?? start?.id;
@@ -119,11 +135,11 @@ export async function researchAri(
 
     // Poll the GET until terminal (the SSE /stream is heartbeat only).
     const deadline = started + budget;
-    const pollMs = opts.pollMs ?? 1200;
+    const pollMs = opts.pollMs ?? 1500;
     while (Date.now() < deadline) {
       const data = await fetchJson(`${RESEARCH_HOST}/research/${taskId}`, { headers: { "X-API-Key": key } }, 8000);
       const status = data?.status ?? data?.state;
-      if (status === "completed" || data?.response || data?.output) {
+      if (status === "completed" || data?.result || data?.response || data?.output) {
         return normalizeAri(data, question, "REAL", Date.now() - started, taskId);
       }
       if (status === "failed" || status === "error") throw new Error(`research task ${taskId} ${status}`);
@@ -135,22 +151,43 @@ export async function researchAri(
   }
 }
 
+// Structured research output (standard/deep support output_schema; lite does not).
+const ARI_OUTPUT_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["summary", "lender_actions"],
+  properties: {
+    summary: { type: "string", description: "2-4 sentence synthesis of how lenders respond." },
+    lender_actions: { type: "array", items: { type: "string" }, description: "Discrete actions a lender typically takes." },
+  },
+};
+
+// Handles the live shape (data.result.output) and the PRERUN cache shape (data.response.output).
+// content may be a structured object {summary, lender_actions} (with output_schema) or a plain string.
 function normalizeAri(data: any, question: string, label: Provenance, latency: number, taskId: string | null): AriResult {
-  const output = data?.response?.output ?? data?.output ?? data;
-  const content = output?.content ?? {};
+  const output = data?.result?.output ?? data?.response?.output ?? data?.output ?? {};
+  const content = output?.content;
+  let summary = "";
+  let lender_actions: string[] = [];
+  if (content && typeof content === "object") {
+    summary = content.summary ?? "";
+    lender_actions = Array.isArray(content.lender_actions) ? content.lender_actions : [];
+  } else if (typeof content === "string") {
+    summary = content;
+  }
   const rawSources: any[] = output?.sources ?? [];
   return {
     label,
     question,
-    summary: content?.summary ?? output?.summary ?? "",
-    lender_actions: content?.lender_actions ?? [],
+    summary,
+    lender_actions,
     sources: rawSources.map((s) => ({
       url: s.url,
       title: s.title ?? null,
-      publisher: s.publisher ?? null,
+      publisher: s.publisher ?? domainOf(s.url),
       snippet: Array.isArray(s.snippets) ? s.snippets[0] ?? null : s.snippet ?? null,
     })),
-    research_effort: data?.research_effort ?? "standard",
+    research_effort: data?.input?.research_effort ?? data?.research_effort ?? "standard",
     latency_ms: latency,
     task_id: taskId,
   };
@@ -200,4 +237,6 @@ function sleep(ms: number): Promise<void> {
 export const ARI_QUESTION =
   "How do private-credit lenders typically respond when a sponsor-backed borrower restates accounts and disallows EBITDA add-backs after an auditor change?";
 
-export const SEARCH_QUERY = "Thornwick Logistics Ardenmoor FY2025 restatement auditor change disallowed EBITDA add-backs";
+// Thornwick is a SYNTHETIC borrower, so we don't pretend a live crawl finds it. The live Search
+// proves freshness on the REAL underlying theme the recompute is an instance of; hits are labelled REAL.
+export const SEARCH_QUERY = "private credit borrower restated accounts disallowed EBITDA add-backs covenant breach";

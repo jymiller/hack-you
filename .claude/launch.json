@@ -5,7 +5,8 @@
       "name": "sentinel",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start"],
-      "port": 8080
+      "port": 8080,
+      "autoPort": true
     }
   ]
 }

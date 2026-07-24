@@ -15,5 +15,11 @@ services:
       # in labelled fallback mode (Search → SYNTHETIC, ARI → the genuine PRERUN cache).
       - key: YDC_API_KEY
         sync: false
+      # Parasail inference (OpenAI-compatible). Set the key as a secret in the dashboard.
+      # PARASAIL_MODEL is not secret — pinned to the serverless GLM-5.2 id (no dot in "52").
+      - key: PARASAIL_API_KEY
+        sync: false
+      - key: PARASAIL_MODEL
+        value: parasail-glm-52
       - key: NODE_VERSION
         value: "22"

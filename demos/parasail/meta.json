@@ -2,6 +2,6 @@
   "name": "Parasail",
   "blurb": "GLM-5.2 reasoning chat (OpenAI-compatible)",
   "accent": "violet",
-  "status": "soon",
+  "status": "live",
   "order": 30
 }

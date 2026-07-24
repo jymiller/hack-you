@@ -12,7 +12,10 @@ It reads `PORT` from the environment (Render sets it) and `YDC_API_KEY` for live
 3. **Add the You.com key** — open the **covenant-sentinel** service → **Environment** →
    add `YDC_API_KEY = <your key>` → **Save** (triggers a redeploy). This is what makes the
    demo cite **live** sources. *(You paste the key — I never handle it.)*
-4. **For the live demo, avoid cold starts** — the blueprint defaults to the **free** instance,
+4. **Add the Parasail key** — same **Environment** panel → add `PARASAIL_API_KEY = <your key>` →
+   **Save**. `PARASAIL_MODEL` is already pinned to `parasail-glm-52` in the blueprint. Powers the
+   Parasail/GLM-5.2 inference path. *(You paste the key — I never handle it.)*
+5. **For the live demo, avoid cold starts** — the blueprint defaults to the **free** instance,
    which sleeps after ~15 min idle (~30–50 s wake-up). Bump it to **Starter** in the service's
    **Settings → Instance Type** (your $50 covers it for months). Or just pre-warm the URL right
    before you go on stage.

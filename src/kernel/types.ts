@@ -424,7 +424,7 @@ export interface ProposedWrite {
     citations: Array<{ url: string; title: string | null; publisher: string | null; snippet: string | null }>;
   };
   downstream: {
-    channel: "actionlayer";
+    channel: "covenant_register";
     template: "reservation_of_rights";
     target_ref: string;
     dry_run: true;
@@ -463,11 +463,11 @@ export type WriteResult = CommittedWrite | DeniedWrite;
 
 export interface ServeReceipt {
   receipt_id: string;
-  channel: "actionlayer";
+  channel: "covenant_register";
   template: "reservation_of_rights";
   target_ref: string;
   served_at: string;
-  provenance_label: "PRERUN";
+  provenance_label: "SYNTHETIC";
   detail?: unknown;
 }
 

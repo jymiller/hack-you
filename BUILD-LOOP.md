@@ -13,7 +13,7 @@ step until its one check is green.**
 
 - **CORE** — deterministic (no network, no LLM). Build & prove the money-shot with plain arithmetic you can test.
 - **FACE** — the vendor. Wrap the core in the You.com Research API (ARI): live web + citations.
-- **HARDEN** — serve the notice (PRERUN) and rehearse until it runs clean, every time.
+- **HARDEN** — issue the breach notice to the covenant register (SYNTHETIC) and rehearse until it runs clean, every time.
 
 **The demo is REAL the moment CORE's two starred checks pass** (step 3, the flip + step 7, the labels). FACE makes it
 live; HARDEN makes it safe. Everything before that line is what you actually claim on stage — so all the risk is
@@ -66,13 +66,13 @@ _(Steps 3 + 7 together are the "demo-flip eval" — the one gate that says the d
 
 | # | Capability | The check (gate) |
 |---|---|---|
-| 9 | Serve + rehearse | ActionLayer serves the notice **(PRERUN)** only after you attest, against a synthetic target; then **3 clean end-to-end runs in a row** |
+| 9 | Issue + rehearse | the committed write issues the reservation-of-rights notice to the covenant register **(SYNTHETIC)** only after you attest; then **3 clean end-to-end runs in a row** |
 
 ## How each step gets done (the cycle)
 
 Every box above is built the same way. The unusual, important part is step 2 — **write the check before the code**.
 
-**Pick the step → write its check first (a runnable assertion) → build the thin slice (opencode × Novita) → run the
+**Pick the step → write its check first (a runnable assertion) → build the thin slice → run the
 check → green: commit + next · red: fix (max 3 tries, then stop and flag).** Run the full money-shot end-to-end every
 ~3 steps so drift surfaces early, not at demo time.
 
@@ -94,6 +94,6 @@ whether the core works.
 - **NEW WORK ONLY** — retype the kernel fresh from the spec; bring the data + design + credits, leave the code.
   Commit inside the event window. (`HANDOFF.md` §8)
 - **Deterministic core first** — no network/LLM in the money-shot is exactly what makes it trustworthy on stage.
-- **Honesty labels on every effect**; ActionLayer is **PRERUN**, never live-fire a real notice. (`HANDOFF.md` §2e–f)
-- **Harness ≠ runtime** — opencode-on-Novita builds it; You.com ARI must be the live star in the demo. (`HANDOFF.md` §2d)
+- **Honesty labels on every effect**; never live-fire a real notice — the committed write records to the covenant register (**SYNTHETIC**).
+- **You.com ARI must be the live star** in the demo — route real traffic through it. (`HANDOFF.md` §2d)
 - Keys live in `.env` (gitignored); see `.env.example`.

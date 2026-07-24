@@ -1,6 +1,6 @@
 // Sentinel desk server. Serves the UI and two endpoints, one per demo action:
 //   POST /api/scan   — fire You.com (Search + ARI), recompute, return the finding + scoreboard.
-//   POST /api/attest — the human gate; on ATTEST, serve PRERUN via ActionLayer.
+//   POST /api/attest — the human gate; on ATTEST, issue the breach notice to the covenant register.
 // Deploys to a live URL (AWS Builder Loft credits / Render). "Running live" scores the AWS judge.
 
 import express from "express";

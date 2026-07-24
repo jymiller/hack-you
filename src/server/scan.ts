@@ -23,7 +23,7 @@ export interface ScanResult {
   assessments: Assessment[]; // leverage + interest_cover
   proposal: ProposedWrite | null;
   scoreboard: ScoreboardEvent[];
-  labels: { search: string; ari: string; recompute: "REAL"; downstream_serve: "PRERUN" };
+  labels: { search: string; ari: string; recompute: "REAL"; downstream_serve: "SYNTHETIC" };
 }
 
 function attachLiveCitations(a: Assessment, ari: AriResult, eventId: string): void {
@@ -102,11 +102,12 @@ export async function runScan(now: string): Promise<ScanResult> {
     assessments: [a, aIc],
     proposal: a.proposed_write,
     scoreboard: sb.events,
-    labels: { search: search.label, ari: ari.label, recompute: "REAL", downstream_serve: "PRERUN" },
+    labels: { search: search.label, ari: ari.label, recompute: "REAL", downstream_serve: "SYNTHETIC" },
   };
 }
 
-// The human gate: attest the proposal, then (only on ATTEST) serve PRERUN via ActionLayer.
+// The human gate: attest the proposal, then (only on ATTEST) issue the reservation-of-rights
+// breach notice to the covenant register.
 export interface AttestResult {
   outcome: "committed" | "denied";
   attestation: Attestation;
@@ -125,7 +126,7 @@ export function applyAttestation(
 ): AttestResult {
   const attestation = makeAttestation(proposal, decision, analyst, now, note);
   const result = attest(proposal, attestation);
-  const serve = serveIfCommitted(result, now, { note: "PRERUN — synthetic sandbox target; never live-fire on stage" });
+  const serve = serveIfCommitted(result, now, { note: "SYNTHETIC — reservation-of-rights notice recorded in the covenant register" });
 
   // continue the scoreboard sequence from where the scan left off
   const sb = new Scoreboard(now, seqStart);

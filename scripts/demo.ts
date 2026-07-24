@@ -54,10 +54,10 @@ function moneyShot(): void {
     console.log(`  ${C.cyan}memory:${C.reset} ${m.relation.join("+")} → ${m.prior_facts_id} (${m.shared_add_back_category})`);
   }
 
-  // Human attest gate → PRERUN serve
+  // Human attest gate → issue the breach notice to the covenant register
   const attestation = makeAttestation(a.proposed_write!, "ATTEST", { analyst_id: "an-01", name: "A. Vergdefinetta", role: "credit_analyst" }, NOW, "Confirmed against restated FY2025.");
   const result = attest(a.proposed_write!, attestation);
-  const receipt = serveIfCommitted(result, NOW, { note: "PRERUN — synthetic sandbox target" });
+  const receipt = serveIfCommitted(result, NOW, { note: "SYNTHETIC — notice recorded in the covenant register" });
 
   const sb = new Scoreboard(NOW);
   sb.scan(a, { triggerEventId: "ev-thornwick-fy2025-restatement", triggerLabel: "REAL", triggerSource: "you_research_ari" });

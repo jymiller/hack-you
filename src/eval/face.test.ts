@@ -36,14 +36,14 @@ describe("GATE 8 — FACE: You.com-wrapped scan (offline fallback path)", () => 
     expect(names).toContain("memory_hit");
   });
 
-  it("attest gate over the scan: ATTEST commits and serves PRERUN; DENY serves nothing", async () => {
+  it("attest gate over the scan: ATTEST commits and issues the notice; DENY issues nothing", async () => {
     delete process.env.YDC_API_KEY;
     const s = await runScan(NOW);
     const analyst = { analyst_id: "an-01", name: "Duty Analyst", role: "credit_analyst" as const };
 
     const committed = applyAttestation(s.headline, s.proposal!, "ATTEST", analyst, NOW, null, s.scoreboard.length);
     expect(committed.outcome).toBe("committed");
-    expect(committed.serve_receipt?.provenance_label).toBe("PRERUN");
+    expect(committed.serve_receipt?.provenance_label).toBe("SYNTHETIC");
     expect(committed.events.map((e) => e.event)).toContain("write_committed");
 
     const denied = applyAttestation(s.headline, s.proposal!, "DENY", analyst, NOW, "hold", s.scoreboard.length);

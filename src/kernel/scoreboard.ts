@@ -120,11 +120,11 @@ export class Scoreboard {
 
   writeResult(a: Assessment, result: WriteResult, serve: ServeReceipt | null): void {
     if (result.outcome === "committed") {
-      this.push("write_committed", a, "PRERUN", {
+      this.push("write_committed", a, "SYNTHETIC", {
         proposal_id: result.proposal.proposal_id,
         downstream: { channel: result.proposal.downstream.channel, template: result.proposal.downstream.template, target_ref: result.proposal.downstream.target_ref },
         serve_receipt_id: serve?.receipt_id ?? null,
-        provenance_label: "PRERUN",
+        provenance_label: "SYNTHETIC",
       });
     } else {
       this.push("write_denied", a, "REAL", {

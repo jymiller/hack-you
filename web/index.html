@@ -271,10 +271,10 @@ async function decide(decision) {
   if (out.outcome === "committed") {
     $("proposalBadge").className = "badge green"; $("proposalBadge").textContent = "WRITE · COMMITTED";
     $("receipt").style.display = "block";
-    $("receipt").innerHTML = `ActionLayer serve · reservation_of_rights · receipt ${out.serve_receipt.receipt_id.slice(0,18)}…<br>${chipHtml("PRERUN")} served against synthetic sandbox target — never live-fired on stage.`;
+    $("receipt").innerHTML = `Breach notice issued · reservation-of-rights · covenant register · receipt ${out.serve_receipt.receipt_id.slice(0,18)}…<br>${chipHtml("SYNTHETIC")} recorded against the synthetic book — no external counterparty served.`;
   } else {
     $("proposalBadge").className = "badge"; $("proposalBadge").style.borderColor = "var(--line)"; $("proposalBadge").textContent = "WRITE · DENIED";
-    $("receipt").style.display = "block"; $("receipt").innerHTML = `Denied by analyst — no downstream serve fired. ${chipHtml("REAL")}`;
+    $("receipt").style.display = "block"; $("receipt").innerHTML = `Denied by analyst — no notice issued. ${chipHtml("REAL")}`;
   }
 }
 

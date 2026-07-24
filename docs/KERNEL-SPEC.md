@@ -21,7 +21,7 @@ ratio from measures — never trusting any certified number or stated EBITDA tot
 the field map** and detects schema drift by comparing *maps, not values*, (4) classifies
 **PASS / WATCH / BREACH / INDETERMINATE**, and (5) emits a **PROPOSED write** that is inert until a
 separate human `attest()` flips it. `assess()` performs **no side effects and no writes.** Only a
-wrapper, only after `attest()` returns `ATTEST`, may fire the downstream (ActionLayer) serve.
+wrapper, only after `attest()` returns `ATTEST`, may issue the downstream notice to the covenant register.
 
 ---
 
@@ -237,7 +237,7 @@ interface Assessment {
   labels: {                           // §8 honesty overlay — rendered from the record
     facts: "SYNTHETIC" | "REAL" | "PRERUN";       // the corpus/observation label
     recompute: "SYNTHETIC" | "REAL" | "PRERUN";   // the kernel run itself == REAL
-    downstream_serve: "SYNTHETIC" | "REAL" | "PRERUN"; // the ActionLayer serve == PRERUN on stage
+    downstream_serve: "SYNTHETIC" | "REAL" | "PRERUN"; // the covenant-register notice == SYNTHETIC on stage
   };
   provenance_label: "SYNTHETIC" | "REAL" | "PRERUN"; // top label for the whole record
 
@@ -403,14 +403,14 @@ interface ProposedWrite {
     citations: Array<{ url: string; title: string | null; publisher: string | null; snippet: string | null }>;
   };
   downstream: {                 // a DESCRIPTOR of the serve, not a call. Never fired here.
-    channel: "actionlayer";
+    channel: "covenant_register";
     template: "reservation_of_rights";
     target_ref: string;         // synthetic/sandbox recipient
     dry_run: true;              // const true at proposal time
   };
   requires_attestation: true;   // const
   attestation_state: "PENDING"; // const at emit
-  provenance_label: "SYNTHETIC"; // facts are synthetic; the eventual serve is PRERUN (see labels)
+  provenance_label: "SYNTHETIC"; // facts are synthetic; the eventual notice is SYNTHETIC (see labels)
 }
 
 interface Attestation {
@@ -464,13 +464,13 @@ Exactly one label per on-stage effect: **SYNTHETIC** (all corpus data), **REAL**
 | `event.provenance_label` (`facts.events[]`) | `REAL` | the live You.com Search/ARI crawl that triggered the scan |
 | `Assessment.labels.facts` | `SYNTHETIC` | the book being assessed |
 | `Assessment.labels.recompute` | `REAL` | the kernel run itself is a real computation |
-| `Assessment.labels.downstream_serve` | `PRERUN` | the ActionLayer serve is a cached receipt |
+| `Assessment.labels.downstream_serve` | `SYNTHETIC` | the covenant-register notice over the synthetic book |
 | `Assessment.provenance_label` | `SYNTHETIC` | top label for the whole record |
 | `ProposedWrite.provenance_label` | `SYNTHETIC` | proposal over synthetic facts |
 | every scoreboard event `.provenance_label` (§9) | as above | UI reads it off the event |
 
 The **money-shot** is legible directly from `Assessment.labels`: `facts=SYNTHETIC`, `recompute=REAL`,
-`downstream_serve=PRERUN` — "SYNTHETIC data through a REAL recompute, served PRERUN." The UI **must
+`downstream_serve=SYNTHETIC` — "SYNTHETIC data through a REAL recompute, notice recorded to the register." The UI **must
 read the label from the record**; it must never paint a label from slide text. Rule: never label a
 mock as PRERUN; a `dry_run:true` descriptor that was never executed is SYNTHETIC, not PRERUN.
 
@@ -511,8 +511,8 @@ Per-event `data` payloads:
 - **`attested`** — `{ proposal_id, decision: "ATTEST"|"DENY", analyst_id, attested_at, signature }`
   (one `attested` event carries the decision; `write_committed`/`write_denied` is the consequence).
 - **`write_denied`** — `{ proposal_id, denied_reason: string|null }` (no downstream fired).
-- **`write_committed`** — `{ proposal_id, downstream: { channel:"actionlayer", template, target_ref },
-  serve_receipt_id: string|null, provenance_label: "PRERUN" }` (the serve is a PRERUN receipt).
+- **`write_committed`** — `{ proposal_id, downstream: { channel:"covenant_register", template, target_ref },
+  serve_receipt_id: string|null, provenance_label: "SYNTHETIC" }` (the notice is recorded to the register).
 
 Ordering for the money-shot demo: `scanned(REAL) → breach → drift_detected → memory_hit → attested →
 write_committed(PRERUN)`. Borrower-B contributes a `watch`; Borrower-A a `pass`; Northgate a

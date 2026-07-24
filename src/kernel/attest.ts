@@ -58,16 +58,17 @@ export function attest(proposal: ProposedWrite, attestation: Attestation): Write
   return denied;
 }
 
-// The ONLY place the system touches the outside world. Cannot be reached without a CommittedWrite,
-// which only a human ATTEST produces. On stage this serve is PRERUN (a cached receipt).
+// The ONLY place a committed write becomes an effect. Cannot be reached without a CommittedWrite,
+// which only a human ATTEST produces. It issues the reservation-of-rights notice to the covenant
+// register (SYNTHETIC — over the synthetic book; no external counterparty is served).
 export function executeCommitted(w: CommittedWrite, servedAt: string, detail?: unknown): ServeReceipt {
   return {
     receipt_id: sha256Hex(`${w.proposal.proposal_id}|${w.attestation.attestation_id}|${servedAt}`),
-    channel: "actionlayer",
+    channel: "covenant_register",
     template: "reservation_of_rights",
     target_ref: w.proposal.downstream.target_ref,
     served_at: servedAt,
-    provenance_label: "PRERUN",
+    provenance_label: "SYNTHETIC",
     detail,
   };
 }

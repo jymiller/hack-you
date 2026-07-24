@@ -453,8 +453,8 @@
         "byte_length": null
       },
       "extraction": {
-        "method": "ocr",
-        "model": "deepseek-ocr",
+        "method": "text",
+        "model": null,
         "extracted_at": null,
         "page_count": 88
       },

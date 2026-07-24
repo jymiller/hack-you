@@ -40,15 +40,15 @@ describe("GATE 5 — DENY / human-attest gate: zero writes before attest", () =>
     expect(serveIfCommitted(result, NOW)).toBeNull();
   });
 
-  it("ATTEST → write_committed, and only then does a PRERUN serve receipt exist", () => {
+  it("ATTEST → write_committed, and only then does a notice receipt exist", () => {
     const a = thornwickBreach();
     const ok = makeAttestation(a.proposed_write!, "ATTEST", ANALYST, NOW, "Confirmed against restated FY2025.");
     const result = attest(a.proposed_write!, ok);
     expect(result.outcome).toBe("committed");
     const receipt = serveIfCommitted(result, NOW);
     expect(receipt).not.toBeNull();
-    expect(receipt!.provenance_label).toBe("PRERUN");
-    expect(receipt!.channel).toBe("actionlayer");
+    expect(receipt!.provenance_label).toBe("SYNTHETIC");
+    expect(receipt!.channel).toBe("covenant_register");
   });
 
   it("a tampered attestation is rejected", () => {
@@ -104,11 +104,11 @@ describe("GATE 6 — scoreboard: the money-shot emits an ordered event feed", ()
 });
 
 describe("★ GATE 7 — honesty labels: every effect carries exactly one label, none unlabeled", () => {
-  it("money-shot triad: facts SYNTHETIC · recompute REAL · downstream_serve PRERUN", () => {
+  it("money-shot triad: facts SYNTHETIC · recompute REAL · downstream_serve SYNTHETIC", () => {
     const a = thornwickBreach();
     expect(a.labels.facts).toBe("SYNTHETIC");
     expect(a.labels.recompute).toBe("REAL");
-    expect(a.labels.downstream_serve).toBe("PRERUN");
+    expect(a.labels.downstream_serve).toBe("SYNTHETIC");
     expect(a.provenance_label).toBe("SYNTHETIC");
     expect(a.proposed_write!.provenance_label).toBe("SYNTHETIC");
   });
@@ -142,7 +142,7 @@ describe("★ GATE 7 — honesty labels: every effect carries exactly one label,
     for (const e of sb.events) {
       expect(LABELS).toContain(e.provenance_label);
     }
-    // the serve is PRERUN, never a mock mislabeled
-    expect(sb.events.find((e) => e.event === "write_committed")!.provenance_label).toBe("PRERUN");
+    // the issued notice is SYNTHETIC (a synthetic-book notice), never a mock mislabeled
+    expect(sb.events.find((e) => e.event === "write_committed")!.provenance_label).toBe("SYNTHETIC");
   });
 });

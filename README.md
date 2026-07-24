@@ -4,9 +4,9 @@
 
 A real-time agent that watches the live web — news, filings, markets — for events that threaten a
 borrower's financial covenant, does **cited** deep research via the You.com Research API (ARI),
-flags the drift, routes it to a human analyst to sign off, and (post-attestation) serves a notice
-via ActionLayer. The killer failure mode it catches: a borrower quietly restating its accounts so a
-covenant silently breaches while the dashboard stays green.
+flags the drift, routes it to a human analyst to sign off, and (post-attestation) issues a
+reservation-of-rights breach notice to the covenant register. The killer failure mode it catches: a
+borrower quietly restating its accounts so a covenant silently breaches while the dashboard stays green.
 
 **The one truth on screen:** the certificate reads **GREEN 6.47×**, the recompute reads **BREACH 7.59×**.
 
@@ -47,8 +47,8 @@ wrap it in You.com, then harden it. Three phases, each gated on one runnable che
    (proximity band or a deteriorating trend).
 4. **consult memory** across bundles — the cross-deal join key is `sponsor_id` (`memory.ts`:
    Thornwick → Halveston, same sponsor, same disallowed run-rate synergy, two years earlier).
-5. **propose a write** that is inert until a separate human `attest()` flips it (`attest.ts`). A
-   downstream serve is structurally unreachable without a `CommittedWrite`, which only an ATTEST
+5. **propose a write** that is inert until a separate human `attest()` flips it (`attest.ts`). The
+   downstream notice is structurally unreachable without a `CommittedWrite`, which only an ATTEST
    produces — the DENY/attest gate.
 
 Every effect carries exactly one honesty label — **SYNTHETIC** (corpus data), **REAL** (a live
@@ -69,9 +69,9 @@ the REAL/PRERUN citations to the finding. Recompute is REAL over a SYNTHETIC boo
 
 ### Phase 3 — HARDEN
 
-The ActionLayer serve is **PRERUN** — a cached reservation-of-rights receipt, served only after the
-human attests, never live-fired on stage. The deterministic core makes the 3-clean-runs rehearsal
-trivial: the money-shot is a pure function.
+After the human attests, the committed write issues a reservation-of-rights breach notice to the
+covenant register (**SYNTHETIC** — over the synthetic book, no external counterparty). The
+deterministic core makes the 3-clean-runs rehearsal trivial: the money-shot is a pure function.
 
 ## The 6-borrower synthetic corpus (`fixtures/`)
 
@@ -99,12 +99,12 @@ npm run typecheck # tsc --noEmit
 - `face.test.ts` — the You.com-wrapped scan (offline fallback path).
 - `totality.test.ts` — §11 error matrix; the kernel never throws and INDETERMINATE is never a silent PASS.
 
-## Vendor stack
+## Vendor stack (You.com Agentic hackathon sponsors)
 
-- **You.com** — Research API (ARI) for cited deep research; Search/Contents for live-web freshness.
-- **Novita** — reasoning LLM + DeepSeek-OCR, and the opencode build harness (OpenAI-compatible).
-- **ActionLayer** — last-mile serve-notice rail (run PRERUN on stage).
-- **AWS** — venue and deploy target (Builder Loft credits).
+- **You.com** — Research API (ARI) for cited deep research; Search for live-web freshness. The load-bearing vendor.
+- **Render** — hosts the live deployed URL (web service + Sentinel UI + attest gate).
+- **AWS** — the venue (Builder Loft) and a deploy target.
+- **Opsera** — optional $500 side-quest: a pre-deploy security scan on the repo (best use of Opsera Agents).
 
 ## Private prep
 

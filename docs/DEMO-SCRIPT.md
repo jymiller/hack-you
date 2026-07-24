@@ -70,7 +70,7 @@ a receipt. The money-shot is **SYNTHETIC data through a REAL recompute**.
 | **1:20** | Ratio flips **6.47× GREEN → 7.59× BREACH**; tile turns red; scoreboard: `breach · certification_conflict · memory_hit` | "6.47 becomes 7.59 — a breach by more than a full turn. The dashboard was green. The truth is a breach." | — | `[REAL]` recompute · `[SYNTHETIC]` data |
 | **1:30** | **Cited ARI brief** slides in: summary + `lender_actions[]`, each with **inline source links** | "And here's why it matters — researched while we were talking. You.com's ARI agent built a cited brief on exactly this: restated accounts, disallowed add-backs, auditor change. Eight real sources — Proskauer, Sidley, Paul Weiss." | — (pulled from the background call that finished at 0:19) | ARI package `[REAL]` |
 | **2:00** | **Attest gate**: write shown as **PROPOSED**, red "requires human sign-off" | "Sentinel does not act on this itself. It proposes. A human analyst attests." → click **Attest** → write goes **PROPOSED → COMMITTED** | — | gate `[REAL]` |
-| **2:15** | **ActionLayer serve receipt** (reservation-of-rights notice) appears | "Only after sign-off does the last mile fire — a reservation-of-rights notice, served through ActionLayer. Pre-run against a sandbox, shown here as a receipt." | — | serve `[PRERUN]` |
+| **2:15** | **Breach-notice receipt** (reservation-of-rights) recorded in the covenant register | "Only after sign-off does the write commit — a reservation-of-rights breach notice, recorded in the covenant register. No external counterparty is ever served on stage." | — | notice `[SYNTHETIC]` |
 | **2:30** | Metric card + single **Opsera scan** slide | "Signal to cited breach alert: under a minute — an analyst's afternoon in thirteen seconds. Live signal from You.com Search, the cited brief from You.com's ARI, number one on DeepSearchQA. Secured and scanned with Opsera." | — | metric `[REAL]` · Opsera `[PRERUN]` |
 | **2:45** | Split card: **cert GREEN 6.47×** vs **recompute BREACH 7.59×** | *(closing line — §4)* | — | — |
 | **3:00** | Hold on the split card | *(silence — let it land)* | — | — |
@@ -90,15 +90,14 @@ Say the fallback **out loud**; naming the cache is worth more than a flawless ru
 | **Search headline (0:20)** | crawl times out on venue wifi | "Our live crawl just timed out on the venue wifi — here's the identical query I ran last night, labeled PRERUN." → cached Search screenshot `[PRERUN]` |
 | **ARI package (1:30)** | background call still running or 429/5xx | "The research call's still running — rather than watch a spinner, here's the completed package from last night. PRERUN — a genuine API response, eight real sources, 13.3 seconds." → render `prerun/ari-lender-response-standard.json` `[PRERUN]` |
 | **Recompute (0:50–1:20)** | UI hiccup | "The recompute is a pure local function — no network, nothing to fail. Here are the numbers straight from the book: £34m EBITDA down to £29m, 220 over 29 is 7.59." (read off `fixtures/thornwick.json`) `[REAL]` |
-| **Attest / ActionLayer (2:00–2:15)** | anything | Already PRERUN by design — never live-fire a notice on stage. "This one we never fire live; here's the receipt from the sandbox run." `[PRERUN]` |
+| **Attest / notice (2:00–2:15)** | anything | The committed write is a local register record over synthetic data — nothing to fire live. "The notice is a pure local record; here it is." `[SYNTHETIC]` |
 | **Total wifi death** | network gone entirely | "Venue wifi's gone — here's the full run I recorded last night, end to end." → play the backup video (§5). |
 
 Guardrails that protect the demo and the bounties:
-- **Never** live-fire ActionLayer on stage (metered; can hang on a `blocked_on_user` prompt). PRERUN only.
+- **Never** fire a real external notice on stage — the committed write records to the covenant register (`[SYNTHETIC]`) only.
 - **Never** call ARI `exhaustive` live; `standard` + `background:true` only.
-- The live runtime research model **is You.com ARI**, not Novita — do not swap Novita in as the ARI
-  substitute (voids the You.com bounty). Novita is the *build harness* + OCR; mention only as "built with."
-- Every on-screen effect carries exactly one label. Never label a mock as PRERUN.
+- The live runtime research **is You.com ARI** — route real traffic through it (that's the bounty requirement).
+- Every on-screen effect carries exactly one label. Never label a mock as PRERUN (PRERUN is reserved for the genuine cached You.com call).
 
 ---
 
@@ -120,7 +119,7 @@ Guardrails that protect the demo and the bounties:
   REAL on stable wifi. This is your insurance against total network failure — and the submission's
   required backup video in one shot.
 - Show the deployed URL bar, the live Search headline, the recompute flip, the cited ARI package with
-  visible source links, the attest click, and the PRERUN serve receipt.
+  visible source links, the attest click, and the committed breach-notice receipt.
 - Keep every honesty label visible on screen. Narrate the labels once ("live," "synthetic book,"
   "pre-run") so the video is self-explanatory muted.
 - Save it locally **and** upload a copy; queue the local file in a paused tab before you go on.

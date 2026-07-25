@@ -1,0 +1,7 @@
+{
+  "name": "Opsera",
+  "blurb": "DevSecOps gate — this instance scans its own repo and publishes the posture",
+  "accent": "amber",
+  "status": "live",
+  "order": 35
+}

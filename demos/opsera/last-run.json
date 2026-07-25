@@ -1,0 +1,73 @@
+{
+  "_comment": "Real output from an Opsera DevSecOps agent pre-commit run. Committed as a dated artifact because the Opsera scan is a 6-phase agent flow driven from Claude Code — the server cannot invoke it on demand. The live self-scan at /api/opsera/posture runs on every request; this is the agent's own verdict for comparison.",
+  "scanned_at": "2026-07-25T01:23:00Z",
+  "execution_id": "1030417e-55e5-494c-8b51-44bf064d4241",
+  "scan_mode": "pre-commit",
+  "verdict": "SAFE TO COMMIT",
+  "risk_score": 80.8,
+  "risk_label": "Critical Risk",
+  "staged": {
+    "files": ["demos/opsera/meta.json", "demos/opsera/page.html", "demos/opsera/routes.ts"],
+    "lines_added": 311
+  },
+  "counts": { "critical": 7, "high": 23, "medium": 31, "low": 0, "total": 61 },
+  "classification": { "new": 0, "existing": 61 },
+  "scanners": [
+    { "name": "gitleaks", "role": "secrets", "status": "ran", "findings": 0, "note": "no secrets anywhere in the tree" },
+    { "name": "semgrep", "role": "sast", "status": "ran", "findings": 0, "note": "133 files scanned, 0 skipped" },
+    { "name": "npm audit", "role": "dependencies", "status": "ran", "findings": 5, "note": "lockfile — dev-only chain" },
+    { "name": "grype", "role": "dependencies", "status": "ran", "findings": 56, "note": "installed tree — all inside node_modules" },
+    { "name": "checkov", "role": "iac", "status": "ran", "findings": 0, "note": "no supported IaC resources detected" },
+    { "name": "hadolint", "role": "containers", "status": "n/a", "findings": 0, "note": "no Dockerfile in repo" }
+  ],
+  "where_the_findings_live": {
+    "repo_source": 0,
+    "lockfile_dev_dependencies": 5,
+    "node_modules_not_shipped": 56
+  },
+  "headline_caveat": "The 80.8 risk score counts all 61 findings equally. 56 of them are inside node_modules — gitignored, never deployed — and the 6 criticals there are Go stdlib CVEs (GO-2024-2887, GO-2025-3563, GO-2026-4337) compiled into a vendored prebuilt binary. Zero findings touch repo source. The 5 that matter are dev-only and collapse to a single action.",
+  "single_remediation": "npm i -D vitest@4.1.10",
+  "notable": [
+    {
+      "severity": "critical",
+      "id": "GHSA-5xrq-8626-4rwp",
+      "cwe": "CWE-862",
+      "cvss": 9.8,
+      "title": "Vitest UI server allows arbitrary file read and execute",
+      "location": "vitest@<=3.2.5",
+      "scope": "dev-only",
+      "remediation": "npm i -D vitest@4.1.10 (major)"
+    },
+    {
+      "severity": "high",
+      "id": "CWE-22",
+      "cvss": null,
+      "title": "Vite path traversal in optimized deps `.map` handling",
+      "location": "vite@<=6.4.2",
+      "scope": "dev-only",
+      "remediation": "resolved by the vitest bump"
+    },
+    {
+      "severity": "medium",
+      "id": "CWE-346",
+      "cvss": 5.3,
+      "title": "esbuild lets any origin request the dev server and read the response",
+      "location": "esbuild@<=0.24.2",
+      "scope": "dev-only",
+      "remediation": "resolved by the vitest bump"
+    },
+    {
+      "severity": "critical",
+      "id": "GO-2024-2887",
+      "cvss": null,
+      "title": "Go stdlib CVE in vendored prebuilt binary",
+      "location": "node_modules — stdlib go1.20.12",
+      "scope": "not-shipped",
+      "remediation": "npm update to pick up rebuilt binaries"
+    }
+  ],
+  "telemetry": {
+    "reported": true,
+    "withheld": "Opsera's phase-5 telemetry requested `userPrompt` and `followUpPrompts` — verbatim operator chat messages. Counts, score, repo and scanner list were sent; conversation content was not."
+  }
+}

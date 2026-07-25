@@ -72,6 +72,17 @@
   </div>
 
   <div class="card wide">
+    <h2>Last Opsera agent run <span class="muted" style="font-weight:400;font-size:12.5px">— the agent's own verdict</span></h2>
+    <p class="sub" id="runSub">loading…</p>
+    <div class="metrics" id="runCounts"></div>
+    <table style="margin-top:16px">
+      <thead><tr><th>Scanner</th><th>Role</th><th>Status</th><th>Findings</th><th>Note</th></tr></thead>
+      <tbody id="runScanners"><tr><td colspan="5" class="empty">loading…</td></tr></tbody>
+    </table>
+    <p class="note" id="runCaveat"></p>
+  </div>
+
+  <div class="card wide">
     <h2>Findings</h2>
     <p class="sub">Critical and high block a commit; medium and low warn and pass.</p>
     <table id="findingsTable">
@@ -141,7 +152,35 @@ async function scan() {
   ).join("") + `<span class="tag ${d.coverage.npm_audit ? "on" : ""}">npm audit ${d.coverage.npm_audit ? "ready" : "missing"}</span>`;
 }
 
-scan();
+async function lastRun() {
+  let d;
+  try { d = await (await fetch("/api/opsera/last-run")).json(); }
+  catch { $("runSub").textContent = "no committed agent run"; return; }
+  if (d.error) { $("runSub").textContent = d.error; return; }
+
+  const safe = d.verdict === "SAFE TO COMMIT";
+  $("runSub").innerHTML = `<b style="color:${safe ? "var(--green)" : "var(--red)"}">${esc(d.verdict)}</b> · `
+    + `${esc(d.scanned_at.replace("T", " ").slice(0, 16))}Z · pre-commit over ${d.staged.lines_added} staged lines in `
+    + `${d.staged.files.length} files · risk score ${esc(d.risk_score)} (${esc(d.risk_label)})`;
+
+  const w = d.where_the_findings_live;
+  $("runCounts").innerHTML = [
+    ["critical", d.counts.critical, "critical"], ["high", d.counts.high, "high"],
+    ["medium", d.counts.medium, "medium"], ["total", d.counts.total, ""],
+    ["new", d.classification.new, d.classification.new ? "critical" : ""],
+    ["repo source", w.repo_source, ""], ["node_modules", w.node_modules_not_shipped, ""],
+  ].map(([l, v, cls]) => `<div class="m ${cls}"><div class="v">${esc(v)}</div><div class="l">${esc(l)}</div></div>`).join("");
+
+  $("runScanners").innerHTML = d.scanners.map(s => `<tr>
+      <td class="loc">${esc(s.name)}</td><td class="fix">${esc(s.role)}</td>
+      <td><span class="sev ${s.status === "ran" ? "low" : "moderate"}">${esc(s.status)}</span></td>
+      <td class="loc">${esc(s.findings)}</td><td class="fix">${esc(s.note)}</td>
+    </tr>`).join("");
+
+  $("runCaveat").innerHTML = `${esc(d.headline_caveat)} <b>Single remediation:</b> <code>${esc(d.single_remediation)}</code>`;
+}
+
+scan(); lastRun();
 </script>
 </body>
 </html>

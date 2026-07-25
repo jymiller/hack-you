@@ -6,12 +6,14 @@
 import { Router } from "express";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const exec = promisify(execFile);
 const router = Router();
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(HERE, "..", "..");
 
 // The scanners Opsera's phase-2 tool check looks for before it will run a full scan.
 const SCANNERS = ["semgrep", "gitleaks", "trufflehog", "trivy", "osv-scanner", "checkov", "syft"];
@@ -58,7 +60,10 @@ async function npmAudit(): Promise<Record<string, any> | null> {
 
 async function gitGrep(pattern: string): Promise<{ file: string; line: number; text: string }[]> {
   try {
-    const { stdout } = await exec("git", ["grep", "-nIE", pattern], { cwd: ROOT, timeout: 10_000, maxBuffer: 4 << 20 });
+    // Exclude this file: the RULES table above holds the patterns as literals, so an unfiltered
+    // sweep matches its own rule definitions and reports the scanner as a finding.
+    const args = ["grep", "-nIE", pattern, "--", ".", ":(exclude)demos/opsera/routes.ts"];
+    const { stdout } = await exec("git", args, { cwd: ROOT, timeout: 10_000, maxBuffer: 4 << 20 });
     return stdout.split("\n").filter(Boolean).slice(0, 50).map((l) => {
       const [file, line, ...rest] = l.split(":");
       return { file, line: Number(line), text: rest.join(":").trim().slice(0, 160) };
@@ -152,6 +157,16 @@ router.get("/posture", async (_req, res) => {
 
   cache = { at: Date.now(), data };
   res.json(data);
+});
+
+// The Opsera agent's own verdict. The scan is a six-phase agent flow driven from Claude Code, so the
+// server can't invoke it per-request — it's committed as a dated artifact and served verbatim.
+router.get("/last-run", (_req, res) => {
+  try {
+    res.json({ label: "ARTIFACT", ...JSON.parse(readFileSync(join(HERE, "last-run.json"), "utf8")) });
+  } catch {
+    res.status(404).json({ error: "no Opsera agent run committed yet" });
+  }
 });
 
 export default router;

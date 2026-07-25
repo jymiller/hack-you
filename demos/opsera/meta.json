@@ -1,0 +1,7 @@
+{
+  "name": "Opsera",
+  "blurb": "DevSecOps gate — 5 scanners run before every commit lands",
+  "accent": "red",
+  "status": "live",
+  "order": 5
+}

@@ -3,5 +3,6 @@
   "blurb": "Real-time web research + concurrent research agents across the portfolio",
   "accent": "cyan",
   "status": "live",
-  "order": 10
+  "order": 10,
+  "listed": false
 }

@@ -109,7 +109,10 @@ async function mountDemos(): Promise<DemoCard[]> {
 
     const pagePath = join(dir, "page.html");
     const hasPage = existsSync(pagePath);
-    registry.push({
+    // `listed: false` keeps a demo mounted (page + API) but off the landing grid — used when the
+    // demo is already surfaced as a first-class entry and a vendor tile would just duplicate it.
+    const listed = meta.listed !== false;
+    if (listed) registry.push({
       slug,
       name: (meta.name as string) ?? slug,
       blurb: (meta.blurb as string) ?? "",

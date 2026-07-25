@@ -3,6 +3,12 @@
 .env.*
 !.env.example
 
+# Security scan output — reports quote matched secrets verbatim
+.opsera/
+*-report.json
+gitleaks-report.json
+npm-audit.json
+
 # Private session seed (prep/plan stays out of the published repo)
 HANDOFF.md
 

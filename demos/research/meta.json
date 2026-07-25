@@ -1,6 +1,6 @@
 {
-  "name": "You.com Research",
-  "blurb": "Live Search · ARI deep research · async portfolio fan-out · credit balance",
+  "name": "Research",
+  "blurb": "Real-time web research + concurrent research agents across the portfolio",
   "accent": "cyan",
   "status": "live",
   "order": 10

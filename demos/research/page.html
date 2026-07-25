@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>You.com Research — Covenant Sentinel</title>
+<title>Research — Covenant Sentinel</title>
 <style>
   :root {
     --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
@@ -20,11 +20,24 @@
   header .nav:hover { color:var(--ink); border-color:var(--cyan); }
   .balance { font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line); padding:4px 11px; border-radius:999px; }
   .balance b { color:var(--green); }
+  /* what this page does */
+  .pipeline { border-bottom:1px solid var(--line); background:var(--panel2); }
+  .pl-wrap { max-width:1140px; margin:0 auto; padding:18px 20px 20px; }
+  .pl-intro { font-size:13.5px; color:var(--dim); max-width:78ch; margin-bottom:14px; }
+  .pl-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media(max-width:820px){ .pl-steps{ grid-template-columns:1fr; } }
+  .pl { border:1px solid var(--line); border-radius:9px; padding:11px 13px; background:var(--panel); }
+  .pl .n { font-family:var(--mono); font-size:10px; font-weight:700; color:#04121c; background:var(--cyan);
+           border-radius:999px; padding:1px 7px; margin-right:7px; }
+  .pl b { font-size:13.5px; }
+  .pl span:last-child { display:block; font-size:12px; color:var(--dim); margin-top:5px; }
+
   main { max-width:1140px; margin:0 auto; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   @media(max-width:900px){ main{grid-template-columns:1fr;} }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
   .card.wide { grid-column:1/-1; }
   h2 { margin:0 0 3px; font-size:16px; }
+  .step { font-family:var(--mono); font-size:10px; font-weight:700; color:#04121c; background:var(--cyan); border-radius:999px; padding:1px 7px; margin-right:8px; vertical-align:middle; }
   .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; }
   .api { font-family:var(--mono); font-size:10.5px; color:var(--faint); border:1px solid var(--line); border-radius:5px; padding:1px 7px; margin-left:6px; vertical-align:middle; }
   .row { display:flex; gap:8px; flex-wrap:wrap; }
@@ -72,17 +85,29 @@
 </head>
 <body>
 <header>
-  <div class="brand"><b>You.com</b> Research</div>
-  <span class="muted" style="font-size:12px">Search · ARI deep research · async fan-out</span>
+  <div class="brand"><b>Research</b></div>
+  <span class="muted" style="font-size:12px">real-time web intelligence for credit monitoring</span>
   <div class="spacer"></div>
   <span class="balance" id="balance">balance …</span>
   <a class="nav" href="/">← Home</a>
   <a class="nav" href="/app">Sentinel desk →</a>
 </header>
 
+<div class="pipeline">
+  <div class="pl-wrap">
+    <div class="pl-intro">An analyst covering 40 borrowers can't read every filing. This page is the research half of
+      Covenant Sentinel — it finds what changed, explains it with citations, and does it across the whole book at once.</div>
+    <div class="pl-steps">
+      <div class="pl"><span class="n">1</span><b>Watch</b><span>Live web search, filtered by recency — is this pattern happening right now?</span></div>
+      <div class="pl"><span class="n">2</span><b>Research</b><span>One signal in, a cited brief out — an autonomous agent that multi-searches and reasons.</span></div>
+      <div class="pl"><span class="n">3</span><b>Fan out</b><span>One research agent per sponsor, all running concurrently across the portfolio.</span></div>
+    </div>
+  </div>
+</div>
+
 <main>
   <div class="card">
-    <h2>Live web search <span class="api">GET /v1/search</span> <span class="chip LIVE" id="searchLbl" style="display:none">LIVE</span></h2>
+    <h2><span class="step">1</span>Watch — live web <span class="api">Search API</span> <span class="chip LIVE" id="searchLbl" style="display:none">LIVE</span></h2>
     <p class="sub">You.com Search with <span style="font-family:var(--mono)">freshness</span> + <span style="font-family:var(--mono)">livecrawl</span> — proves the signal is current.</p>
     <div class="row">
       <input id="q" placeholder="e.g. private credit covenant breach" />
@@ -94,7 +119,7 @@
   </div>
 
   <div class="card">
-    <h2>Deep research <span class="api">POST /v1/research</span> <span class="chip LIVE" id="askLbl" style="display:none">LIVE</span></h2>
+    <h2><span class="step">2</span>Research one signal <span class="api">Research API · ARI</span> <span class="chip LIVE" id="askLbl" style="display:none">LIVE</span></h2>
     <p class="sub">ARI returns a cited brief — <span style="font-family:var(--mono)">background</span> mode, structured <span style="font-family:var(--mono)">output_schema</span>. #1 on DeepSearchQA (83.67%).</p>
     <div class="row">
       <input id="ask" placeholder="e.g. NVIDIA latest revenue, margins, guidance" />
@@ -105,16 +130,16 @@
   </div>
 
   <div class="card wide">
-    <h2>Async portfolio sweep <span class="api">dispatch → poll</span></h2>
-    <p class="sub">ARI takes ~15–18s per question, so blocking a request doesn't scale. These dispatch as
-      background jobs and run <b>concurrently</b> — one research task per sponsor across the whole book.
-      The job board below is live.</p>
+    <h2><span class="step">3</span>Fan out — concurrent research agents <span class="api">Research API · async</span></h2>
+    <p class="sub">Each sponsor in the book gets its <b>own research agent</b>. A single ARI brief takes ~15–18s,
+      so six run sequentially would be ~110s — dispatched concurrently they all land in about 24s. Every agent below is a
+      real, separately-cited investigation.</p>
     <div class="row">
-      <button class="amber" id="sweepGo">▶ Sweep all sponsors</button>
+      <button class="amber" id="sweepGo">▶ Launch research agents</button>
       <input id="oneOff" placeholder="…or dispatch a single background question" />
       <button class="cyan" id="oneOffGo">Dispatch</button>
     </div>
-    <div class="jobs" id="jobs"><span class="muted" style="font-size:12.5px">No jobs yet — dispatch a sweep to watch them run.</span></div>
+    <div class="jobs" id="jobs"><span class="muted" style="font-size:12.5px">No agents running — launch the sweep to watch them work in parallel.</span></div>
   </div>
 </main>
 
@@ -162,7 +187,7 @@ async function doAsk() {
 
 let polling = null;
 function renderJobs(list) {
-  if (!list.length) { $("jobs").innerHTML = `<span class="muted" style="font-size:12.5px">No jobs yet — dispatch a sweep to watch them run.</span>`; return; }
+  if (!list.length) { $("jobs").innerHTML = `<span class="muted" style="font-size:12.5px">No agents running — launch the sweep to watch them work in parallel.</span>`; return; }
   $("jobs").innerHTML = list.map(j => {
     const dur = j.duration_ms != null ? (j.duration_ms/1000).toFixed(1) + "s" : (j.status === "running" ? "running…" : "");
     const running = j.status === "running" || j.status === "queued";

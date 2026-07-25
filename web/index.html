@@ -57,6 +57,30 @@
   .vcard.soon .badge { color:var(--faint); background:var(--panel2); border:1px solid var(--line); }
   .vcard.soon .go { color:var(--faint); }
 
+  /* the two first-class entries */
+  .duo { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:6px 0 4px; }
+  @media(max-width:760px){ .duo{ grid-template-columns:1fr; } }
+  .big-card { display:block; text-decoration:none; color:inherit; background:var(--panel); border:1px solid var(--line);
+              border-radius:14px; padding:22px; transition:border-color .16s, transform .14s, box-shadow .16s; }
+  .big-card:hover { transform:translateY(-3px); border-color:var(--cyan); box-shadow:0 0 30px -8px var(--cyan); }
+  .big-card.alt:hover { border-color:var(--green); box-shadow:0 0 30px -8px var(--green); }
+  .bc-k { font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); }
+  .big-card.alt .bc-k { color:var(--green); }
+  .bc-t { font-size:20px; font-weight:700; margin:7px 0 8px; line-height:1.25; }
+  .bc-b { font-size:13.5px; color:var(--dim); margin-bottom:14px; }
+  .bc-go { font-family:var(--mono); font-size:13px; font-weight:700; color:var(--cyan); }
+  .big-card.alt .bc-go { color:var(--green); }
+
+  /* collapsed vendor tiles */
+  .more { margin-top:26px; border-top:1px solid var(--line); padding-top:16px; }
+  .more summary { cursor:pointer; font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+                  color:var(--faint); list-style:none; }
+  .more summary::-webkit-details-marker { display:none; }
+  .more summary::before { content:"▸ "; color:var(--faint); }
+  .more[open] summary::before { content:"▾ "; }
+  .more summary:hover { color:var(--dim); }
+  .more .grid { margin-top:16px; }
+
   .infra { margin:22px 0 0; font-size:12.5px; color:var(--faint); }
   .infra b { color:var(--dim); }
   .foot { color:var(--faint); font-size:12.5px; border-top:1px solid var(--line); padding:18px 0 60px; margin-top:34px; }
@@ -86,17 +110,35 @@
       <span class="green">6.47×</span><span class="ar">→</span><span class="red">7.59×</span>
       <span class="note">certificate GREEN, recompute BREACH — the money-shot</span>
     </div>
-    <a class="cta" href="/app">▶ Open the live demo <span class="sub">the Sentinel desk</span></a>
   </section>
 
   <!-- EXPLORE: a mini-demo per vendor -->
   <section class="explore">
-    <h2>Explore the stack</h2>
-    <p class="sub">A live mini-demo for each vendor in the build — click to open.</p>
-    <div class="grid" id="grid"></div>
+    <h2>The two halves</h2>
+    <p class="sub">Signal in, verdict out.</p>
+    <div class="duo">
+      <a class="big-card" href="/research">
+        <div class="bc-k">Real-time research</div>
+        <div class="bc-t">Watch the live web, then research it</div>
+        <div class="bc-b">Live web search with freshness controls, cited deep research, and a fan-out that runs
+          <b>one research agent per sponsor</b> across the whole book — concurrently, in ~24s.</div>
+        <span class="bc-go">Open Research →</span>
+      </a>
+      <a class="big-card alt" href="/app">
+        <div class="bc-k">The verdict</div>
+        <div class="bc-t">Recompute the covenant, catch the breach</div>
+        <div class="bc-b">A deterministic kernel rebuilds the ratio from raw facts, flips <b>6.47× → 7.59×</b>,
+          and routes it to a human to attest before anything is issued.</div>
+        <span class="bc-go">Open the desk →</span>
+      </a>
+    </div>
 
-    <p class="infra">Hosted live on <b>Render</b> · venue &amp; deploy credits from <b>AWS</b> Builder Loft · builder perks from
-      LlamaIndex, Agno, One (Pica), CrewAI, Replit, Parasail. Partners: MindStudio, Opsera, Founders Bay.</p>
+    <details class="more">
+      <summary>Vendor mini-demos &amp; stack details</summary>
+      <div class="grid" id="grid"></div>
+      <p class="infra">Hosted live on <b>Render</b> · venue &amp; deploy credits from <b>AWS</b> Builder Loft · builder perks from
+        LlamaIndex, Agno, One (Pica), CrewAI, Replit, Parasail. Partners: MindStudio, Opsera, Founders Bay.</p>
+    </details>
   </section>
 
   <div class="foot">

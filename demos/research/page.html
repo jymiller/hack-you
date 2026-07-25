@@ -20,67 +20,81 @@
   header .nav:hover { color:var(--ink); border-color:var(--cyan); }
   .balance { font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line); padding:4px 11px; border-radius:999px; }
   .balance b { color:var(--green); }
-  /* what this page does */
-  .pipeline { border-bottom:1px solid var(--line); background:var(--panel2); }
-  .pl-wrap { max-width:1140px; margin:0 auto; padding:18px 20px 20px; }
-  .pl-intro { font-size:13.5px; color:var(--dim); max-width:78ch; margin-bottom:14px; }
-  .pl-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-  @media(max-width:820px){ .pl-steps{ grid-template-columns:1fr; } }
-  .pl { border:1px solid var(--line); border-radius:9px; padding:11px 13px; background:var(--panel); }
-  .pl .n { font-family:var(--mono); font-size:10px; font-weight:700; color:#04121c; background:var(--cyan);
-           border-radius:999px; padding:1px 7px; margin-right:7px; }
-  .pl b { font-size:13.5px; }
-  .pl span:last-child { display:block; font-size:12px; color:var(--dim); margin-top:5px; }
 
-  main { max-width:1140px; margin:0 auto; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  @media(max-width:900px){ main{grid-template-columns:1fr;} }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
-  .card.wide { grid-column:1/-1; }
-  h2 { margin:0 0 3px; font-size:16px; }
-  .step { font-family:var(--mono); font-size:10px; font-weight:700; color:#04121c; background:var(--cyan); border-radius:999px; padding:1px 7px; margin-right:8px; vertical-align:middle; }
-  .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; }
-  .api { font-family:var(--mono); font-size:10.5px; color:var(--faint); border:1px solid var(--line); border-radius:5px; padding:1px 7px; margin-left:6px; vertical-align:middle; }
+  .wrap { max-width:1140px; margin:0 auto; padding:20px; }
+  .intro { color:var(--dim); font-size:14px; max-width:82ch; margin:4px 0 6px; }
+  .intro b { color:var(--ink); }
+  .sect { font-family:var(--mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:26px 0 10px; }
+
+  /* three modes — identical shells, different jobs */
+  .modes { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media(max-width:900px){ .modes{ grid-template-columns:1fr; } }
+  .mode { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .mode > summary { cursor:pointer; padding:15px 16px; list-style:none; }
+  .mode > summary::-webkit-details-marker { display:none; }
+  .mode-h { display:flex; align-items:center; gap:9px; }
+  .mode-n { font-family:var(--mono); font-size:10px; font-weight:700; color:#04121c; border-radius:999px; padding:2px 8px; }
+  .m1 .mode-n { background:var(--cyan); } .m2 .mode-n { background:var(--violet); } .m3 .mode-n { background:var(--amber); }
+  .mode-t { font-size:16px; font-weight:700; flex:1; }
+  .mode-time { font-family:var(--mono); font-size:10.5px; color:var(--faint); }
+  .mode-q { font-size:13px; color:var(--ink); margin-top:8px; font-weight:600; }
+  .mode-p { font-size:12.5px; color:var(--dim); margin-top:4px; }
+  .mode-body { padding:0 16px 16px; }
   .row { display:flex; gap:8px; flex-wrap:wrap; }
-  input, select { font-family:var(--sans); font-size:14px; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
-  input { flex:1; min-width:170px; }
-  button { font-weight:700; border:0; border-radius:8px; padding:9px 16px; cursor:pointer; font-size:14px; }
-  button.cyan { background:var(--cyan); color:#04121c; } button.violet { background:var(--violet); color:#1a0f2b; }
-  button.amber { background:var(--amber); color:#241a05; }
+  input, select { font-family:var(--sans); font-size:13.5px; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  input { flex:1; min-width:120px; }
+  button { font-weight:700; border:0; border-radius:8px; padding:9px 15px; cursor:pointer; font-size:13.5px; }
+  .b1 { background:var(--cyan); color:#04121c; } .b2 { background:var(--violet); color:#1a0f2b; } .b3 { background:var(--amber); color:#241a05; }
   button:disabled { opacity:.5; cursor:default; }
+  .ex { font-size:11.5px; color:var(--faint); margin-top:8px; } .ex a { color:var(--dim); cursor:pointer; text-decoration:underline; }
+
+  /* one shared log */
   .chip { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; letter-spacing:.4px; }
   .chip.SYNTHETIC { color:var(--dim); background:#1a2233; border:1px solid var(--line); }
   .chip.LIVE { color:#051b10; background:var(--green); }
   .chip.PRERUN { color:#1a0f2b; background:var(--violet); }
-  .meta { font-size:11.5px; color:var(--dim); margin:12px 0 6px; }
-  .hit { border-top:1px solid var(--line); padding:10px 0; }
-  .hit .t a { color:var(--ink); text-decoration:none; font-weight:600; } .hit .t a:hover { color:var(--cyan); }
-  .hit .src { font-size:11px; color:var(--faint); font-family:var(--mono); }
-  .hit .snip { font-size:12.5px; color:var(--dim); margin-top:3px; }
-  .summary { font-size:13.5px; margin:8px 0 12px; }
-  .hl { list-style:none; padding:0; margin:0 0 10px; display:flex; flex-direction:column; gap:6px; }
-  .hl li { border:1px solid var(--line); border-radius:8px; padding:8px 11px; background:var(--panel2); font-size:12.5px; }
-  .sources a { display:block; font-size:11.5px; color:var(--cyan); text-decoration:none; margin:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .muted { color:var(--dim); } .spin { color:var(--amber); font-family:var(--mono); font-size:12px; }
-  .ex { font-size:12px; color:var(--faint); margin-top:7px; } .ex a { color:var(--dim); cursor:pointer; text-decoration:underline; }
-
-  /* job board */
-  .jobs { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .run { border:1px solid var(--line); border-radius:10px; background:var(--panel); margin-bottom:10px; }
+  .run > summary { cursor:pointer; padding:12px 14px; list-style:none; display:flex; align-items:flex-start; gap:10px; }
+  .run > summary::-webkit-details-marker { display:none; }
+  .run > summary::before { content:"▸"; color:var(--faint); font-size:11px; margin-top:2px; }
+  .run[open] > summary::before { content:"▾"; }
+  .run > summary:hover { background:var(--panel2); }
+  .run-main { flex:1; min-width:0; }
+  .run-q { font-weight:600; font-size:13.5px; }
+  .run-meta { font-family:var(--mono); font-size:11px; color:var(--faint); margin-top:3px; }
+  .kind { font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.5px; padding:2px 7px; border-radius:4px; }
+  .kind.search { color:var(--cyan); border:1px solid var(--cyan); }
+  .kind.single { color:var(--violet); border:1px solid var(--violet); }
+  .kind.fan_out { color:var(--amber); border:1px solid var(--amber); }
+  .run-body { padding:0 12px 12px; display:flex; flex-direction:column; gap:8px; }
   .job { border:1px solid var(--line); border-radius:9px; background:var(--panel2); padding:11px 13px; }
-  .job .top { display:flex; align-items:center; gap:9px; }
-  .job .lbl { flex:1; font-size:13px; font-weight:600; }
-  .job .st { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px; letter-spacing:.4px; }
+  .job .top { display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+  .job .lbl { flex:1; font-size:12.5px; font-weight:600; min-width:120px; }
+  .job .dur { font-family:var(--mono); font-size:11px; color:var(--faint); }
+  .st { font-family:var(--mono); font-size:9.5px; font-weight:700; padding:2px 8px; border-radius:999px; letter-spacing:.4px; }
   .st.queued { color:var(--faint); border:1px solid var(--line); }
   .st.running { color:var(--amber); border:1px solid var(--amber); }
   .st.completed { color:var(--green); border:1px solid var(--green); }
   .st.failed { color:var(--red); border:1px solid var(--red); }
-  .job .dur { font-family:var(--mono); font-size:11px; color:var(--faint); }
+  .fnd { font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.5px; padding:2px 8px; border-radius:999px; white-space:nowrap; }
+  .fnd.none { color:var(--faint); border:1px solid var(--line); }
+  .fnd.background { color:var(--dim); border:1px solid var(--dim); }
+  .fnd.notable { color:var(--amber); border:1px solid var(--amber); background:rgba(255,176,32,.08); }
+  .fnd.material { color:var(--red); border:1px solid var(--red); background:rgba(255,84,112,.10); }
+  .head-line { font-size:13px; font-weight:600; margin-top:7px; }
   .who { font-family:var(--mono); font-size:11px; color:var(--faint); margin-top:3px; }
   .bar { height:3px; background:var(--line); border-radius:2px; overflow:hidden; margin-top:9px; }
   .bar i { display:block; height:100%; width:40%; background:var(--amber); animation:slide 1.4s ease-in-out infinite; }
   @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
   @media (prefers-reduced-motion: reduce){ .bar i{ animation:none; width:100%; } }
-  .job .body { margin-top:9px; font-size:12.5px; color:var(--dim); border-top:1px solid var(--line); padding-top:9px; }
-  .job details summary { cursor:pointer; font-size:11.5px; color:var(--faint); }
+  .body { margin-top:9px; font-size:12.5px; color:var(--dim); border-top:1px solid var(--line); padding-top:9px; }
+  .hl { list-style:none; padding:0; margin:8px 0 0; display:flex; flex-direction:column; gap:6px; }
+  .hl li { border:1px solid var(--line); border-radius:7px; padding:7px 10px; font-size:12px; }
+  .sources a { display:block; font-size:11.5px; color:var(--cyan); text-decoration:none; margin:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  details summary { cursor:pointer; }
+  .asked { margin-top:6px; } .asked summary { font-size:11px; color:var(--faint); }
+  .asked div { font-size:11.5px; color:var(--dim); font-style:italic; margin-top:4px; padding-left:9px; border-left:2px solid var(--line); }
+  .muted { color:var(--dim); }
 </style>
 </head>
 <body>
@@ -93,60 +107,75 @@
   <a class="nav" href="/app">Sentinel desk →</a>
 </header>
 
-<div class="pipeline">
-  <div class="pl-wrap">
-    <div class="pl-intro">An analyst covering 40 borrowers can't read every filing. This page is the research half of
-      Covenant Sentinel — it finds what changed, explains it with citations, and does it across the whole book at once.</div>
-    <div class="pl-steps">
-      <div class="pl"><span class="n">1</span><b>Watch</b><span>Live web search, filtered by recency — is this pattern happening right now?</span></div>
-      <div class="pl"><span class="n">2</span><b>Research</b><span>One signal in, a cited brief out — an autonomous agent that multi-searches and reasons.</span></div>
-      <div class="pl"><span class="n">3</span><b>Fan out</b><span>One research agent per sponsor, all running concurrently across the portfolio.</span></div>
-    </div>
+<div class="wrap">
+  <p class="intro">An analyst covering 40 borrowers can't read every filing. This page gives them three ways to look —
+    <b>detect</b> what's happening right now, <b>understand</b> a single signal in depth, or <b>sweep</b> the same question
+    across the entire book at once. Same engine, three depths. Everything lands in one log below.</p>
+
+  <div class="sect">Three ways to research</div>
+  <div class="modes">
+    <details class="mode m1" open>
+      <summary>
+        <div class="mode-h"><span class="mode-n">1</span><span class="mode-t">Detect</span><span class="mode-time">&lt;1s</span></div>
+        <div class="mode-q">Is this happening right now?</div>
+        <div class="mode-p">Scans the live web, filtered by recency. Broad and shallow — many links, no reasoning.
+          Use it to spot that something is moving.</div>
+      </summary>
+      <div class="mode-body">
+        <div class="row">
+          <input id="q" placeholder="covenant breach" />
+          <select id="freshness"><option value="day">day</option><option value="week" selected>week</option><option value="month">month</option></select>
+          <button class="b1" id="searchGo">Detect</button>
+        </div>
+        <div class="ex">try: <a data-q="leveraged loan covenant breach 2026">covenant breaches</a> · <a data-q="auditor change restatement private equity portfolio company">restatements</a></div>
+      </div>
+    </details>
+
+    <details class="mode m2" open>
+      <summary>
+        <div class="mode-h"><span class="mode-n">2</span><span class="mode-t">Understand</span><span class="mode-time">~15s</span></div>
+        <div class="mode-q">What does it actually mean?</div>
+        <div class="mode-p">One research agent multi-searches, reasons, and returns a cited brief with a verdict.
+          Narrow and deep — use it on a signal that matters.</div>
+      </summary>
+      <div class="mode-body">
+        <div class="row">
+          <input id="ask" placeholder="Why do lenders disallow synergy add-backs?" />
+          <button class="b2" id="askGo">Understand</button>
+        </div>
+        <div class="ex">try: <a data-a="How do lenders respond when a borrower restates EBITDA after an auditor change?">lender response</a> · <a data-a="NVIDIA Corporation latest quarterly revenue, margins and guidance">NVIDIA financials</a></div>
+      </div>
+    </details>
+
+    <details class="mode m3" open>
+      <summary>
+        <div class="mode-h"><span class="mode-n">3</span><span class="mode-t">Sweep</span><span class="mode-time">~24s</span></div>
+        <div class="mode-q">And across my whole book?</div>
+        <div class="mode-p">One agent per sponsor, all running at once. Six sequential briefs would take ~110s;
+          fanned out they land together. Deep, and wide.</div>
+      </summary>
+      <div class="mode-body">
+        <div class="row">
+          <input id="sweepQ" placeholder="your question — or blank for covenant risk" />
+          <button class="b3" id="sweepGo">Sweep all</button>
+        </div>
+        <div class="ex">Blank asks the default covenant-risk question of every sponsor.</div>
+      </div>
+    </details>
   </div>
+
+  <div class="sect">Research log <span style="text-transform:none;letter-spacing:0" class="muted">— every run, newest first, kept between sessions</span></div>
+  <div id="runs"><span class="muted" style="font-size:12.5px">Nothing researched yet.</span></div>
 </div>
-
-<main>
-  <div class="card">
-    <h2><span class="step">1</span>Watch — live web <span class="api">Search API</span> <span class="chip LIVE" id="searchLbl" style="display:none">LIVE</span></h2>
-    <p class="sub">You.com Search with <span style="font-family:var(--mono)">freshness</span> + <span style="font-family:var(--mono)">livecrawl</span> — proves the signal is current.</p>
-    <div class="row">
-      <input id="q" placeholder="e.g. private credit covenant breach" />
-      <select id="freshness"><option value="day">day</option><option value="week" selected>week</option><option value="month">month</option></select>
-      <button class="cyan" id="searchGo">Search</button>
-    </div>
-    <div class="ex">try: <a data-q="leveraged loan covenant breach 2026">covenant breaches</a> · <a data-q="auditor change restatement private equity portfolio company">restatements</a></div>
-    <div id="searchOut"></div>
-  </div>
-
-  <div class="card">
-    <h2><span class="step">2</span>Research one signal <span class="api">Research API · ARI</span> <span class="chip LIVE" id="askLbl" style="display:none">LIVE</span></h2>
-    <p class="sub">ARI returns a cited brief — <span style="font-family:var(--mono)">background</span> mode, structured <span style="font-family:var(--mono)">output_schema</span>. #1 on DeepSearchQA (83.67%).</p>
-    <div class="row">
-      <input id="ask" placeholder="e.g. NVIDIA latest revenue, margins, guidance" />
-      <button class="violet" id="askGo">Ask</button>
-    </div>
-    <div class="ex">try: <a data-a="How do lenders respond when a borrower restates EBITDA after an auditor change?">lender response</a> · <a data-a="NVIDIA Corporation latest quarterly revenue, margins and guidance">NVIDIA financials</a></div>
-    <div id="askOut"></div>
-  </div>
-
-  <div class="card wide">
-    <h2><span class="step">3</span>Fan out — concurrent research agents <span class="api">Research API · async</span></h2>
-    <p class="sub">Each sponsor in the book gets its <b>own research agent</b>. A single ARI brief takes ~15–18s,
-      so six run sequentially would be ~110s — dispatched concurrently they all land in about 24s. Every agent below is a
-      real, separately-cited investigation.</p>
-    <div class="row">
-      <button class="amber" id="sweepGo">▶ Launch research agents</button>
-      <input id="oneOff" placeholder="…or dispatch a single background question" />
-      <button class="cyan" id="oneOffGo">Dispatch</button>
-    </div>
-    <div class="jobs" id="jobs"><span class="muted" style="font-size:12.5px">No agents running — launch the sweep to watch them work in parallel.</span></div>
-  </div>
-</main>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
 const chip = (l) => `<span class="chip ${l}">${l}</span>`;
+const FIND = { none:"NOTHING FOUND", background:"CONTEXT ONLY", notable:"WORTH WATCHING", material:"MATERIAL FINDING" };
+const KIND = { search:"DETECT", single:"UNDERSTAND", fan_out:"SWEEP" };
+const RANK = { material:3, notable:2, background:1, none:0 };
+const fmtTime = (iso) => { try { return new Date(iso).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}); } catch { return iso; } };
 
 async function loadBalance() {
   try {
@@ -155,85 +184,71 @@ async function loadBalance() {
   } catch { $("balance").textContent = "balance: n/a"; }
 }
 
-async function doSearch() {
-  const query = $("q").value.trim(); if (!query) return;
-  $("searchGo").disabled = true; $("searchOut").innerHTML = `<div class="spin">▓ searching the live web…</div>`;
-  try {
-    const r = await (await fetch("/api/research/search", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ query, freshness: $("freshness").value }) })).json();
-    $("searchLbl").style.display = "inline-block"; $("searchLbl").className = "chip " + r.label; $("searchLbl").textContent = r.label;
-    $("searchOut").innerHTML = `<div class="meta">${r.hits.length} results · ${r.latency_ms}ms · ${chip(r.label)}</div>` +
-      r.hits.map(h => `<div class="hit"><div class="t"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title||h.url)}</a></div><div class="src">${esc(h.publisher||"")} ${h.published_at?"· "+esc(h.published_at):""}</div><div class="snip">${esc(h.snippet||"")}</div></div>`).join("");
-  } catch (e) { $("searchOut").innerHTML = `<div class="muted">search failed: ${esc(e.message)}</div>`; }
-  $("searchGo").disabled = false; loadBalance();
+function renderAgent(a) {
+  const dur = a.duration_ms != null ? (a.duration_ms/1000).toFixed(1)+"s" : (a.status==="running" ? "running…" : "");
+  const running = a.status === "running" || a.status === "queued";
+  const verdict = a.finding ? `<span class="fnd ${esc(a.finding)}">${esc(FIND[a.finding] || a.finding)}</span>` : "";
+  const head = a.headline ? `<div class="head-line">${esc(a.headline)}</div>` : "";
+  const who = a.borrowers && a.borrowers.length ? `<div class="who">${esc(a.borrowers.join(" · "))}</div>` : "";
+  const askedQ = a.question ? `<details class="asked"><summary>question asked</summary><div>${esc(a.question)}</div></details>` : "";
+  let body = "";
+  if (a.status === "completed") {
+    const parts = [];
+    if (a.summary) parts.push(`<div>${esc(a.summary)}</div>`);
+    if (a.highlights && a.highlights.length) parts.push(`<ul class="hl">${a.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`);
+    if (a.sources && a.sources.length) parts.push(`<details style="margin-top:8px"><summary style="font-size:11.5px;color:var(--faint)">${a.sources.length} sources</summary><div class="sources">${a.sources.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">↗ ${esc(x.title||x.url)}</a>`).join("")}</div></details>`);
+    if (parts.length) body = `<div class="body">${parts.join("")}</div>`;
+  } else if (a.status === "failed") { body = `<div class="body">${esc(a.error||"failed")}</div>`; }
+  return `<div class="job"><div class="top"><span class="lbl">${esc(a.label)}</span><span class="dur">${dur}</span>${verdict}${a.label_provenance?chip(a.label_provenance):""}<span class="st ${a.status}">${a.status.toUpperCase()}</span></div>${head}${who}${askedQ}${running?`<div class="bar"><i></i></div>`:""}${body}</div>`;
 }
 
-function renderResearch(r) {
-  return `<div class="meta">${esc(r.research_effort)} · ${(r.latency_ms/1000).toFixed(1)}s · ${chip(r.label)}</div>` +
-    `<div class="summary">${esc(r.summary)}</div>` +
-    (r.highlights && r.highlights.length ? `<ul class="hl">${r.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>` : "") +
-    (r.sources && r.sources.length ? `<div class="meta">${r.sources.length} cited sources</div><div class="sources">${r.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.title||s.url)}</a>`).join("")}</div>` : "");
-}
-
-async function doAsk() {
-  const input = $("ask").value.trim(); if (!input) return;
-  $("askGo").disabled = true; $("askOut").innerHTML = `<div class="spin">▓ ARI researching… (~15s, cited)</div>`;
-  try {
-    const r = await (await fetch("/api/research/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ input }) })).json();
-    $("askLbl").style.display = "inline-block"; $("askLbl").className = "chip " + r.label; $("askLbl").textContent = r.label;
-    $("askOut").innerHTML = renderResearch(r);
-  } catch (e) { $("askOut").innerHTML = `<div class="muted">research failed: ${esc(e.message)}</div>`; }
-  $("askGo").disabled = false; loadBalance();
-}
-
-let polling = null;
-function renderJobs(list) {
-  if (!list.length) { $("jobs").innerHTML = `<span class="muted" style="font-size:12.5px">No agents running — launch the sweep to watch them work in parallel.</span>`; return; }
-  $("jobs").innerHTML = list.map(j => {
-    const dur = j.duration_ms != null ? (j.duration_ms/1000).toFixed(1) + "s" : (j.status === "running" ? "running…" : "");
-    const running = j.status === "running" || j.status === "queued";
-    let body = "";
-    if (j.status === "completed" && j.result) {
-      const r = j.result;
-      const sum = r.summary || "";
-      body = `<div class="body"><div>${esc(sum.slice(0,260))}${sum.length>260?"…":""}</div>` +
-        (r.sources && r.sources.length ? `<details style="margin-top:7px"><summary>${r.sources.length} cited sources</summary><div class="sources">${r.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.title||s.url)}</a>`).join("")}</div></details>` : "") + `</div>`;
-    } else if (j.status === "failed") {
-      body = `<div class="body">${esc(j.error||"failed")}</div>`;
-    }
-    const who = j.meta && j.meta.borrowers && j.meta.borrowers.length ? `<div class="who">${esc(j.meta.borrowers.join(" · "))}</div>` : "";
-    return `<div class="job"><div class="top"><span class="lbl">${esc(j.label)}</span><span class="dur">${dur}</span><span class="st ${j.status}">${j.status.toUpperCase()}</span></div>${who}${running ? `<div class="bar"><i></i></div>` : ""}${body}</div>`;
+function renderRuns(runs) {
+  if (!runs.length) { $("runs").innerHTML = `<span class="muted" style="font-size:12.5px">Nothing researched yet.</span>`; return; }
+  $("runs").innerHTML = runs.map((r, i) => {
+    const done = r.agents.filter(a => a.status === "completed").length;
+    const active = r.agents.some(a => a.status === "running" || a.status === "queued");
+    const title = r.question ? esc(r.question) : "Default covenant-risk sweep";
+    const srcs = r.agents.reduce((n,a) => n + (a.sources ? a.sources.length : 0), 0);
+    const worst = r.agents.reduce((w,a) => (a.finding && RANK[a.finding] > RANK[w] ? a.finding : w), "none");
+    const flagged = r.agents.filter(a => a.finding === "material" || a.finding === "notable").length;
+    // Roll up honestly: if anything is flagged say how many, otherwise report the highest finding
+    // actually returned (which may be "context only", not "nothing").
+    const rollup = r.agents.some(a => a.finding)
+      ? `<span class="fnd ${worst}">${flagged ? flagged+" OF "+r.agent_count+" FLAGGED" : (FIND[worst]||worst)}</span>` : "";
+    return `<details class="run" ${i===0?"open":""}>
+      <summary>
+        <div class="run-main">
+          <div class="run-q">${title}</div>
+          <div class="run-meta"><span class="kind ${r.kind}">${KIND[r.kind]||r.kind}</span> · ${fmtTime(r.started_at)} · ${done}/${r.agent_count} done · ${srcs} sources${active?' · <b style="color:var(--amber)">running</b>':""}${r.archived?' · logged':""}</div>
+        </div>${rollup}
+      </summary>
+      <div class="run-body">${r.agents.map(renderAgent).join("")}</div>
+    </details>`;
   }).join("");
 }
 
-async function pollJobs() {
+let polling = null;
+async function poll() {
   try {
-    const data = await (await fetch("/api/research/jobs")).json();
-    renderJobs(data.jobs);
-    const active = data.jobs.some(j => j.status === "running" || j.status === "queued");
+    const d = await (await fetch("/api/research/runs")).json();
+    renderRuns(d.runs);
+    const active = d.runs.some(r => r.agents.some(a => a.status === "running" || a.status === "queued"));
     if (!active && polling) { clearInterval(polling); polling = null; loadBalance(); }
   } catch {}
 }
-function startPolling() { pollJobs(); if (!polling) polling = setInterval(pollJobs, 1500); }
+function start() { poll(); if (!polling) polling = setInterval(poll, 1500); }
 
-$("searchGo").onclick = doSearch;
-$("askGo").onclick = doAsk;
-$("sweepGo").onclick = async () => {
-  $("sweepGo").disabled = true;
-  await fetch("/api/research/portfolio", { method:"POST" });
-  startPolling();
-  setTimeout(() => { $("sweepGo").disabled = false; }, 3000);
-};
-$("oneOffGo").onclick = async () => {
-  const input = $("oneOff").value.trim(); if (!input) return;
-  await fetch("/api/research/jobs", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ input }) });
-  $("oneOff").value = ""; startPolling();
-};
-$("q").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
-$("ask").addEventListener("keydown", e => { if (e.key === "Enter") doAsk(); });
-$("oneOff").addEventListener("keydown", e => { if (e.key === "Enter") $("oneOffGo").click(); });
-document.querySelectorAll(".ex a[data-q]").forEach(a => a.onclick = () => { $("q").value = a.dataset.q; doSearch(); });
-document.querySelectorAll(".ex a[data-a]").forEach(a => a.onclick = () => { $("ask").value = a.dataset.a; doAsk(); });
-loadBalance(); pollJobs();
+async function post(url, body) { await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body||{}) }); start(); }
+
+$("searchGo").onclick = () => { const q=$("q").value.trim(); if(q) post("/api/research/search", { query:q, freshness:$("freshness").value }); };
+$("askGo").onclick    = () => { const q=$("ask").value.trim(); if(q) post("/api/research/jobs", { input:q }); };
+$("sweepGo").onclick  = () => { post("/api/research/portfolio", { question:$("sweepQ").value.trim() }); };
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") $("searchGo").click(); });
+$("ask").addEventListener("keydown", e => { if (e.key === "Enter") $("askGo").click(); });
+$("sweepQ").addEventListener("keydown", e => { if (e.key === "Enter") $("sweepGo").click(); });
+document.querySelectorAll(".ex a[data-q]").forEach(a => a.onclick = () => { $("q").value = a.dataset.q; $("searchGo").click(); });
+document.querySelectorAll(".ex a[data-a]").forEach(a => a.onclick = () => { $("ask").value = a.dataset.a; $("askGo").click(); });
+loadBalance(); poll();
 </script>
 </body>
 </html>

@@ -145,7 +145,9 @@ export async function researchAri(
     while (Date.now() < deadline) {
       const data = await fetchJson(`${RESEARCH_HOST}/research/${taskId}`, { headers: { "X-API-Key": key } }, 8000);
       const status = data?.status ?? data?.state;
-      if (status === "completed" || data?.result || data?.response || data?.output) {
+      // Only a terminal status ends the poll: `result` appears (empty) while still running,
+      // so breaking on its presence returns an empty brief.
+      if (status === "completed") {
         return normalizeAri(data, question, "LIVE", Date.now() - started, taskId);
       }
       if (status === "failed" || status === "error") throw new Error(`research task ${taskId} ${status}`);
@@ -255,6 +257,8 @@ export const SEARCH_QUERY = "private credit borrower restated accounts disallowe
 export interface ResearchResult {
   label: Provenance;
   input: string;
+  headline: string | null;
+  finding: "none" | "background" | "notable" | "material" | null;
   summary: string;
   highlights: string[];
   sources: AriSource[];
@@ -268,10 +272,16 @@ export interface ResearchResult {
 const FINANCE_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["summary", "highlights"],
+  required: ["headline", "finding", "summary", "highlights"],
   properties: {
-    summary: { type: "string", description: "3-5 sentence overview of the company's current financial position." },
-    highlights: { type: "array", items: { type: "string" }, description: "Key figures: revenue, growth, margins, net income, debt/leverage, recent guidance." },
+    headline: { type: "string", description: "One short line (max ~10 words) stating the verdict, e.g. 'No material findings' or 'Restatement and auditor change reported'." },
+    finding: {
+      type: "string",
+      enum: ["none", "background", "notable", "material"],
+      description: "How significant the findings are. 'none' = nothing relevant found; 'background' = only general context, nothing specific; 'notable' = relevant signals worth monitoring; 'material' = a specific, significant finding a lender must act on.",
+    },
+    summary: { type: "string", description: "3-5 sentence synthesis of what was found." },
+    highlights: { type: "array", items: { type: "string" }, description: "Key concrete facts, figures or events found." },
   },
 };
 
@@ -283,7 +293,7 @@ export async function youResearch(
   const key = apiKey();
   const started = Date.now();
   if (!key) {
-    return { label: "SYNTHETIC", input, summary: "No YDC_API_KEY set — live You.com research is off.", highlights: [], sources: [], research_effort: "n/a", latency_ms: 0, note: "offline" };
+    return { label: "SYNTHETIC", input, headline: null, finding: null, summary: "No YDC_API_KEY set — live You.com research is off.", highlights: [], sources: [], research_effort: "n/a", latency_ms: 0, note: "offline" };
   }
   const effort = opts.effort ?? "standard";
   const schema = opts.schema ?? FINANCE_SCHEMA;
@@ -305,25 +315,29 @@ export async function youResearch(
       await sleep(1500);
       data = await fetchJson(`${RESEARCH_HOST}/research/${taskId}`, { headers: { "X-API-Key": key } }, 8000);
       const st = data?.status ?? data?.state;
-      if (st === "completed" || data?.result || data?.response || data?.output) break;
+      if (st === "completed") break;  // see note above — never break on `result` alone
       if (st === "failed" || st === "error") throw new Error(`research task ${st}`);
     }
     const output = data?.result?.output ?? data?.response?.output ?? data?.output ?? {};
     const content = output?.content;
     let summary = "";
     let highlights: string[] = [];
+    let headline: string | null = null;
+    let finding: ResearchResult["finding"] = null;
     if (content && typeof content === "object") {
       summary = content.summary ?? "";
       highlights = Array.isArray(content.highlights) ? content.highlights : Array.isArray(content.lender_actions) ? content.lender_actions : [];
+      headline = content.headline ?? null;
+      finding = content.finding ?? null;
     } else if (typeof content === "string") {
       summary = content;
     }
     const sources: AriSource[] = (output?.sources ?? []).map((s: any) => ({
       url: s.url, title: s.title ?? null, publisher: s.publisher ?? domainOf(s.url), snippet: Array.isArray(s.snippets) ? s.snippets[0] ?? null : s.snippet ?? null,
     }));
-    return { label: "LIVE", input, summary, highlights, sources, research_effort: effort, latency_ms: Date.now() - started, task_id: taskId ?? null };
+    return { label: "LIVE", input, headline, finding, summary, highlights, sources, research_effort: effort, latency_ms: Date.now() - started, task_id: taskId ?? null };
   } catch (err) {
-    return { label: "SYNTHETIC", input, summary: `Live research failed: ${(err as Error).message}`, highlights: [], sources: [], research_effort: effort, latency_ms: Date.now() - started, note: "error" };
+    return { label: "SYNTHETIC", input, headline: null, finding: null, summary: `Live research failed: ${(err as Error).message}`, highlights: [], sources: [], research_effort: effort, latency_ms: Date.now() - started, note: "error" };
   }
 }
 

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>You.com Research — Covenant Sentinel</title>
+<style>
+  :root {
+    --bg:#0b0f17; --panel:#121826; --panel2:#0e1420; --line:#1e2740; --ink:#e7ecf5; --dim:#8a97b1; --faint:#5a678a;
+    --green:#35d07f; --red:#ff5470; --amber:#ffb020; --cyan:#46c6ff; --violet:#b48cff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.5; }
+  a { color:var(--cyan); }
+  header { display:flex; align-items:center; gap:13px; padding:13px 22px; border-bottom:1px solid var(--line); position:sticky; top:0; background:linear-gradient(180deg,#0e1524,#0b0f17); z-index:5; flex-wrap:wrap; }
+  header .brand { font-weight:700; } header .brand b { color:var(--cyan); }
+  header .spacer { flex:1; }
+  header .nav { font-size:12px; color:var(--dim); text-decoration:none; border:1px solid var(--line); padding:4px 10px; border-radius:6px; }
+  header .nav:hover { color:var(--ink); border-color:var(--cyan); }
+  .balance { font-family:var(--mono); font-size:12px; color:var(--dim); border:1px solid var(--line); padding:4px 11px; border-radius:999px; }
+  .balance b { color:var(--green); }
+  main { max-width:1140px; margin:0 auto; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:900px){ main{grid-template-columns:1fr;} }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card.wide { grid-column:1/-1; }
+  h2 { margin:0 0 3px; font-size:16px; }
+  .sub { color:var(--dim); font-size:12.5px; margin:0 0 14px; }
+  .api { font-family:var(--mono); font-size:10.5px; color:var(--faint); border:1px solid var(--line); border-radius:5px; padding:1px 7px; margin-left:6px; vertical-align:middle; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  input, select { font-family:var(--sans); font-size:14px; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+  input { flex:1; min-width:170px; }
+  button { font-weight:700; border:0; border-radius:8px; padding:9px 16px; cursor:pointer; font-size:14px; }
+  button.cyan { background:var(--cyan); color:#04121c; } button.violet { background:var(--violet); color:#1a0f2b; }
+  button.amber { background:var(--amber); color:#241a05; }
+  button:disabled { opacity:.5; cursor:default; }
+  .chip { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; letter-spacing:.4px; }
+  .chip.SYNTHETIC { color:var(--dim); background:#1a2233; border:1px solid var(--line); }
+  .chip.LIVE { color:#051b10; background:var(--green); }
+  .chip.PRERUN { color:#1a0f2b; background:var(--violet); }
+  .meta { font-size:11.5px; color:var(--dim); margin:12px 0 6px; }
+  .hit { border-top:1px solid var(--line); padding:10px 0; }
+  .hit .t a { color:var(--ink); text-decoration:none; font-weight:600; } .hit .t a:hover { color:var(--cyan); }
+  .hit .src { font-size:11px; color:var(--faint); font-family:var(--mono); }
+  .hit .snip { font-size:12.5px; color:var(--dim); margin-top:3px; }
+  .summary { font-size:13.5px; margin:8px 0 12px; }
+  .hl { list-style:none; padding:0; margin:0 0 10px; display:flex; flex-direction:column; gap:6px; }
+  .hl li { border:1px solid var(--line); border-radius:8px; padding:8px 11px; background:var(--panel2); font-size:12.5px; }
+  .sources a { display:block; font-size:11.5px; color:var(--cyan); text-decoration:none; margin:2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .muted { color:var(--dim); } .spin { color:var(--amber); font-family:var(--mono); font-size:12px; }
+  .ex { font-size:12px; color:var(--faint); margin-top:7px; } .ex a { color:var(--dim); cursor:pointer; text-decoration:underline; }
+
+  /* job board */
+  .jobs { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .job { border:1px solid var(--line); border-radius:9px; background:var(--panel2); padding:11px 13px; }
+  .job .top { display:flex; align-items:center; gap:9px; }
+  .job .lbl { flex:1; font-size:13px; font-weight:600; }
+  .job .st { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px; letter-spacing:.4px; }
+  .st.queued { color:var(--faint); border:1px solid var(--line); }
+  .st.running { color:var(--amber); border:1px solid var(--amber); }
+  .st.completed { color:var(--green); border:1px solid var(--green); }
+  .st.failed { color:var(--red); border:1px solid var(--red); }
+  .job .dur { font-family:var(--mono); font-size:11px; color:var(--faint); }
+  .who { font-family:var(--mono); font-size:11px; color:var(--faint); margin-top:3px; }
+  .bar { height:3px; background:var(--line); border-radius:2px; overflow:hidden; margin-top:9px; }
+  .bar i { display:block; height:100%; width:40%; background:var(--amber); animation:slide 1.4s ease-in-out infinite; }
+  @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
+  @media (prefers-reduced-motion: reduce){ .bar i{ animation:none; width:100%; } }
+  .job .body { margin-top:9px; font-size:12.5px; color:var(--dim); border-top:1px solid var(--line); padding-top:9px; }
+  .job details summary { cursor:pointer; font-size:11.5px; color:var(--faint); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>You.com</b> Research</div>
+  <span class="muted" style="font-size:12px">Search · ARI deep research · async fan-out</span>
+  <div class="spacer"></div>
+  <span class="balance" id="balance">balance …</span>
+  <a class="nav" href="/">← Home</a>
+  <a class="nav" href="/app">Sentinel desk →</a>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Live web search <span class="api">GET /v1/search</span> <span class="chip LIVE" id="searchLbl" style="display:none">LIVE</span></h2>
+    <p class="sub">You.com Search with <span style="font-family:var(--mono)">freshness</span> + <span style="font-family:var(--mono)">livecrawl</span> — proves the signal is current.</p>
+    <div class="row">
+      <input id="q" placeholder="e.g. private credit covenant breach" />
+      <select id="freshness"><option value="day">day</option><option value="week" selected>week</option><option value="month">month</option></select>
+      <button class="cyan" id="searchGo">Search</button>
+    </div>
+    <div class="ex">try: <a data-q="leveraged loan covenant breach 2026">covenant breaches</a> · <a data-q="auditor change restatement private equity portfolio company">restatements</a></div>
+    <div id="searchOut"></div>
+  </div>
+
+  <div class="card">
+    <h2>Deep research <span class="api">POST /v1/research</span> <span class="chip LIVE" id="askLbl" style="display:none">LIVE</span></h2>
+    <p class="sub">ARI returns a cited brief — <span style="font-family:var(--mono)">background</span> mode, structured <span style="font-family:var(--mono)">output_schema</span>. #1 on DeepSearchQA (83.67%).</p>
+    <div class="row">
+      <input id="ask" placeholder="e.g. NVIDIA latest revenue, margins, guidance" />
+      <button class="violet" id="askGo">Ask</button>
+    </div>
+    <div class="ex">try: <a data-a="How do lenders respond when a borrower restates EBITDA after an auditor change?">lender response</a> · <a data-a="NVIDIA Corporation latest quarterly revenue, margins and guidance">NVIDIA financials</a></div>
+    <div id="askOut"></div>
+  </div>
+
+  <div class="card wide">
+    <h2>Async portfolio sweep <span class="api">dispatch → poll</span></h2>
+    <p class="sub">ARI takes ~15–18s per question, so blocking a request doesn't scale. These dispatch as
+      background jobs and run <b>concurrently</b> — one research task per sponsor across the whole book.
+      The job board below is live.</p>
+    <div class="row">
+      <button class="amber" id="sweepGo">▶ Sweep all sponsors</button>
+      <input id="oneOff" placeholder="…or dispatch a single background question" />
+      <button class="cyan" id="oneOffGo">Dispatch</button>
+    </div>
+    <div class="jobs" id="jobs"><span class="muted" style="font-size:12.5px">No jobs yet — dispatch a sweep to watch them run.</span></div>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])));
+const chip = (l) => `<span class="chip ${l}">${l}</span>`;
+
+async function loadBalance() {
+  try {
+    const b = await (await fetch("/api/research/balance")).json();
+    $("balance").innerHTML = b.balance != null ? `You.com balance: <b>${Number(b.balance).toLocaleString()}</b>` : `balance: <span class="muted">n/a</span>`;
+  } catch { $("balance").textContent = "balance: n/a"; }
+}
+
+async function doSearch() {
+  const query = $("q").value.trim(); if (!query) return;
+  $("searchGo").disabled = true; $("searchOut").innerHTML = `<div class="spin">▓ searching the live web…</div>`;
+  try {
+    const r = await (await fetch("/api/research/search", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ query, freshness: $("freshness").value }) })).json();
+    $("searchLbl").style.display = "inline-block"; $("searchLbl").className = "chip " + r.label; $("searchLbl").textContent = r.label;
+    $("searchOut").innerHTML = `<div class="meta">${r.hits.length} results · ${r.latency_ms}ms · ${chip(r.label)}</div>` +
+      r.hits.map(h => `<div class="hit"><div class="t"><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title||h.url)}</a></div><div class="src">${esc(h.publisher||"")} ${h.published_at?"· "+esc(h.published_at):""}</div><div class="snip">${esc(h.snippet||"")}</div></div>`).join("");
+  } catch (e) { $("searchOut").innerHTML = `<div class="muted">search failed: ${esc(e.message)}</div>`; }
+  $("searchGo").disabled = false; loadBalance();
+}
+
+function renderResearch(r) {
+  return `<div class="meta">${esc(r.research_effort)} · ${(r.latency_ms/1000).toFixed(1)}s · ${chip(r.label)}</div>` +
+    `<div class="summary">${esc(r.summary)}</div>` +
+    (r.highlights && r.highlights.length ? `<ul class="hl">${r.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>` : "") +
+    (r.sources && r.sources.length ? `<div class="meta">${r.sources.length} cited sources</div><div class="sources">${r.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.title||s.url)}</a>`).join("")}</div>` : "");
+}
+
+async function doAsk() {
+  const input = $("ask").value.trim(); if (!input) return;
+  $("askGo").disabled = true; $("askOut").innerHTML = `<div class="spin">▓ ARI researching… (~15s, cited)</div>`;
+  try {
+    const r = await (await fetch("/api/research/ask", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ input }) })).json();
+    $("askLbl").style.display = "inline-block"; $("askLbl").className = "chip " + r.label; $("askLbl").textContent = r.label;
+    $("askOut").innerHTML = renderResearch(r);
+  } catch (e) { $("askOut").innerHTML = `<div class="muted">research failed: ${esc(e.message)}</div>`; }
+  $("askGo").disabled = false; loadBalance();
+}
+
+let polling = null;
+function renderJobs(list) {
+  if (!list.length) { $("jobs").innerHTML = `<span class="muted" style="font-size:12.5px">No jobs yet — dispatch a sweep to watch them run.</span>`; return; }
+  $("jobs").innerHTML = list.map(j => {
+    const dur = j.duration_ms != null ? (j.duration_ms/1000).toFixed(1) + "s" : (j.status === "running" ? "running…" : "");
+    const running = j.status === "running" || j.status === "queued";
+    let body = "";
+    if (j.status === "completed" && j.result) {
+      const r = j.result;
+      const sum = r.summary || "";
+      body = `<div class="body"><div>${esc(sum.slice(0,260))}${sum.length>260?"…":""}</div>` +
+        (r.sources && r.sources.length ? `<details style="margin-top:7px"><summary>${r.sources.length} cited sources</summary><div class="sources">${r.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.title||s.url)}</a>`).join("")}</div></details>` : "") + `</div>`;
+    } else if (j.status === "failed") {
+      body = `<div class="body">${esc(j.error||"failed")}</div>`;
+    }
+    const who = j.meta && j.meta.borrowers && j.meta.borrowers.length ? `<div class="who">${esc(j.meta.borrowers.join(" · "))}</div>` : "";
+    return `<div class="job"><div class="top"><span class="lbl">${esc(j.label)}</span><span class="dur">${dur}</span><span class="st ${j.status}">${j.status.toUpperCase()}</span></div>${who}${running ? `<div class="bar"><i></i></div>` : ""}${body}</div>`;
+  }).join("");
+}
+
+async function pollJobs() {
+  try {
+    const data = await (await fetch("/api/research/jobs")).json();
+    renderJobs(data.jobs);
+    const active = data.jobs.some(j => j.status === "running" || j.status === "queued");
+    if (!active && polling) { clearInterval(polling); polling = null; loadBalance(); }
+  } catch {}
+}
+function startPolling() { pollJobs(); if (!polling) polling = setInterval(pollJobs, 1500); }
+
+$("searchGo").onclick = doSearch;
+$("askGo").onclick = doAsk;
+$("sweepGo").onclick = async () => {
+  $("sweepGo").disabled = true;
+  await fetch("/api/research/portfolio", { method:"POST" });
+  startPolling();
+  setTimeout(() => { $("sweepGo").disabled = false; }, 3000);
+};
+$("oneOffGo").onclick = async () => {
+  const input = $("oneOff").value.trim(); if (!input) return;
+  await fetch("/api/research/jobs", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ input }) });
+  $("oneOff").value = ""; startPolling();
+};
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+$("ask").addEventListener("keydown", e => { if (e.key === "Enter") doAsk(); });
+$("oneOff").addEventListener("keydown", e => { if (e.key === "Enter") $("oneOffGo").click(); });
+document.querySelectorAll(".ex a[data-q]").forEach(a => a.onclick = () => { $("q").value = a.dataset.q; doSearch(); });
+document.querySelectorAll(".ex a[data-a]").forEach(a => a.onclick = () => { $("ask").value = a.dataset.a; doAsk(); });
+loadBalance(); pollJobs();
+</script>
+</body>
+</html>

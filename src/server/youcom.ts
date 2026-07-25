@@ -289,9 +289,13 @@ export async function youResearch(
   const schema = opts.schema ?? FINANCE_SCHEMA;
   const budget = opts.timeoutMs ?? 40000;
   try {
+    // NOTE: `enabled_toolsets` (the only documented value being "events") is rejected for external
+    // keys — "restricted to internal service callers" (HTTP 403). Verified against this account, so
+    // we deliberately don't send it. Steering toward datable events is done in the prompt instead.
+    const body: Record<string, unknown> = { input, research_effort: effort, background: true, output_schema: schema };
     const start = await fetchJson(
       `${RESEARCH_HOST}/research`,
-      { method: "POST", headers: { "X-API-Key": key, "Content-Type": "application/json" }, body: JSON.stringify({ input, research_effort: effort, background: true, output_schema: schema }) },
+      { method: "POST", headers: { "X-API-Key": key, "Content-Type": "application/json" }, body: JSON.stringify(body) },
       8000
     );
     const taskId: string | undefined = start?.task_id ?? start?.id;

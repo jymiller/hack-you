@@ -127,7 +127,7 @@
           <select id="freshness"><option value="day">day</option><option value="week" selected>week</option><option value="month">month</option></select>
           <button class="b1" id="searchGo">Detect</button>
         </div>
-        <div class="ex">try: <a data-q="leveraged loan covenant breach 2026">covenant breaches</a> · <a data-q="auditor change restatement private equity portfolio company">restatements</a></div>
+        <div class="ex">try: <a data-q="loan interest rates">loan interest rates</a> · <a data-q="leveraged loan covenant breach 2026">covenant breaches</a></div>
       </div>
     </details>
 
@@ -143,7 +143,7 @@
           <input id="ask" placeholder="Why do lenders disallow synergy add-backs?" />
           <button class="b2" id="askGo">Understand</button>
         </div>
-        <div class="ex">try: <a data-a="How do lenders respond when a borrower restates EBITDA after an auditor change?">lender response</a> · <a data-a="NVIDIA Corporation latest quarterly revenue, margins and guidance">NVIDIA financials</a></div>
+        <div class="ex">try: <a data-a="What are the expected future Fed interest rate moves and what do they mean for leveraged borrowers?">future Fed rate moves</a> · <a data-a="How do lenders respond when a borrower restates EBITDA after an auditor change?">lender response</a></div>
       </div>
     </details>
 
@@ -156,10 +156,13 @@
       </summary>
       <div class="mode-body">
         <div class="row">
-          <input id="sweepQ" placeholder="your question — or blank for covenant risk" />
-          <button class="b3" id="sweepGo">Sweep all</button>
+          <input id="sweepQ" placeholder="ask your own question of every sponsor…" />
+          <button class="b3" id="askAllGo">Ask across all</button>
         </div>
-        <div class="ex">Blank asks the default covenant-risk question of every sponsor.</div>
+        <div class="row" style="margin-top:8px">
+          <button class="b3" id="sweepGo" style="background:transparent;color:var(--amber);border:1px solid var(--amber)">▶ Run default covenant-risk sweep</button>
+        </div>
+        <div class="ex">try: <a data-s="Find publicly available loan agreement PDFs that contain financial covenant clauses">loan PDFs with covenants</a></div>
       </div>
     </details>
   </div>
@@ -242,12 +245,15 @@ async function post(url, body) { await fetch(url, { method:"POST", headers:{"Con
 
 $("searchGo").onclick = () => { const q=$("q").value.trim(); if(q) post("/api/research/search", { query:q, freshness:$("freshness").value }); };
 $("askGo").onclick    = () => { const q=$("ask").value.trim(); if(q) post("/api/research/jobs", { input:q }); };
-$("sweepGo").onclick  = () => { post("/api/research/portfolio", { question:$("sweepQ").value.trim() }); };
+// Two distinct actions so neither is ambiguous: the canned sweep, or your own question fanned out.
+$("sweepGo").onclick  = () => post("/api/research/portfolio", { question: "" });
+$("askAllGo").onclick = () => { const q=$("sweepQ").value.trim(); if(!q){ $("sweepQ").focus(); return; } post("/api/research/portfolio", { question:q }); };
 $("q").addEventListener("keydown", e => { if (e.key === "Enter") $("searchGo").click(); });
 $("ask").addEventListener("keydown", e => { if (e.key === "Enter") $("askGo").click(); });
-$("sweepQ").addEventListener("keydown", e => { if (e.key === "Enter") $("sweepGo").click(); });
+$("sweepQ").addEventListener("keydown", e => { if (e.key === "Enter") $("askAllGo").click(); });
 document.querySelectorAll(".ex a[data-q]").forEach(a => a.onclick = () => { $("q").value = a.dataset.q; $("searchGo").click(); });
 document.querySelectorAll(".ex a[data-a]").forEach(a => a.onclick = () => { $("ask").value = a.dataset.a; $("askGo").click(); });
+document.querySelectorAll(".ex a[data-s]").forEach(a => a.onclick = () => { $("sweepQ").value = a.dataset.s; $("askAllGo").click(); });
 loadBalance(); poll();
 </script>
 </body>
